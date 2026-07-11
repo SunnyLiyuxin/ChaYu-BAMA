@@ -1,0 +1,47 @@
+# 纵向追溯链关系（只存纵向依据，横向翻译关系不在此处）
+# level 与架构层号方向相反：3=物料 / 2=表达 / 1=风味坐标 / 0=知识依据
+# parent = 纵向上一级 id；横向翻译关系（跨文化表达 ← 国内表达）用 source_expression_id 承载，不进本表
+trace_nodes:
+  # 跨文化链
+  - id: asset_tieguanyin_poster_en_001
+    node_type: marketing_asset
+    level: 3
+    name: 多模态物料
+    summary: "面向欧美咖啡爱好者的英文图片物料"
+    parent: expr_en_tieguanyin_coffee_001
+  - id: expr_en_tieguanyin_coffee_001
+    node_type: expression
+    level: 2
+    name: 跨文化表达
+    summary: "用 specialty coffee 的 floral finish 降低理解门槛，同时保留 Guanyin Yun 的文化解释"
+    parent: flavor_tieguanyin_001
+  # 国内链
+  - id: asset_tieguanyin_poster_zh_001
+    node_type: marketing_asset
+    level: 3
+    name: 多模态物料
+    summary: "面向国内消费者的中文图片物料"
+    parent: expr_cn_tieguanyin_001
+  - id: expr_cn_tieguanyin_001
+    node_type: expression
+    level: 2
+    name: 国内表达
+    summary: "兰花香、清爽、尾韵较长"
+    parent: flavor_tieguanyin_001
+  # 共享底层（两链共用）
+  - id: flavor_tieguanyin_001
+    node_type: flavor_profile
+    level: 1
+    name: 风味坐标
+    summary: "花香 8，鲜爽度 7，回甘与尾韵 8"
+    parent: knowledge_tieguanyin_001
+  - id: knowledge_tieguanyin_001
+    node_type: knowledge
+    level: 0
+    name: 知识依据
+    summary: "铁观音工艺、乌龙茶审评术语、公开文献代理数据"
+    parent: null
+
+# 茶品术语：规则筛选时与 trigger_terms 取交集
+tea_terms:
+  tieguanyin_001: ["铁观音", "乌龙茶", "兰花香", "回甘", "观音韵", "清鲜", "韵"]

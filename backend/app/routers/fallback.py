@@ -41,19 +41,23 @@ def video_asset(tea_id: str):
 
 
 @router.post("/translate")
-def translate():
+def translate(body: dict | None = None):
     """通用翻译（P2 占位）。"""
-    return responses.fallback_response(message="通用翻译 Demo 阶段暂不开放，跨文化表达请走 cross-cultural-expression。")
+    return responses.fallback_response(
+        message="通用翻译 Demo 阶段暂不开放，跨文化表达请走 cross-cultural-expression。"
+    )
 
 
 @router.post("/image/generate")
-def image_generate():
+def image_generate(body: dict | None = None):
     """真实生图（P2 占位）。"""
-    return responses.fallback_response(message="真实生图 Demo 阶段暂不开放，marketing-asset 返回 image_prompt 供前端渲染。")
+    return responses.fallback_response(
+        message="真实生图 Demo 阶段暂不开放，marketing-asset 返回 image_prompt 供前端渲染。"
+    )
 
 
 @router.post("/audio/generate")
-def audio_generate():
+def audio_generate(body: dict | None = None):
     """音频生成（P2 占位）。"""
     return responses.fallback_response(message="音频生成 Demo 阶段暂不开放。")
 

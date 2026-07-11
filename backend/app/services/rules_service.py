@@ -7,11 +7,11 @@
   4. trigger_terms 与茶品术语有交集；为空则视为通用规则
   5. 按 priority 排序，取少量高相关规则
 
-阶段一：规则存在内存（mock_data.GENERATION_RULES）。接 SQLite 后改为查表。
+数据来源：data/seeds/generation_rules.yaml（经 data_loader 加载）。
 注入 prompt 的逻辑在接 LLM 时实现；本阶段返回筛选结果供调试观察。
 """
 
-from app.mock_data import GENERATION_RULES, PRIORITY_ORDER, TEA_TERMS
+from app import data_loader
 
 
 def select_rules(
@@ -31,10 +31,10 @@ def select_rules(
         tea_id: 用于取茶品术语，与 trigger_terms 取交集；None 时跳过术语命中
         limit: 最多返回规则数
     """
-    tea_terms = set(TEA_TERMS.get(tea_id, [])) if tea_id else set()
+    tea_terms = set(data_loader.get_tea_terms(tea_id)) if tea_id else set()
 
     matched: list[dict] = []
-    for rule in GENERATION_RULES:
+    for rule in data_loader.all_rules():
         if not rule.get("enabled", True):
             continue
         if rule["scope"] not in (scope, "any"):
@@ -50,7 +50,7 @@ def select_rules(
             continue
         matched.append(rule)
 
-    matched.sort(key=lambda r: PRIORITY_ORDER.get(r.get("priority", "low"), 99))
+    matched.sort(key=lambda r: data_loader.PRIORITY_ORDER.get(r.get("priority", "low"), 99))
     return matched[:limit]
 
 

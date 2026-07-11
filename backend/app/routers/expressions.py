@@ -22,6 +22,10 @@ def create_domestic_expression(tea_id: str, body: DomesticExpressionRequest):
     )
     if status == "tea_not_found":
         return responses.error("TEA_NOT_FOUND", "未找到对应茶品")
+    if status == "expression_not_found":
+        return responses.fallback_response(
+            message="该茶品国内表达 Demo 阶段尚未预置。",
+        )
 
     # 阶段一：_selected_rules 仅用于调试规则筛选，不进接口响应
     expr.pop("_selected_rules", None)
@@ -49,6 +53,10 @@ def create_cross_cultural_expression(tea_id: str, body: CrossCulturalExpressionR
         return responses.fallback_response(
             message="当前目标语言 / 市场 / 受众参照系 Demo 阶段暂未开放。",
             suggested_action="Demo 主路径：铁观音 × 英语 × 欧美市场 × 精品咖啡爱好者。",
+        )
+    if status == "expression_not_found":
+        return responses.fallback_response(
+            message="该茶品跨文化表达 Demo 阶段尚未预置。",
         )
 
     expr.pop("_selected_rules", None)

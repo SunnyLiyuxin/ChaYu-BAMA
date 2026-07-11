@@ -1,0 +1,47 @@
+# 结构化生成规则（第 3 类底座：规则库）
+# 运行时由 rules_service 按 scope/market/audience_reference/trigger_terms + priority 筛选
+# 规则结构对应 docs/技术架构.md 6.4 节字段
+rules:
+  - id: rule_domestic_to_foreign_translation
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: any
+    trigger_terms: []
+    priority: high
+    instruction: "跨文化表达由国内表达横向翻译派生而来。应将国内表达的中文 articulation 信达雅地转译为目标语言，保留原意与文化概念，不得脱离源文自由发挥。该翻译为同层横向派生，不作为纵向追溯链的一层。"
+    negative_example: "忽略国内表达源文，凭空生成一段与源文无关的英文描述。"
+    positive_example: "以国内表达中'兰花香、清爽、尾韵较长'为源文，转译为对应的英文表达。"
+    enabled: true
+
+  - id: rule_cross_cultural_preserve_yun
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: specialty_coffee_lovers
+    trigger_terms: ["观音韵", "韵"]
+    priority: high
+    instruction: "涉及观音韵时，不得直接替换成咖啡或葡萄酒术语。必须保留 Guanyin Yun，并提供入门类比和文化解释。"
+    negative_example: "Guanyin Yun is the tannin of tea."
+    positive_example: "Guanyin Yun can be introduced through a familiar lingering finish, but it is broader than a single coffee or wine note."
+    enabled: true
+
+  - id: rule_domestic_store_sales_style
+    scope: domestic_expression
+    market: domestic
+    audience_reference: domestic_general
+    trigger_terms: ["兰花香", "回甘"]
+    priority: medium
+    instruction: "面向国内消费者的门店话术应通俗易懂，优先用'兰花香、清爽、回甘'等日常感知词，避免生僻审评术语。"
+    negative_example: "本茶具有典型观音韵与醇厚底味。（术语过重）"
+    positive_example: "这款铁观音入口清爽，兰花香慢慢展开，喝完嘴里留香。"
+    enabled: true
+
+  - id: rule_marketing_factual_boundary
+    scope: marketing_asset
+    market: any
+    audience_reference: any
+    trigger_terms: []
+    priority: high
+    instruction: "营销文案不得声称代理数据是八马单品实测值；成分说明须标注为公开文献代理数据或典型范围。"
+    negative_example: "经八马实测，氨基酸含量 X%。"
+    positive_example: "成分说明基于公开文献乌龙茶典型范围，不代表单品实测值。"
+    enabled: true

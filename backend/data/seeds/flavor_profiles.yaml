@@ -1,0 +1,35 @@
+# 风味坐标（第 2 层：风味结构化层）
+# 国内链与跨文化链共享同一份茶品风味坐标（按 tea_id）
+# intensity: 0-10；dimensions 带 label_zh / label_en，雷达图按语言取标签
+flavor_profiles:
+  - profile_id: flavor_tieguanyin_001
+    tea_id: tieguanyin_001
+    dimensions:
+      - key: floral
+        label_zh: 花香
+        label_en: Floral
+        intensity: 8
+        description: "以兰花香为代表的清雅花香"
+        evidence_ids: ["evidence_tea_flavor_wheel_2022"]
+      - key: freshness
+        label_zh: 鲜爽度
+        label_en: Freshness
+        intensity: 7
+        description: "入口清爽，回味较明亮"
+        evidence_ids: ["evidence_public_oolong_components"]
+      - key: finish
+        label_zh: 回甘与尾韵
+        label_en: Lingering Finish
+        intensity: 8
+        description: "饮后口腔留香，尾韵较长"
+        evidence_ids: ["evidence_tea_flavor_wheel_2022"]
+      - key: roasted
+        label_zh: 焙火感
+        label_en: Roasted Note
+        intensity: 4
+        description: "焙火带来的火香与醇厚度"
+        evidence_ids: ["evidence_public_oolong_components"]
+    component_notes:
+      - name: 氨基酸
+        value_type: typical_range
+        description: "Demo 阶段采用公开文献中的乌龙茶典型范围，不代表八马单品实测值"

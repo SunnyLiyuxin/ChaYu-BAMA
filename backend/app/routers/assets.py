@@ -31,6 +31,10 @@ def create_marketing_asset(tea_id: str, body: MarketingAssetRequest):
         return responses.fallback_response(
             message="当前语言 Demo 阶段暂未开放，仅支持 zh / en。",
         )
+    if status == "asset_not_found":
+        return responses.fallback_response(
+            message="该茶品对应语言物料 Demo 阶段尚未预置。",
+        )
 
     asset.pop("_selected_rules", None)
     return responses.success(

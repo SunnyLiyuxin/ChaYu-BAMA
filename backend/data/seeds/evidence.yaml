@@ -1,0 +1,17 @@
+# 证据元数据：数据来源与可信度
+# confidence: high/medium/low；source_type 由团队人工确认
+evidence_sources:
+  - id: evidence_tea_flavor_wheel_2022
+    claim: "茶叶感官风味轮可作为风味术语参考"
+    source_type: public_standard
+    source: "T/CTSS 58-2022 茶叶感官风味轮"
+    confidence: high
+    collected_by: "王传宇"
+    notes: "用于 Demo 风味术语参考"
+  - id: evidence_public_oolong_components
+    claim: "乌龙茶成分与感知关系，采用公开文献典型范围"
+    source_type: industry_article
+    source: "公开乌龙茶工艺与成分综述"
+    confidence: medium
+    collected_by: "团队"
+    notes: "Demo 阶段代理数据，不代表单品实测值"

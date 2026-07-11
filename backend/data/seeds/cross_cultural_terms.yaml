@@ -1,0 +1,17 @@
+# 茶文化核心术语及其英文解释、类比策略、文化保留策略
+# 跨文化链规则筛选时，茶品术语与 trigger_terms 取交集会命中这里的概念
+cross_cultural_terms:
+  - id: term_guanyin_yun
+    chinese: 观音韵
+    english: Guanyin Yun
+    explanation: "Guanyin Yun refers to the lingering impression Tieguanyin leaves after drinking, including aroma, aftertaste, and mouthfeel."
+    analogy_strategy: "用 specialty coffee 的 floral finish 作入门类比降低门槛，但不等同单一风味物质"
+    preserve_strategy: "保留拼音 Guanyin Yun 并附文化解释，不得替换为咖啡/酒术语"
+    evidence_ids: ["evidence_tea_flavor_wheel_2022"]
+  - id: term_lanxiang
+    chinese: 兰花香
+    english: Orchid Aroma
+    explanation: "以兰花香为代表的清雅花香，铁观音典型香型。"
+    analogy_strategy: "可类比为 floral / jasmine notes in light coffee"
+    preserve_strategy: "可类比，需说明非完全相同"
+    evidence_ids: ["evidence_tea_flavor_wheel_2022"]

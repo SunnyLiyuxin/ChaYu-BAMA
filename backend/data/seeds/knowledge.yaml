@@ -1,0 +1,16 @@
+# 茶品知识卡片（第 1 层：知识 / 证据层）
+# 含产地风土、工艺、文化故事、证据引用
+tea_knowledge:
+  - tea_id: tieguanyin_001
+    origin:
+      region: 福建安溪
+      terroir: "山地丘陵、云雾充足、昼夜温差较明显，适宜乌龙茶香气形成"
+    process:
+      name: 铁观音传统制作工艺
+      steps: ["晒青", "凉青", "摇青", "杀青", "揉捻", "焙火"]
+      key_technique: "看青做青、摇青与焙火控制"
+    story:
+      title: 铁观音非遗制茶技艺
+      content: "铁观音制作技艺强调经验判断与工艺控制，是中国乌龙茶的重要代表。"
+    evidence_ids:
+      - evidence_tea_flavor_wheel_2022

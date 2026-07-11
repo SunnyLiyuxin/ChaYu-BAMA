@@ -1,0 +1,9 @@
+# 茶品基础信息
+# Demo 阶段仅 1 款：铁观音
+teas:
+  - id: tieguanyin_001
+    name: 赛珍珠铁观音
+    category: 乌龙茶
+    origin: 福建安溪
+    brand: 八马茶业
+    demo_available: true

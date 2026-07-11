@@ -1,0 +1,15 @@
+# 表达策略：不同受众/场景/市场对应的表达框架
+# 国内链与跨文化链各引用一条策略，作为表达生成的结构骨架
+expression_strategies:
+  - id: strategy_domestic_store_sales
+    scope: domestic_expression
+    market: domestic
+    audience_reference: domestic_general
+    output_slots: ["story_style", "scientific_style", "emotional_style"]
+    instruction: "门店话术，三种风格并行：故事感 / 科学感 / 情绪感"
+  - id: strategy_cross_cultural_coffee
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: specialty_coffee_lovers
+    output_slots: ["literal_explanation", "beginner_analogy", "cultural_narrative"]
+    instruction: "跨文化表达三段：字面解释 / 入门类比（咖啡参照）/ 文化叙事；类比作为对象内部子结构"

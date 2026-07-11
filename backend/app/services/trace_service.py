@@ -10,7 +10,7 @@
 跨文化表达对象上的 source_expression_id 字段另行记录，前端可按需展示。
 """
 
-from app.mock_data import TRACE_NODES
+from app import data_loader
 
 
 def build_trace(output_id: str) -> dict | None:
@@ -19,14 +19,16 @@ def build_trace(output_id: str) -> dict | None:
     Returns:
         {"output_id", "output_type", "trace": [...]} 或 None（id 不存在）。
     """
-    node = TRACE_NODES.get(output_id)
+    node = data_loader.get_trace_node(output_id)
     if node is None:
         return None
 
     trace: list[dict] = []
     current_id = output_id
-    while current_id:
-        current = TRACE_NODES.get(current_id)
+    seen: set[str] = set()  # 防御循环引用
+    while current_id and current_id not in seen:
+        seen.add(current_id)
+        current = data_loader.get_trace_node(current_id)
         if current is None:
             break
         trace.append(
@@ -41,6 +43,6 @@ def build_trace(output_id: str) -> dict | None:
 
     return {
         "output_id": output_id,
-        "output_type": TRACE_NODES[output_id]["node_type"],
+        "output_type": data_loader.get_trace_node(output_id)["node_type"],
         "trace": trace,
     }
