@@ -84,28 +84,27 @@ def audience_references():
 
 
 def _registered_paths(app) -> set[str]:
-    """收集所有已注册路由的 path（去尾斜杠归一），含嵌套 router 的子路由。
+    """已注册路由的 path 集合（去尾斜杠归一），来自 OpenAPI schema 的 paths。
 
-    catch-all 据此判断：带尾斜杠的请求若其实命中某真实路由，则重定向到无尾斜杠的
-    规范形式，而非当作未知路由吞掉。include_router 后 app.routes 里是带 /api 前缀
-    的完整 path（如 /api/teas/{tea_id}/knowledge），参数占位 {tea_id} 保留。
-
-    排除 path 转换器（{...:path}）路由：它匹配跨多段、正是 catch-all / 挂载点，
-    若纳入会让"真未知单段路由"自匹配后重定向到自己（死循环）。
+    不遍历 app.routes 内部结构：新版 FastAPI 把 include_router 存成 _IncludedRouter
+    （path=None、无 .routes），递归收集会漏掉全部业务路由。改用 app.openapi()['paths']
+    ——它是 FastAPI 暴露已注册路由的稳定接口，键即去尾斜杠的规范路径
+    （如 /api/teas/{tea_id}/knowledge），参数占位 {tea_id} 保留，可被 _compile_route
+    编译成 [^/]+ 正则用于动态段比对。
     """
     paths: set[str] = set()
-
-    def collect(routes):
-        for route in routes:
-            path = getattr(route, "path", None)
-            if path and ":path}" not in path:
-                paths.add(path.rstrip("/"))
-            sub = getattr(route, "routes", None)
-            if sub:
-                collect(sub)
-
-    collect(app.routes)
+    try:
+        schema = app.openapi()
+    except Exception:
+        schema = {"paths": {}}
+    for p in schema.get("paths", {}):
+        paths.add(p.rstrip("/"))
     return paths
+
+
+# catch-all 自身模式：app.openapi() 会把 /{path:path} 收为 /api/{path}，
+# 它匹配任意单段，会让"真未知路由"自匹配后重定向到自己（死循环）。这里显式排除。
+_CATCH_ALL_PATTERN = "/api/{path}"
 
 
 @functools.lru_cache(maxsize=None)
@@ -142,6 +141,8 @@ def catch_all_api(path: str, request: Request):
     normalized = path.rstrip("/")
     target = f"/api/{normalized}"
     for registered in _registered_paths(request.app):
+        if registered == _CATCH_ALL_PATTERN:
+            continue  # 跳过 catch-all 自身，避免真未知路由自匹配重定向死循环
         if _compile_route(registered).match(target):
             return RedirectResponse(url=target, status_code=302)
 
