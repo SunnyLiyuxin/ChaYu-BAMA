@@ -83,23 +83,29 @@ def audience_references():
 # ---------------------------------------------------------------------------
 
 
-def _registered_paths(app) -> set[str]:
-    """已注册路由的 path 集合（去尾斜杠归一），来自 OpenAPI schema 的 paths。
+def _registered_routes(app) -> list[tuple[str, set[str]]]:
+    """已注册路由的 (path, methods) 列表，来自 OpenAPI schema 的 paths。
 
     不遍历 app.routes 内部结构：新版 FastAPI 把 include_router 存成 _IncludedRouter
     （path=None、无 .routes），递归收集会漏掉全部业务路由。改用 app.openapi()['paths']
     ——它是 FastAPI 暴露已注册路由的稳定接口，键即去尾斜杠的规范路径
-    （如 /api/teas/{tea_id}/knowledge），参数占位 {tea_id} 保留，可被 _compile_route
-    编译成 [^/]+ 正则用于动态段比对。
+    （如 /api/teas/{tea_id}/knowledge），值含该路径支持的 method 列表。参数占位
+    {tea_id} 保留，可被 _compile_route 编译成 [^/]+ 正则用于动态段比对。
+
+    返回 (path, methods) 元组列表：重定向前既要 path 匹配，也要当前请求方法被该
+    路由支持——否则 GET 请求命中一条 POST-only 路由时，会 302 重定向到同一 URL
+    （重定向保持原方法），永远到不了 POST handler，形成"重定向太多次"死循环。
     """
-    paths: set[str] = set()
+    routes: list[tuple[str, set[str]]] = []
     try:
         schema = app.openapi()
     except Exception:
         schema = {"paths": {}}
-    for p in schema.get("paths", {}):
-        paths.add(p.rstrip("/"))
-    return paths
+    for path, ops in schema.get("paths", {}).items():
+        methods = {m.upper() for m in ops if m.lower() in
+                   {"get", "post", "put", "delete", "patch", "head", "options"}}
+        routes.append((path.rstrip("/"), methods))
+    return routes
 
 
 # catch-all 自身模式：app.openapi() 会把 /{path:path} 收为 /api/{path}，
@@ -134,15 +140,21 @@ def catch_all_api(path: str, request: Request):
     本路由挂在 prefix="/api" 下，path 是去掉 "/api/" 后的部分
     （如 "demo-routes/" 或 "teas/tieguanyin_001/knowledge/"）。
 
-    - 若带尾斜杠的请求其实命中某已注册路由（含动态段路由 /teas/{tea_id}/knowledge/），
-      则 302 重定向到无尾斜杠的规范形式，修复"真实路由被 catch-all 误吞成 fallback"。
+    重定向前同时校验 path 与 method：
+    - 若带尾斜杠的请求其实命中某已注册路由、且该路由支持当前请求方法
+      （含动态段路由 /teas/{tea_id}/knowledge/），则 302 重定向到无尾斜杠的规范形式，
+      修复"真实路由被 catch-all 误吞成 fallback"。
+    - 若 path 匹配但方法不被该路由支持（如 GET 命中一条 POST-only 路由），
+      不重定向（重定向保持原方法，会死循环），直接走 fallback。
     - 否则返回 fallback（fallback_reason=api_not_implemented）。
     """
     normalized = path.rstrip("/")
     target = f"/api/{normalized}"
-    for registered in _registered_paths(request.app):
+    for registered, methods in _registered_routes(request.app):
         if registered == _CATCH_ALL_PATTERN:
             continue  # 跳过 catch-all 自身，避免真未知路由自匹配重定向死循环
+        if request.method.upper() not in methods:
+            continue  # 方法不匹配：重定向保持原方法，会死循环，不重定向
         if _compile_route(registered).match(target):
             return RedirectResponse(url=target, status_code=302)
 
