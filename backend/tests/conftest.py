@@ -15,14 +15,16 @@ init 参数优先级高于文件/环境），干净绕开真实 key。
 
 import importlib
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 
-from app import config
+from app import config, data_loader
 from app.config import Settings
 from app.main import app
 from app.services import output_store
+from scripts.seed import run_seed
 
 # 所有直接 `from app.config import get_settings` 后在运行时调用 get_settings() 的模块。
 # 改 app.config.get_settings 不影响它们持有的导入期引用，须逐模块 patch。
@@ -67,6 +69,25 @@ def _isolated_output_db(tmp_path) -> Iterator[None]:
     output_store.set_test_db_path(tmp_path / "test_outputs.db")
     yield
     output_store.reset_engine()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _seeded_read_db(tmp_path_factory) -> Iterator[None]:
+    """session 级：灌一份临时 tea.db，把 data_loader 读 engine 指向它。
+
+    读路径已切库：getter 查 SQLite。测试需要一个已灌表的库——在 tmp_path_factory
+    里 run_seed(reset=True) 灌一次（不污染真实 backend/data/tea.db），session 内
+    所有读测试共享。读测试对 seed 表只读不写，共享安全。
+
+    与 output_store 的 _isolated_output_db（per-test）正交：seed.py 不灌
+    generated_outputs 表，读测试也不碰它。test_seed_db.py 用自己的 tmp_path +
+    run_seed（不经共享 engine），不受影响。
+    """
+    db_path = tmp_path_factory.mktemp("seeded_read_db") / "tea.db"
+    run_seed(reset=True, db_path=db_path, verbose=False)
+    data_loader.set_read_db_path(db_path)
+    yield
+    data_loader.reset_read_engine()
 
 
 @pytest.fixture(scope="session")

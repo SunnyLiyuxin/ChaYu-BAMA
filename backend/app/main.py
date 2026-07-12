@@ -24,7 +24,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app import data_loader  # noqa: F401  启动时加载 seed
+from app import data_loader  # noqa: F401  lifespan 启动时检查 DB 灌表状态
 from app import responses
 from app.config import get_settings
 from app.routers import assets, debug, expressions, fallback, teas, trace
@@ -32,18 +32,46 @@ from app.routers import assets, debug, expressions, fallback, teas, trace
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """启动时预热 seed registry + 打印一次 LLM 启用状态（不输出 key）。
+    """启动时检查 DB 灌表状态 + 打印一次 LLM 启用状态（不输出 key）。
 
-    data_loader 已 lru_cache，这里主动触发一次，便于在启动日志中确认 seed
-    加载正常，而非在首个请求时才暴露加载错误。
+    读路径已切库：运行时 getter 查 backend/data/tea.db（由 seed.py --reset 灌表）。
+    若库未灌（表缺失或 teas 表为空），打印醒目警告，不 crash 也不自动灌——
+    显式由开发者运行 `python scripts/seed.py --reset`（与 runbook 一致）。
+    未灌表时读路径返回空/404，由响应本身暴露，不白屏。
     """
-    data_loader.all_seeds()
+    _check_seeded()
     s = get_settings()
     if s.llm_enabled:
         print(f"[startup] LLM 已启用：model={s.llm_model} timeout={s.llm_timeout}")
     else:
         print("[startup] LLM 未启用（未配置 LLM_API_KEY / LLM_BASE_URL），生成接口走 mock 兜底")
     yield
+
+
+def _check_seeded() -> None:
+    """检查 tea.db 是否已灌表：teas 表存在且有行。否则打印警告。best-effort。
+
+    警告文本用 ASCII 标记（[WARNING]），不用 emoji——Windows GBK/cp936 控制台
+    无法编码 ⚠ 等 emoji，会让 print 抛 UnicodeEncodeError 掩盖真正的检查结果。
+    """
+    try:
+        from sqlalchemy import inspect, select
+
+        from app.database import make_session
+        from app.models import Tea
+
+        engine = data_loader._current_read_engine()
+        if not inspect(engine).has_table("teas"):
+            print("[startup] [WARNING] 数据库未灌表（teas 表不存在）。请运行：python scripts/seed.py --reset")
+            return
+        with make_session(engine) as s:
+            n = s.execute(select(Tea)).all()
+        if not n:
+            print("[startup] [WARNING] 数据库 teas 表为空。请运行：python scripts/seed.py --reset")
+            return
+        print(f"[startup] 数据库已就绪：{len(n)} 款茶已灌表")
+    except Exception as e:
+        print(f"[startup] [WARNING] 数据库检查失败（读路径可能不可用）：{e}")
 
 
 app = FastAPI(

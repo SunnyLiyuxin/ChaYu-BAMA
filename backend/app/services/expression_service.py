@@ -164,7 +164,7 @@ def get_cross_cultural_expression(
             tea = data_loader.get_tea(tea_id) or {}
             flavor = data_loader.get_flavor_profile(tea_id) or {}
             knowledge = data_loader.get_knowledge(tea_id) or {}
-            terms = data_loader.all_seeds()["cross_cultural_terms"]
+            terms = data_loader.list_cross_cultural_terms()
             system_prompt, user_prompt, _ = prompts.build_cross_cultural_prompt(
                 tea_id=tea_id, tea=tea, flavor=flavor, knowledge=knowledge,
                 domestic_outputs=domestic_record["outputs"],
