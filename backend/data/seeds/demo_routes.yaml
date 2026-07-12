@@ -1,6 +1,8 @@
-# Demo 路径：国内链 + 跨文化链两条主路径
+# Demo 路径：国内链 + 跨文化链，三款茶各两条主路径
 # 两条链共享同一款茶的 tea_id，仅在 market / target_language / audience_reference 上不同
+
 demo_routes:
+  # ===== 赛珍珠铁观音（已有 + 新增） =====
   - id: tieguanyin_domestic_poster
     tea_id: tieguanyin_001
     tea_name: 赛珍珠铁观音
@@ -10,6 +12,7 @@ demo_routes:
     asset_type: poster
     enabled: true
     description: "铁观音面向国内消费者的中文图片物料 Demo 路径"
+
   - id: tieguanyin_western_coffee_poster
     tea_id: tieguanyin_001
     tea_name: 赛珍珠铁观音
@@ -19,3 +22,65 @@ demo_routes:
     asset_type: poster
     enabled: true
     description: "铁观音面向欧美精品咖啡爱好者的英文图片物料 Demo 路径"
+
+  - id: szz_domestic_poster
+    tea_id: BAMA_SZZ_TGY_NX
+    tea_name: 赛珍珠浓香型安溪铁观音
+    market: domestic
+    target_language: zh
+    audience_reference: domestic_general
+    asset_type: poster
+    enabled: true
+    description: "赛珍珠面向国内消费者的中文图片物料"
+
+  - id: szz_western_coffee_poster
+    tea_id: BAMA_SZZ_TGY_NX
+    tea_name: 赛珍珠浓香型安溪铁观音
+    market: western
+    target_language: en
+    audience_reference: specialty_coffee_lovers
+    asset_type: poster
+    enabled: true
+    description: "赛珍珠面向欧美精品咖啡爱好者的英文物料"
+
+  # ===== 牛一大红袍 =====
+  - id: ny_domestic_poster
+    tea_id: BAMA_NY_WRT_DHP
+    tea_name: 牛一大红袍
+    market: domestic
+    target_language: zh
+    audience_reference: domestic_general
+    asset_type: poster
+    enabled: true
+    description: "牛一大红袍面向国内消费者的中文图片物料"
+
+  - id: ny_western_coffee_poster
+    tea_id: BAMA_NY_WRT_DHP
+    tea_name: 牛一大红袍
+    market: western
+    target_language: en
+    audience_reference: specialty_coffee_lovers
+    asset_type: poster
+    enabled: true
+    description: "牛一大红袍面向欧美精品咖啡爱好者的英文物料"
+
+  # ===== 鼎红金骏眉 =====
+  - id: dh_domestic_poster
+    tea_id: BAMA_DH_BT_JJM
+    tea_name: 鼎红金骏眉
+    market: domestic
+    target_language: zh
+    audience_reference: domestic_general
+    asset_type: poster
+    enabled: true
+    description: "鼎红金骏眉面向国内消费者的中文图片物料"
+
+  - id: dh_western_wine_poster
+    tea_id: BAMA_DH_BT_JJM
+    tea_name: 鼎红金骏眉
+    market: western
+    target_language: en
+    audience_reference: specialty_coffee_lovers
+    asset_type: poster
+    enabled: true
+    description: "鼎红金骏眉面向欧美受众的英文物料（借用葡萄酒品饮结构作叙事入口）"

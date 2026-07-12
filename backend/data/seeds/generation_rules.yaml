@@ -1,7 +1,9 @@
 # 结构化生成规则（第 3 类底座：规则库）
 # 运行时由 rules_service 按 scope/market/audience_reference/trigger_terms + priority 筛选
-# 规则结构对应 docs/技术架构.md 6.4 节字段
+# 规则应结构化存储、按需筛选，不硬编码进 Python 或超长 prompt
+
 rules:
+  # ===== 已有规则（保留） =====
   - id: rule_domestic_to_foreign_translation
     scope: cross_cultural_expression
     market: western
@@ -17,10 +19,10 @@ rules:
     scope: cross_cultural_expression
     market: western
     audience_reference: specialty_coffee_lovers
-    trigger_terms: ["观音韵", "韵"]
+    trigger_terms: ["观音韵", "韵", "岩韵"]
     priority: high
-    instruction: "涉及观音韵时，不得直接替换成咖啡或葡萄酒术语。必须保留 Guanyin Yun，并提供入门类比和文化解释。"
-    negative_example: "Guanyin Yun is the tannin of tea."
+    instruction: "涉及观音韵/岩韵时，不得直接替换成咖啡或葡萄酒术语。必须保留拼音专名（Guanyun Yun / Yan Yun），并提供入门类比和文化解释。"
+    negative_example: "Guanyin Yun is the tannin of tea. / Yan Yun means mineral taste."
     positive_example: "Guanyin Yun can be introduced through a familiar lingering finish, but it is broader than a single coffee or wine note."
     enabled: true
 
@@ -28,9 +30,9 @@ rules:
     scope: domestic_expression
     market: domestic
     audience_reference: domestic_general
-    trigger_terms: ["兰花香", "回甘"]
+    trigger_terms: ["兰花香", "回甘", "炒米香", "岩韵"]
     priority: medium
-    instruction: "面向国内消费者的门店话术应通俗易懂，优先用'兰花香、清爽、回甘'等日常感知词，避免生僻审评术语。"
+    instruction: "面向国内消费者的门店话术应通俗易懂，优先用'兰花香、清爽、回甘、炒米香'等日常感知词，避免生僻审评术语。"
     negative_example: "本茶具有典型观音韵与醇厚底味。（术语过重）"
     positive_example: "这款铁观音入口清爽，兰花香慢慢展开，喝完嘴里留香。"
     enabled: true
@@ -41,7 +43,135 @@ rules:
     audience_reference: any
     trigger_terms: []
     priority: high
-    instruction: "营销文案不得声称代理数据是八马单品实测值；成分说明须标注为公开文献代理数据或典型范围。"
+    instruction: "营销文案不得声称代理数据是八马单品实测值；成分说明须标注为公开文献代理数据或典型范围。品类代理数据禁止呈现为产品实测。"
     negative_example: "经八马实测，氨基酸含量 X%。"
     positive_example: "成分说明基于公开文献乌龙茶典型范围，不代表单品实测值。"
+    enabled: true
+
+  # ===== 跨文化翻译规则（报告第6章） =====
+  - id: rule_cross_cultural_terminology
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: any
+    trigger_terms: []
+    priority: high
+    instruction: "翻译规则：1)产品和文化专名优先采用'拼音/品牌官方英文+一句话解释'，不逐字硬译；2)对新手先给可感知参照物，对进阶用户再解释工艺和文化；3)咖啡/葡萄酒只作为入口，不声称两个体系完全等价；4)共享化合物不意味着整体风味相同。"
+    negative_example: "赛珍珠→Pearl Competition / 金骏眉→Golden Horse Eyebrow / 大红袍→Big Red Robe"
+    positive_example: "赛珍珠→Saizhenzhu Tieguanyin / 金骏眉→Jin Jun Mei black tea / 大红袍→Da Hong Pao"
+    enabled: true
+
+  - id: rule_mapping_type_requirement
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: any
+    trigger_terms: []
+    priority: high
+    instruction: "Agent生成第三层表达时必须输出mapping_type。三种映射类型：1)shared_sensory_reference——共享感官参照物；2)shared_chemical_pathway——共享化学路径；3)narrative_bridge——叙事类比。没有该字段的类比不得进入正式物料。"
+    negative_example: "这个茶就像勃艮第红酒一样。（没有mapping_type，没有差异提醒）"
+    positive_example: "借用葡萄酒的aroma→palate→finish结构帮助品饮（mapping_type: narrative_bridge），但茶没有酒精，酸度结构也不同。"
+    enabled: true
+
+  # ===== 受众与场景规则（报告第7章） =====
+  - id: rule_scene_store_explanation
+    scope: domestic_expression
+    market: domestic
+    audience_reference: domestic_general
+    trigger_terms: ["介绍", "讲解", "门店"]
+    priority: high
+    instruction: "国内门店讲解：输出3个可感知词、冲泡提示、一个文化概念。禁止堆砌术语；禁止虚构检测数据。"
+    negative_example: "本茶茶多酚含量达到X%，氨基酸含量Y%，是顶级品质。"
+    positive_example: "这款茶先有温暖的炒米香，入口后花香和甜感会慢慢出来。建议用95℃以上的水，第一泡30秒。这就是我们说的'音韵'。"
+    enabled: true
+
+  - id: rule_scene_tiktok_content
+    scope: marketing_asset
+    market: any
+    audience_reference: any
+    trigger_terms: ["TikTok", "短视频", "tiktok", "short video"]
+    priority: high
+    instruction: "TikTok短视频生成：前3秒感官钩子、一个可视化比喻、文化名词解释。禁止玄虚空泛；禁止医疗功效承诺。竖屏9:16，关键信息尽早出现，使用平台原生真实表达。"
+    negative_example: "中国茶文化博大精深，源远流长……（空洞开场）"
+    positive_example: "What does rock tea taste like? Not rocks. —— 用3秒钩子引入，然后解释焙火香与岩韵。"
+    enabled: true
+
+  - id: rule_scene_gifting
+    scope: domestic_expression
+    market: domestic
+    audience_reference: domestic_general
+    trigger_terms: ["送礼", "礼赠", "送人", "礼物"]
+    priority: medium
+    instruction: "礼赠推荐：输出系列定位、风味接受度、包装/规格信息。禁止将价格直接等同品质。"
+    negative_example: "这款最贵，所以最好。"
+    positive_example: "赛珍珠是八马经典系列，浓香型铁观音适合喜欢焙火感和花香的收礼人。"
+    enabled: true
+
+  # ===== 成分边界规则（报告第5章） =====
+  - id: rule_component_scientific_boundary
+    scope: domestic_expression
+    market: any
+    audience_reference: any
+    trigger_terms: ["成分", "含量", "检测", "茶多酚", "氨基酸", "咖啡碱"]
+    priority: high
+    instruction: "成分解释边界：未取得产品实测值时，只能引用品类/工艺代理数据，并必须标注'当前为品类代理信息，非该SKU实测值'。'成分→风味'使用supports/associated_with而非causes。"
+    negative_example: "赛珍珠的兰花香就是由橙花叔醇造成的。"
+    positive_example: "同类铁观音研究显示橙花叔醇、茉莉内酯等可能参与花香/果甜香。赛珍珠具体成分待检测确认。"
+    enabled: true
+
+  - id: rule_standard_vs_measurement
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["国标", "标准", "GB", "限值"]
+    priority: high
+    instruction: "国标最低限值不等于产品实测值。国标只进入regulatory_threshold，绝不填入measured_value。"
+    negative_example: "该产品茶多酚含量≥X%（把国标限值当实测值）。"
+    positive_example: "GB/T 19598-2025规定了安溪铁观音的质量要求。产品具体检测值待批次报告确认。"
+    enabled: true
+
+  # ===== 健康声明规则（报告第23章） =====
+  - id: rule_no_health_claims
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["健康", "功效", "降", "治疗", "预防", "安神", "减肥", "抗癌"]
+    priority: high
+    instruction: "Demo阶段不生成疾病预防/治疗话术。不把'含有某成分'自动扩写成治疗、降糖、抗癌等健康承诺。只描述风味贡献和一般性成分信息。"
+    negative_example: "茶多酚可以抗氧化、延缓衰老、预防癌症。"
+    positive_example: "茶多酚是茶叶中的天然成分，参与茶汤的涩感和结构。"
+    enabled: true
+
+  # ===== 内部角色—任务规则（报告第18章） =====
+  - id: rule_operator_role_awareness
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: []
+    priority: medium
+    instruction: "系统需同时考虑operator_role（谁在操作）、business_task（要完成什么工作）、target_audience（最终说给谁听）。防止误做成面向消费者的选茶助手。"
+    negative_example: "只保存audience=coffee enthusiast，系统误做成消费者选茶工具。"
+    positive_example: "operator_role=overseas_social_media_operator, business_task=create_tiktok_script, target_audience=US_coffee_enthusiast_beginner"
+    enabled: true
+
+  # ===== 生成追溯规则 =====
+  - id: rule_generated_flag_required
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: []
+    priority: high
+    instruction: "任何生成文案必须保留generated=true和上游trace_refs。禁止删除或伪装生成标记。"
+    negative_example: "生成文案不标generated字段，看起来像人工撰写的事实。"
+    positive_example: "所有LLM生成内容携带generated=true及trace_refs数组。"
+    enabled: true
+
+  # ===== 证据边界展示 =====
+  - id: rule_evidence_card_display
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: []
+    priority: medium
+    instruction: "前端展示数值时采用三层卡片：结论（一句话）+ 当前证据（来源与范围）+ 适用边界（限制说明）。颜色区分：绿色=产品/批次数据，蓝色=标准或品类研究，黄色=生成推断，灰色=待核实。"
+    negative_example: "茶多酚含量：25.98 mg/g（只显示一个没有上下文的数字）。"
+    positive_example: "结论：咖啡碱通常参与茶汤苦味 | 当前证据：42个商业乌龙茶样本，均值25.98 mg/g | 适用边界：品类研究参考，具体含量待产品检测"
     enabled: true

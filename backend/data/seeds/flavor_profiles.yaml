@@ -1,35 +1,348 @@
 # 风味坐标（第 2 层：风味结构化层）
-# 国内链与跨文化链共享同一份茶品风味坐标（按 tea_id）
-# intensity: 0-10；dimensions 带 label_zh / label_en，雷达图按语言取标签
+# 三款茶各一套风味坐标，共享同一套观察维度
+# intensity: 0-10（demo_estimate，非实测值）
+# dimensions 带 label_zh / label_en，雷达图按语言取标签
+
 flavor_profiles:
+  # ===== 赛珍珠铁观音 =====
   - profile_id: flavor_tieguanyin_001
     tea_id: tieguanyin_001
     dimensions:
+      - key: dry_leaf_aroma
+        label_zh: 干茶香气
+        label_en: Dry Leaf Aroma
+        intensity: 7
+        description: "炒米香、烘焙香；花香线索"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
+      - key: infusion_aroma
+        label_zh: 茶汤香气
+        label_en: Infusion Aroma
+        intensity: 8
+        description: "果甜香、兰花样花香"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor", "evidence_wang_2023_oolong"]
       - key: floral
         label_zh: 花香
         label_en: Floral
         intensity: 8
         description: "以兰花香为代表的清雅花香"
-        evidence_ids: ["evidence_tea_flavor_wheel_2022"]
-      - key: freshness
-        label_zh: 鲜爽度
-        label_en: Freshness
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_tea_flavor_wheel_2022", "evidence_wang_2023_oolong"]
+      - key: sweetness
+        label_zh: 甜感
+        label_en: Sweetness
+        intensity: 6
+        description: "果甜香与回甘共同构成甜感体验"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
+      - key: body
+        label_zh: 醇厚度
+        label_en: Body
         intensity: 7
-        description: "入口清爽，回味较明亮"
+        description: "甘醇、较圆润的口感"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_public_oolong_components"]
+      - key: astringency
+        label_zh: 收敛感
+        label_en: Astringency
+        intensity: 4
+        description: "适度涩感，非主导"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_public_oolong_components"]
+      - key: roasted
+        label_zh: 焙火感
+        label_en: Roasted Note
+        intensity: 5
+        description: "焙火带来的火香与醇厚度"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_wang_2023_oolong"]
+      - key: finish
+        label_zh: 回甘与尾韵
+        label_en: Lingering Finish
+        intensity: 8
+        description: "回甘、花香留存、音韵"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_tea_flavor_wheel_2022", "evidence_gbt19598_2025"]
+    component_notes:
+      - name: 氨基酸
+        value_type: typical_range
+        description: "Demo 阶段采用公开文献中的乌龙茶典型范围，不代表八马单品实测值"
+      - name: 咖啡碱
+        value_type: category_proxy
+        description: "42个商业乌龙茶样本均值25.98 mg/g，范围0–147.47（Chen 2023）；不代表赛珍珠实测值"
+      - note: "花香关联：同类铁观音中的橙花叔醇、茉莉内酯、苯乙醛等可能参与花香/果甜香（Wang 2023）"
+
+  # ===== 赛珍珠（新版ID） =====
+  - profile_id: flavor_szz_tgy_nx
+    tea_id: BAMA_SZZ_TGY_NX
+    dimensions:
+      - key: dry_leaf_aroma
+        label_zh: 干茶香气
+        label_en: Dry Leaf Aroma
+        intensity: 7
+        description: "炒米香、焙火温暖感；花香线索"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
+      - key: infusion_aroma
+        label_zh: 茶汤香气
+        label_en: Infusion Aroma
+        intensity: 8
+        description: "果甜香、兰花样花香"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor", "evidence_wang_2023_oolong"]
+      - key: floral
+        label_zh: 花香
+        label_en: Floral
+        intensity: 8
+        description: "以兰花香为代表的清雅花香"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_tea_flavor_wheel_2022", "evidence_wang_2023_oolong"]
+      - key: sweetness
+        label_zh: 甜感
+        label_en: Sweetness
+        intensity: 6
+        description: "果甜香与回甘共同构成甜感体验"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
+      - key: body
+        label_zh: 醇厚度
+        label_en: Body
+        intensity: 7
+        description: "甘醇、较圆润"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_public_oolong_components"]
+      - key: astringency
+        label_zh: 收敛感
+        label_en: Astringency
+        intensity: 4
+        description: "适度涩感"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_public_oolong_components"]
+      - key: roasted
+        label_zh: 焙火感
+        label_en: Roasted Note
+        intensity: 5
+        description: "焙火带来的烘焙香与醇厚感"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_wang_2023_oolong"]
+      - key: finish
+        label_zh: 回甘与尾韵
+        label_en: Lingering Finish
+        intensity: 8
+        description: "回甘、花香留存、音韵"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_tea_flavor_wheel_2022", "evidence_gbt19598_2025"]
+    component_notes:
+      - name: 氨基酸
+        value_type: typical_range
+        description: "Demo 阶段采用公开文献中的乌龙茶典型范围，不代表八马单品实测值"
+      - name: 咖啡碱
+        value_type: category_proxy
+        description: "42个商业乌龙茶样本均值25.98 mg/g，范围0–147.47（Chen 2023）"
+
+  # ===== 牛一大红袍 =====
+  - profile_id: flavor_ny_wrt_dhp
+    tea_id: BAMA_NY_WRT_DHP
+    dimensions:
+      - key: dry_leaf_aroma
+        label_zh: 干茶香气
+        label_en: Dry Leaf Aroma
+        intensity: 7
+        description: "油润带宝色，焙火香"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
+      - key: infusion_aroma
+        label_zh: 茶汤香气
+        label_en: Infusion Aroma
+        intensity: 8
+        description: "焙火香与花果香交叠；水蜜桃香明显"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor", "evidence_zhan_2023_wrt"]
+      - key: roasted_nutty
+        label_zh: 烘焙/坚果香
+        label_en: Roasted / Nutty
+        intensity: 7
+        description: "焙火带来的坚果、焦糖样烘焙香气线索"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_zhan_2023_wrt"]
+      - key: floral_fruity
+        label_zh: 花果香
+        label_en: Floral-Fruity
+        intensity: 7
+        description: "蜜甜花香、水蜜桃样果香"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
+      - key: body
+        label_zh: 醇厚度
+        label_en: Body
+        intensity: 8
+        description: "醇厚、结构感，岩韵的口腔结构维度"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_zhan_2023_wrt", "evidence_gbt18745"]
+      - key: astringency
+        label_zh: 收敛感
+        label_en: Astringency
+        intensity: 5
+        description: "轻至中等收敛，支撑结构感"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
         evidence_ids: ["evidence_public_oolong_components"]
       - key: finish
         label_zh: 回甘与尾韵
         label_en: Lingering Finish
         intensity: 8
-        description: "饮后口腔留香，尾韵较长"
-        evidence_ids: ["evidence_tea_flavor_wheel_2022"]
-      - key: roasted
-        label_zh: 焙火感
-        label_en: Roasted Note
-        intensity: 4
-        description: "焙火带来的火香与醇厚度"
-        evidence_ids: ["evidence_public_oolong_components"]
+        description: "回甘、焙火与花果余香、岩韵"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_zhan_2023_wrt", "evidence_gbt18745"]
+      - key: liquor_color
+        label_zh: 汤色
+        label_en: Liquor Color
+        intensity: 6
+        description: "橙黄清澈"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
     component_notes:
-      - name: 氨基酸
-        value_type: typical_range
-        description: "Demo 阶段采用公开文献中的乌龙茶典型范围，不代表八马单品实测值"
+      - name: 咖啡碱
+        value_type: category_proxy
+        description: "武夷岩茶研究显示咖啡碱约19–23 mg/g，不同焙火处理下变化<20%（Liu 2021）"
+      - name: 茶氨酸
+        value_type: category_proxy
+        description: "中度与充分焙火后下降约52%–80%（Liu 2021），焙火对游离氨基酸影响明显强于对咖啡碱的影响"
+      - name: 焙火路径
+        value_type: process_proxy
+        description: "高温焙火促进吡嗪、吡咯、呋喃等烘焙香物质形成（Zhan 2023）；不代表牛一实际焙火温度"
+
+  # ===== 鼎红金骏眉 =====
+  - profile_id: flavor_dh_bt_jjm
+    tea_id: BAMA_DH_BT_JJM
+    dimensions:
+      - key: dry_leaf_aroma
+        label_zh: 干茶香气
+        label_en: Dry Leaf Aroma
+        intensity: 8
+        description: "花果香、甜香"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
+      - key: infusion_aroma
+        label_zh: 茶汤香气
+        label_en: Infusion Aroma
+        intensity: 8
+        description: "花蜜甜香、熟果/甜花香；3D萃香：初显花香→中段果蜜香→尾调薄荷甜香"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor", "evidence_lin_2025_wuyi_bt"]
+      - key: floral
+        label_zh: 花香
+        label_en: Floral
+        intensity: 8
+        description: "花蜜甜香中的花香维度"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_lin_2025_wuyi_bt"]
+      - key: honeyed_sweetness
+        label_zh: 蜜甜感
+        label_en: Honeyed Sweetness
+        intensity: 8
+        description: "花果蜜甜香，甜润顺滑"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor", "evidence_lin_2025_wuyi_bt"]
+      - key: body
+        label_zh: 醇厚度
+        label_en: Body
+        intensity: 5
+        description: "甜润、顺滑，相对轻盈"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_chen_2025_blacktea"]
+      - key: bitterness
+        label_zh: 苦感
+        label_en: Bitterness
+        intensity: 2
+        description: "苦涩相对低至中"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_chen_2025_blacktea"]
+      - key: finish
+        label_zh: 回甘与尾韵
+        label_en: Lingering Finish
+        intensity: 7
+        description: "蜜甜与花香延续，干净余韵"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_lin_2025_wuyi_bt"]
+      - key: liquor_color
+        label_zh: 汤色
+        label_en: Liquor Color
+        intensity: 6
+        description: "金黄明亮（金骏眉典型汤色）"
+        value_type: demo_estimate
+        not_measurement: true
+        calibration_status: pending_blind_tasting
+        evidence_ids: ["evidence_bama_prospectus_flavor"]
+    component_notes:
+      - name: 咖啡碱
+        value_type: category_proxy
+        description: "17个商业红茶样本均值43.43 mg/g，范围0–143.89（Chen 2023）"
+      - name: 茶黄素/茶红素
+        value_type: category_proxy
+        description: "参与红茶汤色、亮度、厚度和收敛结构（品类层）"
+      - name: 花蜜香物质
+        value_type: aroma_mechanism_proxy
+        description: "芳樟醇及氧化物、苯乙醇、苯乙醛、橙花醛等共同参与（Lin 2025）"

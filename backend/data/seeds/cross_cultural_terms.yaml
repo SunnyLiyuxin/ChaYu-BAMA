@@ -1,17 +1,127 @@
 # 茶文化核心术语及其英文解释、类比策略、文化保留策略
 # 跨文化链规则筛选时，茶品术语与 trigger_terms 取交集会命中这里的概念
+
 cross_cultural_terms:
+  # ===== 已有术语（保留） =====
   - id: term_guanyin_yun
     chinese: 观音韵
     english: Guanyin Yun
-    explanation: "Guanyin Yun refers to the lingering impression Tieguanyin leaves after drinking, including aroma, aftertaste, and mouthfeel."
+    explanation: "Guanyin Yun refers to the lingering impression Tieguanyin leaves after drinking, including aroma, aftertaste, and mouthfeel. It is the unity of the Tieguanyin cultivar, Anxi terroir, traditional craft, and aftertaste — not a single aroma."
     analogy_strategy: "用 specialty coffee 的 floral finish 作入门类比降低门槛，但不等同单一风味物质"
     preserve_strategy: "保留拼音 Guanyin Yun 并附文化解释，不得替换为咖啡/酒术语"
-    evidence_ids: ["evidence_tea_flavor_wheel_2022"]
+    evidence_ids: ["evidence_tea_flavor_wheel_2022", "evidence_gbt19598_2025"]
+
   - id: term_lanxiang
     chinese: 兰花香
     english: Orchid Aroma
     explanation: "以兰花香为代表的清雅花香，铁观音典型香型。"
     analogy_strategy: "可类比为 floral / jasmine notes in light coffee"
     preserve_strategy: "可类比，需说明非完全相同"
+    evidence_ids: ["evidence_tea_flavor_wheel_2022"]
+
+  # ===== 新增：品牌与产品专名 =====
+  - id: term_saizhenzhu
+    chinese: 赛珍珠
+    english: Saizhenzhu Tieguanyin
+    explanation: "Bama Tea's flagship Tieguanyin series. 'Saizhenzhu' is the brand series name and should be kept in pinyin."
+    analogy_strategy: "不逐字翻译为 Pearl Competition"
+    preserve_strategy: "保留拼音 Saizhenzhu，首次可补充'Bama's signature roasted Tieguanyin'"
+    evidence_ids: ["evidence_hkex_2025_prospectus"]
+
+  - id: term_tieguanyin
+    chinese: 铁观音
+    english: Tieguanyin oolong
+    explanation: "One of China's most famous oolong teas, known for its floral character and complex processing."
+    analogy_strategy: "首次可补充'traditionally known as Iron Goddess of Mercy'"
+    preserve_strategy: "主名用 Tieguanyin，不推荐 Iron Goddess tea 作为唯一名称（可能造成品类搜索断裂）"
+    evidence_ids: ["evidence_gbt19598_2025"]
+
+  - id: term_niuyi
+    chinese: 牛一
+    english: Niuyi Wuyi rock tea
+    explanation: "Bama Tea's flagship Wuyi rock tea series. The name is a brand designation."
+    analogy_strategy: "不翻译为 Number-one cow tea"
+    preserve_strategy: "保留拼音 Niuyi"
+    evidence_ids: ["evidence_hkex_2025_prospectus"]
+
+  - id: term_yan_cha
+    chinese: 岩茶
+    english: Wuyi rock tea
+    explanation: "Oolong tea from the Wuyi mountain region, shaped by unique terroir and roasting craft."
+    analogy_strategy: "海外茶圈已有相对稳定表达 Wuyi rock tea"
+    preserve_strategy: "不只用 oolong 概括，保留 rock tea 品类识别"
+    evidence_ids: ["evidence_gbt18745"]
+
+  - id: term_yan_yun
+    chinese: 岩韵
+    english: Yan Yun
+    explanation: "A persistent structure and aftertaste associated with Wuyi terroir and craft. 'Yan' (rock) refers to the terroir, not a literal taste of stone. It encompasses mountain character, varietal, craft, and mouthfeel structure."
+    analogy_strategy: "避免让人以为茶里有石头味；帮助理解结构感与余韵"
+    preserve_strategy: "保留拼音 Yan Yun 并完整解释，不可简化为 mineral flavor 或 rock taste"
+    evidence_ids: ["evidence_gbt18745"]
+
+  - id: term_dahongpao
+    chinese: 大红袍
+    english: Da Hong Pao
+    explanation: "A prestigious Wuyi rock tea. The name literally means 'Big Red Robe' based on folklore."
+    analogy_strategy: "海外茶圈普遍使用 Da Hong Pao，拼音已有识别度"
+    preserve_strategy: "主名用 Da Hong Pao；文化故事中解释字面意义，不作为主名"
+    evidence_ids: ["evidence_gbt18745"]
+
+  - id: term_dinghong
+    chinese: 鼎红
+    english: Dinghong Black Tea
+    explanation: "Bama Tea's flagship black tea series from Wuyi mountains."
+    analogy_strategy: "不翻译为 Cauldron Red"
+    preserve_strategy: "保留拼音 Dinghong；注意'红茶'国际通用为 black tea"
+    evidence_ids: ["evidence_hkex_2025_prospectus"]
+
+  - id: term_jinjunmei
+    chinese: 金骏眉
+    english: Jin Jun Mei black tea
+    explanation: "A premium bud-type black tea from the Wuyi region. The name is a Chinese tea product proper name."
+    analogy_strategy: "不逐字翻译为 Golden Horse Eyebrow"
+    preserve_strategy: "保留拼音 Jin Jun Mei，解释为芽型武夷红茶"
+    evidence_ids: ["evidence_ght1118"]
+
+  # ===== 感官文化术语 =====
+  - id: term_huigan
+    chinese: 回甘
+    english: hui gan
+    explanation: "A returning sweetness after swallowing — a sweetness that reappears in the mouth and throat, sometimes minutes after drinking."
+    analogy_strategy: "首次出现保留拼音并解释，后文可只用 hui gan"
+    preserve_strategy: "不只用 sweet aftertaste 概括；回甘强调吞咽后甜感重新出现，有时来自喉部或在数分钟后显现"
+    evidence_ids: ["evidence_tea_flavor_wheel_2022", "evidence_reddit_tea_discourse"]
+
+  - id: term_sanxiang
+    chinese: 三香
+    english: Three Aromas
+    explanation: "Bama's signature sensory framework for Saizhenzhu: dry leaf toasted-rice aroma, infusion fruity-sweet aroma, and tasting orchid floral aroma."
+    analogy_strategy: "可分步解释三种香气的感官定位"
+    preserve_strategy: "品牌专有术语，翻译时保留三种香气的完整对应关系"
+    evidence_ids: ["evidence_bama_prospectus_flavor"]
+
+  - id: term_chunhou
+    chinese: 醇厚
+    english: full-bodied / mellow-rich
+    explanation: "Describes a tea with substantial body and smooth mouthfeel, without harshness."
+    analogy_strategy: "可比作 full-bodied coffee 的口感，但强调茶的醇厚通常更柔和不刺激"
+    preserve_strategy: "需要区分醇厚（body/mouthfeel）与浓度（strength）"
+    evidence_ids: ["evidence_tea_flavor_wheel_2022"]
+
+  # ===== 工艺术语 =====
+  - id: term_beihuo
+    chinese: 焙火
+    english: roasting / bake-firing
+    explanation: "A post-processing heating step that develops roasted, nutty, and caramel-like aromas in oolong tea. Critical for Wuyi rock tea and nongxiang (strong-aroma) Tieguanyin."
+    analogy_strategy: "与咖啡烘焙共享热反应路径（吡嗪/呋喃形成），可作为科学类比入口"
+    preserve_strategy: "区分焙火程度（低/中/足火），不把论文实验温度写成品牌工艺参数"
+    evidence_ids: ["evidence_zhan_2023_wrt", "evidence_liu_2021_wrt_roasting"]
+
+  - id: term_zuoqing
+    chinese: 做青
+    english: zuo qing / bruising-oxidation
+    explanation: "The alternating bruising and resting steps that define oolong tea processing, creating its partial oxidation and floral-fruity character."
+    analogy_strategy: "无直接西方对应工艺，需解释而非类比"
+    preserve_strategy: "保留拼音 zuo qing 并解释其交替碰青与静置的过程"
     evidence_ids: ["evidence_tea_flavor_wheel_2022"]

@@ -1,16 +1,89 @@
 # 茶品知识卡片（第 1 层：知识 / 证据层）
 # 含产地风土、工艺、文化故事、证据引用
+# 三款茶各一套知识卡片，共享同一证据池
+
 tea_knowledge:
+  # ===== 赛珍珠铁观音 =====
   - tea_id: tieguanyin_001
     origin:
-      region: 福建安溪
+      region: 福建安溪铁观音地理标志产品范围
       terroir: "山地丘陵、云雾充足、昼夜温差较明显，适宜乌龙茶香气形成"
+      source_note: "八马生态高山茶园；具体山场应以包装确认为准"
     process:
-      name: 铁观音传统制作工艺
+      name: 铁观音传统制作工艺（浓香型）
       steps: ["晒青", "凉青", "摇青", "杀青", "揉捻", "焙火"]
-      key_technique: "看青做青、摇青与焙火控制"
+      key_technique: "看青做青、摇青与焙火控制；浓香型经后续焙火形成炒米香与醇厚感"
+      brand_claim: "非遗技艺，国家级非遗代表性传承人王文礼监制"
     story:
       title: 铁观音非遗制茶技艺
-      content: "铁观音制作技艺强调经验判断与工艺控制，是中国乌龙茶的重要代表。"
+      content: "铁观音制作技艺强调经验判断与工艺控制，是中国乌龙茶的重要代表。品牌概括'百年传承，浓香经典'。"
+      cultural_core: "音韵是铁观音品种、地域、工艺与滋味综合形成的整体感受，不能归因于单一成分。"
     evidence_ids:
       - evidence_tea_flavor_wheel_2022
+      - evidence_gbt19598_2025
+      - evidence_wang_2023_oolong
+
+  - tea_id: BAMA_SZZ_TGY_NX
+    origin:
+      region: 福建安溪铁观音地理标志产品范围
+      terroir: "山地丘陵、云雾充足、昼夜温差较明显，适宜乌龙茶香气形成"
+      source_note: "八马高山生态茶园；品牌表述'安溪原产'"
+    process:
+      name: 铁观音传统制作工艺（浓香型）
+      steps: ["晒青", "凉青", "摇青", "杀青", "揉捻", "焙火"]
+      key_technique: "看青做青、摇青与焙火控制；浓香型经后续焙火形成炒米香与醇厚感"
+      brand_claim: "非遗技艺，国家级非遗代表性传承人王文礼监制"
+    story:
+      title: 赛珍珠：百年传承，浓香经典
+      content: "八马传统优势与最成熟明星系列，具有'三香''音韵'等品牌识别。铁观音制作技艺强调经验判断与工艺控制，是中国乌龙茶的重要代表。"
+      cultural_core: "音韵是铁观音品种、地域、工艺与滋味综合形成的整体感受，适合保留拼音/专名并配解释，不宜只译成一种香气。"
+    evidence_ids:
+      - evidence_tea_flavor_wheel_2022
+      - evidence_gbt19598_2025
+      - evidence_wang_2023_oolong
+      - evidence_hkex_2025_prospectus
+      - evidence_bama_prospectus_flavor
+
+  # ===== 牛一武夷岩茶 =====
+  - tea_id: BAMA_NY_WRT_DHP
+    origin:
+      region: 福建武夷山岩茶产区
+      terroir: "世界文化与自然双遗产地、武夷岩茶核心产区"
+      source_note: "页面表述'以牛栏坑为代表的正岩山场'不等同于该SKU全部原料均来自牛栏坑；具体山场必须有SKU包装/溯源证明才可写入产品事实"
+    process:
+      name: 武夷岩茶传统制作工艺
+      steps: ["萎凋", "做青", "杀青", "揉捻", "干燥", "焙火"]
+      key_technique: "做青与焙火控制；焙火是烘焙香形成关键步骤，高温焙火促进吡嗪、吡咯、呋喃等烘焙香物质"
+      brand_claim: "正岩山场、高香岩韵、非遗技艺；'千里挑一，选出真正好岩茶'"
+    story:
+      title: 牛一：千里挑一的岩茶
+      content: "牛一是八马核心明星系列，代表武夷岩茶、焙火和'岩韵'。大红袍为拼配产品；牛一系列还包括肉桂、水仙、奇丹等，不能混用风味。"
+      cultural_core: "岩韵/岩骨花香包含山场、品种、工艺及口腔结构感，并非单一矿物味。不宜直接翻成'mineral flavor'后结束。"
+    evidence_ids:
+      - evidence_tea_flavor_wheel_2022
+      - evidence_hkex_2025_prospectus
+      - evidence_zhan_2023_wrt
+      - evidence_liu_2021_wrt_roasting
+      - evidence_gbt18745
+
+  # ===== 鼎红武夷红茶 =====
+  - tea_id: BAMA_DH_BT_JJM
+    origin:
+      region: 福建武夷山，金骏眉核心原产地桐木关
+      terroir: "世界红茶发源地福建武夷山；国家地理标志、双世遗武夷山"
+      source_note: "桐木关核心原产地为官方商品页声明，具体原料边界应以包装执行标准和产地标识为准"
+    process:
+      name: 武夷红茶传统制作工艺
+      steps: ["萎凋", "揉捻", "氧化（行业常称'发酵'）", "干燥"]
+      key_technique: "'全发酵'是行业习惯表达，科学上主要为酶促氧化。品牌提出'3D萃香工艺，3重复合香型'，目前属品牌工艺术语。"
+      brand_claim: "3D萃香工艺：初显花香（清雅悠扬）→ 中段果蜜香（灵动清甜）→ 尾调薄荷甜香（清新自然）"
+    story:
+      title: 鼎红：武夷红茶的代表
+      content: "鼎红是八马核心明星系列，代表红茶的萎凋—揉捻—氧化路径，典型花果/花蜜甜香适合跨文化传播。金骏眉是芽型武夷红茶。"
+      cultural_core: "金骏眉是中文产品专名，不宜逐字翻译为'Golden Horse Eyebrow'。建议保留'Jin Jun Mei'并解释其为芽型武夷红茶。"
+    evidence_ids:
+      - evidence_tea_flavor_wheel_2022
+      - evidence_hkex_2025_prospectus
+      - evidence_bama_prospectus_flavor
+      - evidence_lin_2025_wuyi_bt
+      - evidence_chen_2025_blacktea

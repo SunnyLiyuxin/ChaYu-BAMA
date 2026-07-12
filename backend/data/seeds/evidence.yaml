@@ -1,17 +1,237 @@
 # 证据元数据：数据来源与可信度
-# confidence: high/medium/low；source_type 由团队人工确认
+# confidence: high/medium/low
+# evidence_level: A/B/C/D/X（见报告第2.3节）
+# source_type 由团队人工确认
 evidence_sources:
+  # ===== 已有的 =====
   - id: evidence_tea_flavor_wheel_2022
     claim: "茶叶感官风味轮可作为风味术语参考"
     source_type: public_standard
     source: "T/CTSS 58-2022 茶叶感官风味轮"
     confidence: high
+    evidence_level: B
     collected_by: "王传宇"
-    notes: "用于 Demo 风味术语参考"
+    notes: "用于 Demo 风味术语参考；规定茶叶感官基元语素集和风味轮"
+
   - id: evidence_public_oolong_components
     claim: "乌龙茶成分与感知关系，采用公开文献典型范围"
     source_type: industry_article
     source: "公开乌龙茶工艺与成分综述"
     confidence: medium
+    evidence_level: B
     collected_by: "团队"
     notes: "Demo 阶段代理数据，不代表单品实测值"
+
+  # ===== 八马官方文件（A级证据） =====
+  - id: evidence_hkex_2025_prospectus
+    claim: "八马茶业将赛珍珠、牛一、鼎红列为核心明星系列及知名畅销产品"
+    source_type: official_website
+    source: "八马茶业股份有限公司《全球发售/招股章程》，港交所，2025"
+    confidence: high
+    evidence_level: A
+    collected_by: "团队"
+    notes: "明确三大核心系列，并提供代表性产品与工艺信息"
+
+  - id: evidence_hkex_2026_annual
+    claim: "八马2025年年报明确赛珍珠、牛一、鼎红为三大核心系列"
+    source_type: official_website
+    source: "八马茶业股份有限公司《截至2025年12月31日止年度之全年业绩公告》，港交所，2026-03-27"
+    confidence: high
+    evidence_level: A
+    collected_by: "团队"
+    notes: "直接确认三大核心明星系列"
+
+  - id: evidence_bama_prospectus_flavor
+    claim: "八马官方产品感官描述：赛珍珠三香、牛一焙火花果香、鼎红花蜜甜香"
+    source_type: official_website
+    source: "八马官方商品详情页及招股材料中的产品代表性描述"
+    confidence: high
+    evidence_level: A
+    collected_by: "团队（2026-07-12实采）"
+    notes: "品牌官方感官语言，A级可信度；具体SKU描述可能随时间更新"
+
+  # ===== 国家标准（A/B级） =====
+  - id: evidence_gbt19598_2025
+    claim: "GB/T 19598-2025 定义安溪铁观音地理标志产品质量要求，含音韵定义"
+    source_type: public_standard
+    source: "国家市场监督管理总局、国家标准化管理委员会，GB/T 19598-2025《地理标志产品质量要求 安溪铁观音》，2025-09-01实施"
+    confidence: high
+    evidence_level: A
+    collected_by: "团队"
+    notes: "标准是产品合规和定义依据，不是具体SKU实测表；音韵定义：香气馥郁、滋味醇爽、汤中带花果香、回甘明显、齿颊留香的综合品质特征"
+
+  - id: evidence_gbt18745
+    claim: "GB/T 18745 定义武夷岩茶产品质量要求"
+    source_type: public_standard
+    source: "国家市场监督管理总局，GB/T 18745-2006（GB/T 18745-2026已发布，2027-04-01实施）"
+    confidence: high
+    evidence_level: A
+    collected_by: "团队"
+    notes: "现行2006版，新版2026已发布待实施；定义武夷岩茶基本要求"
+
+  - id: evidence_ght1118
+    claim: "GH/T 1118-2015 曾定义金骏眉的地域、单芽原料、工艺要求"
+    source_type: public_standard
+    source: "中华全国供销合作总社，GH/T 1118-2015"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "平台状态信息存在矛盾，具体SKU应以包装执行标准为准"
+
+  # ===== 学术论文（B级） =====
+  - id: evidence_wang_2023_oolong
+    claim: "铁观音及武夷岩茶烘焙前后感官与挥发物比较研究"
+    source_type: paper
+    source: "Wang, D. et al. (2023). Comparative study of volatile fingerprints of roasted and unroasted oolong teas. Food Chemistry: X"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "识别橙花叔醇、茉莉内酯、苯乙醛等与花香/果甜香有关的特征挥发物；焙火增加烘焙、焦糖样挥发物"
+
+  - id: evidence_zhan_2023_wrt
+    claim: "武夷岩茶焙火促进吡嗪、吡咯、呋喃类烘焙香活性物形成"
+    source_type: paper
+    source: "Zhan, S. et al. (2023). Role of roasting in the formation of characteristic aroma of Wuyi rock tea. Food Control, 147, 109614. DOI: 10.1016/j.foodcont.2023.109614"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "120℃以上模型反应促进若干关键烘焙香物形成；不代表牛一实际焙火温度"
+
+  - id: evidence_liu_2021_wrt_roasting
+    claim: "武夷岩茶不同焙火程度化学成分变化：茶氨酸下降52%–80%，咖啡碱相对稳定"
+    source_type: paper
+    source: "Liu, X. et al. (2021). Chemical characterization of Wuyi rock tea with different roasting degrees. RSC Advances, 11"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "12个武夷岩茶样品、4个品种、不同焙火程度；咖啡碱约19–23 mg/g，不同焙火下变化<20%"
+
+  - id: evidence_li_2024_yin_yun
+    claim: "铁观音'音韵'由儿茶素、黄酮及黄酮苷、氨基酸、核苷酸和有机酸等共同塑造，不能归因于单一成分"
+    source_type: paper
+    source: "Li, Q. et al. (2024). Insights into 'Yin Rhyme': Analysis of nonvolatile components in Tieguanyin oolong tea. Food Chemistry: X, 23, 101729. DOI: 10.1016/j.fochx.2024.101729"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "通过广泛靶向代谢组学识别非挥发性成分变化；不提供赛珍珠成品浓度"
+
+  - id: evidence_lin_2025_wuyi_bt
+    claim: "武夷红茶花蜜香由芳樟醇、苯乙醇、苯乙醛、橙花醛等关键香气物共同参与"
+    source_type: paper
+    source: "Lin, Z. et al. (2025). 花蜜香武夷红茶关键香气成分分析：感官评价与GC×GC-O-TOF-MS/rOAV联合研究"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "从331种挥发性化合物中识别出对花蜜香更关键的物质；研究对象为花蜜香武夷红茶，与鼎红官方描述一致"
+
+  - id: evidence_chen_2025_blacktea
+    claim: "红茶中咖啡碱、儿茶素、氨基酸、茶黄素等共同影响苦涩、鲜甜、亮度与结构"
+    source_type: paper
+    source: "Chen等，红茶滋味化学综述"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "品类层机理，不是鼎红SKU实测值"
+
+  - id: evidence_chen_2023_foods
+    claim: "六类商业茶121个样本的成分统计：乌龙茶42个、红茶17个"
+    source_type: paper
+    source: "Chen, Y. et al. (2023). Quantitative Analysis of Bioactive Compounds in Commercial Teas. Foods, 12(16), 3098. DOI: 10.3390/foods12163098"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "UHPLC-DAD检测；乌龙茶咖啡碱25.98±23.49 mg/g，红茶43.43±29.42 mg/g；样本间差异极大，不可套用为单品值"
+
+  - id: evidence_wang_2023_theanine
+    claim: "茶氨酸参与武夷岩茶焙火吡嗪形成"
+    source_type: paper
+    source: "Wang, J. et al. (2023). Contribution of theanine to temperature-induced formation of aroma compounds in Wuyi rock tea. Food Research International"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "讨论茶氨酸与焙火吡嗪形成的关系"
+
+  - id: evidence_zhang_2025_rougui
+    claim: "肉桂武夷岩茶桂皮样香气的关键物质及其形成规律"
+    source_type: paper
+    source: "Zhang, H. et al. (2025). Analysis of key substances of cinnamon-like fragrance in Rougui Wuyi Rock Tea. LWT, 118876. DOI: 10.1016/j.lwt.2025.118876"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "研究对象为肉桂品种，不能直接套给牛一大红袍"
+
+  - id: evidence_ho_2015_tea_aroma
+    claim: "茶中芳樟醇、香叶醇、苯乙醇等香气物质与形成路径综述"
+    source_type: paper
+    source: "Ho, C. T. et al. (2015). Tea aroma formation. Food Science and Human Wellness, 4"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "综述茶香形成路径；可用于解释花香/果香共性机制"
+
+  # ===== 国际参考（B/C级） =====
+  - id: evidence_wcr_sensory_lexicon
+    claim: "World Coffee Research Sensory Lexicon 以 Black Tea 作为咖啡感官校准参照"
+    source_type: public_standard
+    source: "World Coffee Research, Sensory Lexicon（第一版110项属性）"
+    confidence: high
+    evidence_level: B
+    collected_by: "团队"
+    notes: "证明咖啡专业感官体系已使用茶作为校准物；SCA风味轮受CC BY-NC-ND 4.0许可约束，Demo可说明借鉴但不可商业化复制"
+
+  - id: evidence_sca_flavor_wheel
+    claim: "SCA咖啡风味轮（2016版）为WCR合作更新的国际咖啡感官标准"
+    source_type: public_standard
+    source: "Specialty Coffee Association, The Coffee Taster's Flavor Wheel (2016)"
+    confidence: high
+    evidence_level: B
+    collected_by: "团队"
+    notes: "官方许可为CC BY-NC-ND 4.0"
+
+  # ===== 社媒语料（D级） =====
+  - id: evidence_reddit_tea_discourse
+    claim: "海外茶圈自然语言观察：hui gan/yan yun 等术语的海外使用模式"
+    source_type: social_media
+    source: "Reddit r/tea, Steepster 品饮笔记抽样检索（2026）"
+    confidence: low
+    evidence_level: D
+    collected_by: "团队"
+    notes: "D级消费者语料，只用于设计表达，不作为产品科学证据。发现：海外资深茶客会使用拼音hui gan/yan yun；新手常把hui gan近似理解为aftertaste"
+
+  # ===== 平台规则（C级） =====
+  - id: evidence_tiktok_creative_guide
+    claim: "TikTok官方创意指南：竖屏9:16、原生真实叙事、尽早突出关键信息"
+    source_type: official_website
+    source: "TikTok for Business, Creative Made Simple / SMB Creative Playbook / 9 Creative Tips / Spark Ads Creative Playbook"
+    confidence: medium
+    evidence_level: C
+    collected_by: "团队"
+    notes: "用于L4模块平台规则配置；趋势和音乐需结合发布时实时数据"
+
+  # ===== 零售来源（C级） =====
+  - id: evidence_retail_szz11111
+    claim: "赛珍珠11111特级浓香型75g，公开零售页规格信息"
+    source_type: ecommerce
+    source: "八马官方旗舰店商品详情页"
+    confidence: medium
+    evidence_level: C
+    collected_by: "团队（2026-07-12实采）"
+    notes: "规格来自公开零售信息，购买前应再以当期包装核验"
+
+  - id: evidence_retail_ny12800
+    claim: "牛一12800悦享版大红袍，可选17g或51g"
+    source_type: ecommerce
+    source: "八马官方旗舰店商品详情页"
+    confidence: medium
+    evidence_level: C
+    collected_by: "团队（2026-07-12实采）"
+    notes: "待补具体储存条件及包装执行标准"
+
+  - id: evidence_retail_dh10000
+    claim: "鼎红10000金骏眉50g，特级"
+    source_type: ecommerce
+    source: "八马官方旗舰店商品详情页"
+    confidence: medium
+    evidence_level: C
+    collected_by: "团队（2026-07-12实采）"
+    notes: "多种规格可选，Demo需选一个确定规格"

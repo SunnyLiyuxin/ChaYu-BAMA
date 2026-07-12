@@ -1,9 +1,9 @@
-# 预置输出（阶段一 LLM 代理）
-# 两条链各一套：国内表达 + 跨文化表达 + 中文物料 + 英文物料
+# 预置输出（阶段一 LLM 代理 + seed 兜底）
+# 三款茶 × 两条链（国内 + 跨文化）× 物料（中文 + 英文）
 # 跨文化表达 source_expression_id 指向国内表达（横向翻译派生，不进纵向链）
-# 物料：国内物料 source_expression_id 指向国内表达；跨文化物料 source_translation_id 指向跨文化表达
 
 expressions:
+  # ===== 赛珍珠铁观音（已有，保留） =====
   - id: expr_cn_tieguanyin_001
     tea_id: tieguanyin_001
     expression_type: domestic
@@ -19,7 +19,7 @@ expressions:
       emotional_style: "适合在下午慢慢喝，第一口是清爽，后面留下的是比较柔和的花香和回甘。"
     source_profile_id: flavor_tieguanyin_001
     trace_id: expr_cn_tieguanyin_001
-    source_expression_id: null  # 国内表达是翻译源文，无源文
+    source_expression_id: null
 
   - id: expr_en_tieguanyin_coffee_001
     tea_id: tieguanyin_001
@@ -38,10 +38,148 @@ expressions:
         confidence: medium
         note: "用于降低理解门槛，不等同于完全相同的风味物质"
     source_profile_id: flavor_tieguanyin_001
-    source_expression_id: expr_cn_tieguanyin_001  # 横向翻译派生引用
+    source_expression_id: expr_cn_tieguanyin_001
     trace_id: expr_en_tieguanyin_coffee_001
 
+  # ===== 赛珍珠（新ID）——国内表达 =====
+  - id: expr_cn_szz_tgy_nx
+    tea_id: BAMA_SZZ_TGY_NX
+    expression_type: domestic
+    strategy_id: strategy_domestic_store_sales
+    audience:
+      age_group: gen_z
+      knowledge_level: beginner
+      scenario: self_drinking
+      psychology: curiosity
+    outputs:
+      story_style: "赛珍珠的铁观音值得用三种香气来理解：先闻干茶，是温暖的炒米香；再闻茶汤，是果甜香飘出来；入口后，兰花香才慢慢展开。三香层层递进，不是一次全给你。"
+      scientific_style: "浓香型铁观音的'三香'来自做青和焙火共同作用。同类铁观音研究显示，橙花叔醇、茉莉内酯等挥发物可能参与花香和果甜香的形成。当前成分解释基于品类研究，不是赛珍珠单品的检测值。"
+      emotional_style: "下午泡一杯赛珍珠，第一口是炒米的温暖感，慢慢花香透出来，喝完喉咙里甜感又重新浮现。这就是铁观音迷人的地方——它不会一次把答案全告诉你。"
+    source_profile_id: flavor_szz_tgy_nx
+    trace_id: expr_cn_szz_tgy_nx
+    source_expression_id: null
+
+  # ===== 赛珍珠（新ID）——跨文化表达 =====
+  - id: expr_en_szz_tgy_nx_coffee
+    tea_id: BAMA_SZZ_TGY_NX
+    expression_type: cross_cultural
+    strategy_id: strategy_cross_cultural_coffee
+    target_language: en
+    market: western
+    audience_reference: specialty_coffee_lovers
+    outputs:
+      literal_explanation: "Saizhenzhu is Bama Tea's flagship Tieguanyin — a roasted oolong with toasted-rice warmth, a fruity-sweet lift in the aroma, and an orchid-like floral note that unfolds on the palate."
+      beginner_analogy: "Think of the contrast in a carefully roasted coffee: warm toasted notes first, then a cleaner floral finish — but with the lighter body and long hui gan (returning sweetness) of oolong tea."
+      cultural_narrative: "Its defining character is called Guanyin Yun. It is not a single aroma, but the lingering unity of the Tieguanyin cultivar, Anxi terroir, traditional craft and aftertaste. The three-aroma progression — toasted rice, fruity sweetness, orchid — is Bama's way of guiding drinkers into this depth."
+    analogy_rules:
+      - source_dimension: 焙火感/炒米香
+        target_reference: "roasted warmth in medium-roast coffee"
+        mapping_type: shared_sensory_reference
+        confidence: medium
+        note: "共享感官参照，但炒米香与咖啡烘焙香不完全等同"
+      - source_dimension: 花香
+        target_reference: "floral finish in washed coffee"
+        mapping_type: shared_sensory_reference
+        confidence: medium
+        note: "入门类比，不等同于完全相同的风味物质"
+    source_profile_id: flavor_szz_tgy_nx
+    source_expression_id: expr_cn_szz_tgy_nx
+    trace_id: expr_en_szz_tgy_nx_coffee
+
+  # ===== 牛一大红袍——国内表达 =====
+  - id: expr_cn_ny_wrt_dhp
+    tea_id: BAMA_NY_WRT_DHP
+    expression_type: domestic
+    strategy_id: strategy_domestic_store_sales
+    audience:
+      age_group: gen_z
+      knowledge_level: beginner
+      scenario: self_drinking
+      psychology: curiosity
+    outputs:
+      story_style: "牛一大红袍不是只有一股焦香。前段是焙火的温暖感，像烤坚果的香气；后面会慢慢透出花果香和回甘。喝完后整个口腔有一种持续的结构感，这就是我们说的岩韵。"
+      scientific_style: "武夷岩茶的焙火是关键步骤。高温焙火促进吡嗪、吡咯和呋喃等烘焙香物质形成，同时也会改变茶氨酸等成分的组成。当前成分解释基于武夷岩茶品类研究，不代表牛一单品实测值。"
+      emotional_style: "岩茶适合在需要专注的时刻喝。焙火的温暖感让人安心，花果香让它不沉闷，喝完后的回甘像是一种安静的陪伴。"
+    source_profile_id: flavor_ny_wrt_dhp
+    trace_id: expr_cn_ny_wrt_dhp
+    source_expression_id: null
+
+  # ===== 牛一大红袍——跨文化表达 =====
+  - id: expr_en_ny_wrt_dhp_coffee
+    tea_id: BAMA_NY_WRT_DHP
+    expression_type: cross_cultural
+    strategy_id: strategy_cross_cultural_coffee
+    target_language: en
+    market: western
+    audience_reference: specialty_coffee_lovers
+    outputs:
+      literal_explanation: "Niuyi is Bama Tea's flagship Wuyi rock tea series. Da Hong Pao from this series offers roasted-nut warmth, layered floral-fruity notes, a full body, and a long structured finish."
+      beginner_analogy: "Its roasting creates familiar nutty and caramel-like cues — shared heat-driven aroma pathways also known in roasted foods and coffee. Yet the tea remains more lifted, with floral notes and a returning sweetness rather than coffee's dense roast body."
+      cultural_narrative: "Wuyi drinkers call its deeper structure Yan Yun. 'Yan' (rock) refers to terroir and the way aroma, texture and aftertaste hold together — not a literal taste of stone. It is the signature of tea grown in the Wuyi mountains, shaped by unique terrain and roasting craft."
+    analogy_rules:
+      - source_dimension: 焙火香/坚果香
+        target_reference: "nutty and caramel-like roasting cues in dark-roasted coffee"
+        mapping_type: shared_chemical_pathway
+        confidence: medium
+        note: "共享热反应路径，但整体风味不同；必须保留差异提醒"
+      - source_dimension: 岩韵
+        target_reference: "terroir concept in wine"
+        mapping_type: narrative_bridge
+        confidence: medium
+        note: "帮助理解地域与风格关系，但茶的地域—品种—工艺关系有自身体系"
+    source_profile_id: flavor_ny_wrt_dhp
+    source_expression_id: expr_cn_ny_wrt_dhp
+    trace_id: expr_en_ny_wrt_dhp_coffee
+
+  # ===== 鼎红金骏眉——国内表达 =====
+  - id: expr_cn_dh_bt_jjm
+    tea_id: BAMA_DH_BT_JJM
+    expression_type: domestic
+    strategy_id: strategy_domestic_store_sales
+    audience:
+      age_group: gen_z
+      knowledge_level: beginner
+      scenario: self_drinking
+      psychology: curiosity
+    outputs:
+      story_style: "鼎红金骏眉喝起来像走进春天的花园。干茶就有明显的花果香，冲泡后花蜜甜香扑面而来。入口甜润顺滑，几乎没有苦涩感，喝完后蜜甜和花香在嘴里延续很久。"
+      scientific_style: "武夷红茶的花蜜甜香来自多种香气物质的共同塑造。研究识别出芳樟醇及氧化物、苯乙醇、苯乙醛、橙花醛等参与花蜜香。'全发酵'是行业习惯表达，科学上主要为酶促氧化。当前成分解释基于品类研究，非鼎红单品实测值。"
+      emotional_style: "鼎红适合早上第一杯，或者下午需要一点甜感的时候。它不浓烈，更像是一种温柔的花蜜拥抱——不需要懂茶也能享受。"
+    source_profile_id: flavor_dh_bt_jjm
+    trace_id: expr_cn_dh_bt_jjm
+    source_expression_id: null
+
+  # ===== 鼎红金骏眉——跨文化表达 =====
+  - id: expr_en_dh_bt_jjm_wine
+    tea_id: BAMA_DH_BT_JJM
+    expression_type: cross_cultural
+    strategy_id: strategy_cross_cultural_coffee
+    target_language: en
+    market: western
+    audience_reference: specialty_coffee_lovers
+    outputs:
+      literal_explanation: "Dinghong Jin Jun Mei is a premium bud-type black tea from the Wuyi mountains. It delivers a honeyed floral aroma, ripe-fruit sweetness, and a smooth, clean finish."
+      beginner_analogy: "Approach it as you would an aromatic wine: notice the floral top notes first, honeyed fruit in the middle, and the length of the finish — without assuming wine-like acidity or alcohol. The tea's sweetness is natural, not added."
+      cultural_narrative: "Jin Jun Mei is kept as its Chinese name. It is a young tea by Chinese standards — developed in the early 2000s — yet it quickly became one of the most recognized black teas. The goal is not to rename the tea for the world, but to give first-time drinkers enough sensory anchors to enter its own tradition."
+    analogy_rules:
+      - source_dimension: 花蜜甜香
+        target_reference: "honeyed floral / ripe fruit notes"
+        mapping_type: shared_sensory_reference
+        confidence: medium
+        note: "八马官方描述与武夷红茶花蜜香研究一致"
+      - source_dimension: 品饮结构
+        target_reference: "wine-like aromatic progression (aroma→palate→finish)"
+        mapping_type: narrative_bridge
+        confidence: medium
+        note: "借用前中后段品饮结构，必须说明茶无酒精、酸度结构不同"
+    source_profile_id: flavor_dh_bt_jjm
+    source_expression_id: expr_cn_dh_bt_jjm
+    trace_id: expr_en_dh_bt_jjm_wine
+
+
+# ===== 物料层 =====
 assets:
+  # ===== 赛珍珠铁观音（已有，保留） =====
   - id: asset_tieguanyin_poster_zh_001
     tea_id: tieguanyin_001
     asset_type: poster
@@ -58,7 +196,7 @@ assets:
         - { label: 回甘与尾韵, value: 8 }
         - { label: 焙火感, value: 4 }
     image_prompt: "面向国内消费者的铁观音海报，兰花、白瓷茶杯、清雅花韵氛围，现代排版。"
-    source_expression_id: expr_cn_tieguanyin_001  # 纵向上一级 = 国内表达
+    source_expression_id: expr_cn_tieguanyin_001
     source_translation_id: null
     trace_id: asset_tieguanyin_poster_zh_001
 
@@ -79,5 +217,134 @@ assets:
         - { label: "Roasted Note", value: 4 }
     image_prompt: "Premium poster for Chinese Tieguanyin oolong tea, designed for Western specialty coffee lovers, elegant tea leaves, porcelain cup, clear floral mood, modern editorial layout."
     source_expression_id: null
-    source_translation_id: expr_en_tieguanyin_coffee_001  # 纵向上一级 = 跨文化表达
+    source_translation_id: expr_en_tieguanyin_coffee_001
     trace_id: asset_tieguanyin_poster_en_001
+
+  # ===== 赛珍珠（新ID）物料 =====
+  - id: asset_szz_poster_zh
+    tea_id: BAMA_SZZ_TGY_NX
+    asset_type: poster
+    platform: wechat
+    language: zh
+    copy:
+      headline: "赛珍珠：先闻三香，再懂铁观音"
+      subheadline: "干茶炒米香 · 茶汤果甜香 · 滋味兰花香"
+      body: "八马核心明星系列。浓香型安溪铁观音，以'三香'层层递进：先闻炒米温暖，再品果甜，最后兰花香在口中绽放。非遗技艺监制，百年传承浓香经典。"
+    visual_data:
+      radar:
+        - { label: 花香, value: 8 }
+        - { label: 甜感, value: 6 }
+        - { label: 醇厚度, value: 7 }
+        - { label: 焙火感, value: 5 }
+        - { label: 回甘与尾韵, value: 8 }
+    image_prompt: "面向国内消费者的赛珍珠铁观音海报，炒米色与兰花元素，白瓷盖碗，茶汤金黄明亮，现代中式排版。"
+    source_expression_id: expr_cn_szz_tgy_nx
+    source_translation_id: null
+    trace_id: asset_szz_poster_zh
+
+  - id: asset_szz_poster_en
+    tea_id: BAMA_SZZ_TGY_NX
+    asset_type: poster
+    platform: tiktok
+    language: en
+    copy:
+      headline: "Saizhenzhu Tieguanyin: Three Aromas, One Tea"
+      subheadline: "Toasted rice warmth → Fruity sweetness → Orchid floral"
+      body: "Bama Tea's flagship Tieguanyin. A roasted oolong that unfolds in three layers: warm toasted-rice notes first, then a fruity-sweet lift, finishing with orchid floral and a returning sweetness called hui gan."
+    visual_data:
+      radar:
+        - { label: Floral, value: 8 }
+        - { label: Sweetness, value: 6 }
+        - { label: Body, value: 7 }
+        - { label: "Roasted Note", value: 5 }
+        - { label: "Lingering Finish", value: 8 }
+    image_prompt: "Premium poster for Saizhenzhu Tieguanyin, warm toasted-rice tones, orchid elements, white porcelain gaiwan, golden tea liquor, modern editorial layout for Western audience."
+    source_expression_id: null
+    source_translation_id: expr_en_szz_tgy_nx_coffee
+    trace_id: asset_szz_poster_en
+
+  # ===== 牛一大红袍物料 =====
+  - id: asset_ny_poster_zh
+    tea_id: BAMA_NY_WRT_DHP
+    asset_type: poster
+    platform: wechat
+    language: zh
+    copy:
+      headline: "牛一大红袍：焙火温暖，岩韵悠长"
+      subheadline: "焙火香 · 花果香 · 水蜜桃香 · 岩韵"
+      body: "八马核心岩茶系列。武夷岩茶核心产区，正岩山场，非遗技艺。高温焙火带来坚果与焦糖样温暖感，花果香层层交叠，水蜜桃香明显，回甘悠长。"
+    visual_data:
+      radar:
+        - { label: 焙火/坚果香, value: 7 }
+        - { label: 花果香, value: 7 }
+        - { label: 醇厚度, value: 8 }
+        - { label: 收敛感, value: 5 }
+        - { label: 回甘与尾韵, value: 8 }
+    image_prompt: "面向国内消费者的牛一大红袍海报，武夷山岩壁元素、深色陶壶、橙黄茶汤、焙火温暖色调，现代中式排版。"
+    source_expression_id: expr_cn_ny_wrt_dhp
+    source_translation_id: null
+    trace_id: asset_ny_poster_zh
+
+  - id: asset_ny_poster_en
+    tea_id: BAMA_NY_WRT_DHP
+    asset_type: poster
+    platform: tiktok
+    language: en
+    copy:
+      headline: "Niuyi Da Hong Pao: Where Roasting Meets Rock"
+      subheadline: "Roasted nut warmth → Floral-fruity layers → Yan Yun finish"
+      body: "Bama Tea's flagship Wuyi rock tea. Roasting creates familiar nutty warmth, but floral and stone-fruit notes lift through, finishing with Yan Yun — the signature structure of Wuyi terroir."
+    visual_data:
+      radar:
+        - { label: "Roasted/Nutty", value: 7 }
+        - { label: "Floral-Fruity", value: 7 }
+        - { label: Body, value: 8 }
+        - { label: Astringency, value: 5 }
+        - { label: "Lingering Finish", value: 8 }
+    image_prompt: "Premium poster for Niuyi Da Hong Pao Wuyi rock tea, dramatic Wuyi mountain cliffs, dark clay teapot, amber tea liquor, warm roasting tones, editorial layout for Western audience."
+    source_expression_id: null
+    source_translation_id: expr_en_ny_wrt_dhp_coffee
+    trace_id: asset_ny_poster_en
+
+  # ===== 鼎红金骏眉物料 =====
+  - id: asset_dh_poster_zh
+    tea_id: BAMA_DH_BT_JJM
+    asset_type: poster
+    platform: wechat
+    language: zh
+    copy:
+      headline: "鼎红金骏眉：一杯花蜜拥抱"
+      subheadline: "花果香 · 花蜜甜香 · 甜润顺滑"
+      body: "八马核心红茶系列。来自世界红茶发源地武夷山桐木关。3D萃香工艺带来三重香型：初显花香清雅，中段果蜜灵动，尾调薄荷清新。金骏眉芽型红茶，甜润不苦涩。"
+    visual_data:
+      radar:
+        - { label: 花香, value: 8 }
+        - { label: 蜜甜感, value: 8 }
+        - { label: 醇厚度, value: 5 }
+        - { label: 苦感, value: 2 }
+        - { label: 回甘与尾韵, value: 7 }
+    image_prompt: "面向国内消费者的鼎红金骏眉海报，武夷山桐木关竹林元素、白瓷杯、金黄明亮茶汤、花蜜色调，温暖清新排版。"
+    source_expression_id: expr_cn_dh_bt_jjm
+    source_translation_id: null
+    trace_id: asset_dh_poster_zh
+
+  - id: asset_dh_poster_en
+    tea_id: BAMA_DH_BT_JJM
+    asset_type: poster
+    platform: tiktok
+    language: en
+    copy:
+      headline: "Dinghong Jin Jun Mei: Honeyed Floral, Naturally Smooth"
+      subheadline: "Honeyed floral aroma → Ripe fruit sweetness → Clean lingering finish"
+      body: "Bama Tea's flagship black tea from the birthplace of black tea — Wuyi mountains. Jin Jun Mei is a bud-type black tea with natural honeyed sweetness and floral lift. No bitterness, just smooth."
+    visual_data:
+      radar:
+        - { label: Floral, value: 8 }
+        - { label: "Honeyed Sweetness", value: 8 }
+        - { label: Body, value: 5 }
+        - { label: Bitterness, value: 2 }
+        - { label: "Lingering Finish", value: 7 }
+    image_prompt: "Premium poster for Dinghong Jin Jun Mei black tea, Wuyi mountain bamboo forest elements, white porcelain cup, golden tea liquor, warm honey tones, elegant editorial layout for Western audience."
+    source_expression_id: null
+    source_translation_id: expr_en_dh_bt_jjm_wine
+    trace_id: asset_dh_poster_en

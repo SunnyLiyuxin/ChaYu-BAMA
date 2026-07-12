@@ -1,5 +1,6 @@
 # 茶品基础信息
-# Demo 阶段仅 1 款：铁观音
+# Demo 阶段：三大明星系列（赛珍珠 / 牛一 / 鼎红）
+# tea_id 使用品牌系列缩写：SZZ=赛珍珠, NY=牛一, DH=鼎红
 teas:
   - id: tieguanyin_001
     name: 赛珍珠铁观音
@@ -7,3 +8,64 @@ teas:
     origin: 福建安溪
     brand: 八马茶业
     demo_available: true
+    series: 赛珍珠
+    tea_class: 乌龙茶/青茶
+    product_archetype: 浓香型安溪铁观音
+    demo_sku: "赛珍珠11111，特级浓香型，75g"
+    shelf_life_months: 24
+    standard: "GB/T 19598-2025《地理标志产品质量要求 安溪铁观音》"
+
+  - id: BAMA_SZZ_TGY_NX
+    name: 赛珍珠浓香型安溪铁观音
+    category: 乌龙茶
+    origin: 福建安溪铁观音地理标志产品范围
+    brand: 八马茶业
+    demo_available: true
+    series: 赛珍珠
+    tea_class: 乌龙茶/青茶
+    product_archetype: 浓香型安溪铁观音
+    demo_sku: "赛珍珠11111，特级浓香型，75g"
+    grade: 特级
+    shelf_life_months: 24
+    standard: "GB/T 19598-2025《地理标志产品质量要求 安溪铁观音》"
+    brand_sensory: "干茶炒米香、茶汤果甜香、滋味兰花香"
+    cultural_core: "音韵——铁观音品种、地域、工艺与滋味综合形成的整体感受"
+    core_process: "铁观音做青工艺 + 后续焙火形成浓香风格"
+    brew_method_id: "BREW_SZZ_3123_OFFICIAL"
+
+  - id: BAMA_NY_WRT_DHP
+    name: 牛一武夷岩茶·大红袍
+    category: 乌龙茶
+    origin: 福建武夷山岩茶产区
+    brand: 八马茶业
+    demo_available: true
+    series: 牛一
+    tea_class: 武夷岩茶/乌龙茶
+    product_archetype: 牛一大红袍
+    demo_sku: "牛一12800悦享版大红袍，特级，可选17g或51g"
+    grade: 特级
+    shelf_life: "符合存放条件可长期存放"
+    standard: "GB/T 18745-2006（GB/T 18745-2026已发布，2027-04-01实施）"
+    brand_sensory: "焙火香、花果香明显；水蜜桃香、蜜甜花香"
+    cultural_core: "岩韵/岩骨花香——包含山场、品种、工艺及口腔结构感，并非单一矿物味"
+    core_process: "萎凋、做青、杀青、揉捻、干燥、焙火；焙火是烘焙香形成关键步骤"
+    brew_method_id: "BREW_NY_5512_OFFICIAL"
+    region_note: "页面表述'以牛栏坑为代表的正岩山场'不等同于该SKU全部原料均来自牛栏坑"
+
+  - id: BAMA_DH_BT_JJM
+    name: 鼎红武夷红茶·金骏眉
+    category: 红茶
+    origin: 福建武夷山，金骏眉核心原产地桐木关
+    brand: 八马茶业
+    demo_available: true
+    series: 鼎红
+    tea_class: 红茶
+    product_archetype: 鼎红金骏眉
+    demo_sku: "鼎红10000金骏眉，特级，50g"
+    grade: 特级
+    shelf_life_months: 36
+    brand_sensory: "干茶花果香、茶汤花蜜甜香、滋味花蜜香；3D萃香：初显花香→中段果蜜香→尾调薄荷甜香"
+    cultural_core: "金骏眉是中文产品专名，保留拼音Jin Jun Mei并解释其为芽型武夷红茶"
+    core_process: "萎凋、揉捻、氧化（行业常称'发酵'）、干燥"
+    brew_method_id: "BREW_DH_5511_OFFICIAL"
+    region_note: "桐木关核心原产地为官方商品页声明，最终应以包装产地和执行标准复核"

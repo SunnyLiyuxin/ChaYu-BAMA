@@ -1,15 +1,61 @@
 # 表达策略：不同受众/场景/市场对应的表达框架
 # 国内链与跨文化链各引用一条策略，作为表达生成的结构骨架
+
 expression_strategies:
+  # ===== 已有策略（保留） =====
   - id: strategy_domestic_store_sales
     scope: domestic_expression
     market: domestic
     audience_reference: domestic_general
     output_slots: ["story_style", "scientific_style", "emotional_style"]
     instruction: "门店话术，三种风格并行：故事感 / 科学感 / 情绪感"
+
   - id: strategy_cross_cultural_coffee
     scope: cross_cultural_expression
     market: western
     audience_reference: specialty_coffee_lovers
     output_slots: ["literal_explanation", "beginner_analogy", "cultural_narrative"]
     instruction: "跨文化表达三段：字面解释 / 入门类比（咖啡参照）/ 文化叙事；类比作为对象内部子结构"
+
+  # ===== 新增策略 =====
+  - id: strategy_domestic_tiktok
+    scope: domestic_expression
+    market: domestic
+    audience_reference: domestic_general
+    output_slots: ["hook", "sensory_description", "cultural_concept"]
+    instruction: "短视频话术：3秒感官钩子 → 可感知描述 → 一个文化概念 → CTA"
+
+  - id: strategy_cross_cultural_wine
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: wine_enthusiast
+    output_slots: ["literal_explanation", "wine_structure_analogy", "cultural_narrative"]
+    instruction: "面向葡萄酒爱好者的跨文化表达：借用aroma→palate→finish品饮结构，但必须说明茶无酒精、酸度结构不同"
+
+  - id: strategy_cross_cultural_beginner
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: tea_novice
+    output_slots: ["simple_sensory_hook", "familiar_reference", "difference_reminder"]
+    instruction: "面向茶新手的表达：1-3个可感知词 + 一个熟悉参照（食物/饮品）+ 一个差异提醒"
+
+  - id: strategy_domestic_professional
+    scope: domestic_expression
+    market: domestic
+    audience_reference: tea_professional
+    output_slots: ["standard_reference", "process_detail", "evidence_boundary"]
+    instruction: "面向专业茶客/采购的表达：标准引用 → 工艺细节 → 证据边界 → 数据缺口"
+
+  - id: strategy_marketing_poster
+    scope: marketing_asset
+    market: any
+    audience_reference: any
+    output_slots: ["headline", "subheadline", "body", "image_prompt"]
+    instruction: "海报物料：标题+副标题+正文+画面描述，均为四层纵向链的输出端"
+
+  - id: strategy_marketing_tiktok
+    scope: marketing_asset
+    market: any
+    audience_reference: any
+    output_slots: ["hook", "shot_list", "voiceover", "on_screen_text", "caption", "cta", "claim_trace", "cultural_translation_notes"]
+    instruction: "TikTok物料：竖屏9:16，前3秒钩子→12秒品饮体验→6秒文化概念→CTA；附审核卡"
