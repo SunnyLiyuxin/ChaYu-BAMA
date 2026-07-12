@@ -1,8 +1,9 @@
 """Fallback 路由。
 
 P1：GET/POST /api/fallback —— 显式 fallback 入口。
-P2：占位接口（video-asset / translate / image/generate / audio/generate
-     / markets / audience-references）统一返回 fallback，避免 404。
+P2：占位接口（video-asset / translate / image/generate / audio/generate）统一
+     返回 fallback，避免 404。
+     markets / audience-references 已从占位升级为真实列表（见下）。
 """
 
 import functools
@@ -11,7 +12,7 @@ import re
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 
-from app import responses
+from app import data_loader, responses
 from app.schemas import FallbackRequest
 
 router = APIRouter(prefix="/api", tags=["fallback"])
@@ -68,14 +69,14 @@ def audio_generate(body: dict | None = None):
 
 @router.get("/markets")
 def markets():
-    """市场列表（P2 占位）。"""
-    return responses.fallback_response(message="市场列表 Demo 阶段暂以 demo-routes 暴露。")
+    """市场列表（已实现：从 demo_routes 派生 domestic / western，附双语 label）。"""
+    return responses.success(data_loader.list_markets())
 
 
 @router.get("/audience-references")
 def audience_references():
-    """受众参照系列表（P2 占位）。"""
-    return responses.fallback_response(message="受众参照系列表 Demo 阶段暂以 demo-routes 暴露。")
+    """受众参照系列表（已实现：从 demo_routes 派生，附双语 label）。"""
+    return responses.success(data_loader.list_audience_references())
 
 
 # ---------------------------------------------------------------------------

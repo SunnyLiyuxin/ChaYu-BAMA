@@ -66,6 +66,56 @@ def list_demo_routes() -> list[dict]:
     return all_seeds()["demo_routes"]
 
 
+# ---------------------------------------------------------------------------
+# 市场 / 受众参照系枚举（从 demo_routes 派生 + 双语 label）
+# ---------------------------------------------------------------------------
+
+# label 是 Demo 阶段的展示名映射，标 TODO：真市场 catalog 落地后迁入 seed。
+_MARKET_LABELS: dict[str, dict[str, str]] = {
+    "domestic": {"label_zh": "国内", "label_en": "Domestic"},
+    "western": {"label_zh": "欧美", "label_en": "Western"},
+}
+_AUDIENCE_LABELS: dict[str, dict[str, str]] = {
+    "domestic_general": {
+        "label_zh": "国内大众消费者",
+        "label_en": "Domestic general consumers",
+    },
+    "specialty_coffee_lovers": {
+        "label_zh": "欧美精品咖啡爱好者",
+        "label_en": "Western specialty coffee lovers",
+    },
+}
+
+
+def list_markets() -> list[dict]:
+    """从 demo_routes 派生去重后的市场列表，附双语展示名。
+
+    Demo 阶段市场值仅 domestic / western，源自 demo_routes.yaml 的 market 字段。
+    """
+    seen: dict[str, None] = {}
+    for r in all_seeds()["demo_routes"]:
+        m = r.get("market")
+        if m and m not in seen:
+            seen[m] = None
+    return [
+        {"id": m, **_MARKET_LABELS.get(m, {"label_zh": m, "label_en": m})}
+        for m in seen
+    ]
+
+
+def list_audience_references() -> list[dict]:
+    """从 demo_routes 派生去重后的受众参照系列表，附双语展示名。"""
+    seen: dict[str, None] = {}
+    for r in all_seeds()["demo_routes"]:
+        a = r.get("audience_reference")
+        if a and a not in seen:
+            seen[a] = None
+    return [
+        {"id": a, **_AUDIENCE_LABELS.get(a, {"label_zh": a, "label_en": a})}
+        for a in seen
+    ]
+
+
 def get_knowledge(tea_id: str) -> dict | None:
     for k in all_seeds()["tea_knowledge"]:
         if k["tea_id"] == tea_id:

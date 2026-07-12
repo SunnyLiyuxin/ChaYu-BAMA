@@ -23,8 +23,11 @@ POST /api/teas/{tea_id}/domestic-expression
 POST /api/teas/{tea_id}/cross-cultural-expression
 POST /api/teas/{tea_id}/marketing-asset
 GET  /api/trace/{output_id}
+GET  /api/markets
+GET  /api/audience-references
 GET  /api/fallback
 POST /api/fallback
+GET  /api/health-llm        # 调试：确认 LLM 是否接上
 ```
 
 暂未开放的功能会返回统一 fallback JSON，避免前端白屏或默认 404。
