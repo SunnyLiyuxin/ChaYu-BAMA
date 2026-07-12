@@ -8,7 +8,7 @@
 铁观音 × 图片物料 ×（国内链 + 跨文化链）
 ```
 
-后端已实现 P0 Demo 接口，当前阶段使用 `backend/data/seeds/*.yaml` 中的静态 seed 数据和 mock 输出，不依赖真实 LLM、生图服务或数据库。后续可以在此基础上接入 SQLite、LLM、前端和云端部署。
+后端已实现 P0 Demo 接口。数据来自 `backend/data/seeds/*.yaml` 的静态 seed；三个生成接口（国内表达 / 跨文化表达 / 营销物料）已接入 LLM（基于 OpenAI 兼容 SDK，默认指向 GLM，可经 `.env` 切换），未配置 LLM key 或调用失败时透明退回 seed 预置表达（mock 兜底）。真实生图 / 视频生成与 SQLite 持久化暂未接入，仍走 fallback 或 seed。
 
 ## 当前能力
 
@@ -131,11 +131,13 @@ http://localhost:8000/health
 
 ```text
 SQLite / SQLAlchemy 持久化
-真实 LLM API
 真实图片生成 API
+真实视频生成 API
 前端服务容器
 生产环境鉴权与安全配置
 ```
+
+LLM 已接入但可选：未在 `backend/.env` 配置 `LLM_API_KEY` / `LLM_BASE_URL` 时，三个生成接口自动走 seed 兜底，行为与未接 LLM 时一致。
 
 ## 文档
 

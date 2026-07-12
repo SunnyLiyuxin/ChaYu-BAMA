@@ -10,7 +10,9 @@
 1 款茶（铁观音）× 图片物料 ×（国内链 + 跨文化链）两条同构链路
 ```
 
-两条链路均已在后端以 YAML seed 数据和 mock 输出跑通：国内链面向国内消费者，跨文化链面向欧美精品咖啡爱好者。两条链共享同一款茶的知识与风味坐标，跨文化表达由国内表达按规则横向翻译派生而来。
+两条链路均已在后端以 YAML seed 数据跑通：国内链面向国内消费者，跨文化链面向欧美精品咖啡爱好者。两条链共享同一款茶的知识与风味坐标，跨文化表达由国内表达按规则横向翻译派生而来。
+
+三个生成接口（国内表达 / 跨文化表达 / 营销物料）已接入 LLM（OpenAI 兼容 SDK，默认指向 GLM，经 `backend/.env` 配置）。LLM 负责文本字段生成，ID / trace / source / 雷达数值仍由 seed 提供；未配置 key 或调用失败时透明退回 seed 预置表达（mock 兜底），不白屏。
 
 不要默认扩展到多茶品、其他市场、其他受众参照系或真实视频生成。未开放能力应返回 fallback。
 
@@ -184,7 +186,7 @@ GET  /api/markets
 GET  /api/audience-references
 ```
 
-P2 接口可以先注册路由并返回 fallback。
+P2 接口可以先注册路由并返回 fallback。其中 `GET /api/markets` 与 `GET /api/audience-references` 已升级为真实枚举列表（从 `demo_routes` 派生），其余仍为占位 fallback。
 
 ## Fallback 规则
 
@@ -216,7 +218,9 @@ YAML seed 数据
 data_loader 内存加载
 P0 API
 P1 fallback
-P2 占位 fallback
+P2 占位 fallback（markets / audience-references 已升级为真实列表）
+LLM service、Prompt 模板、输出 JSON 校验（LLM-primary + seed-fallback）
+pytest 测试覆盖（P0 / 生成 / 追溯 / LLM 降级 / fallback）
 Dockerfile / docker-compose 后端服务
 ```
 
@@ -225,8 +229,8 @@ Dockerfile / docker-compose 后端服务
 1. 搭建 FastAPI 项目结构。
 2. 建 SQLAlchemy models，并让 `seed.py --reset` 从 YAML 生成 SQLite。
 3. 将当前内存查询逐步替换为数据库查询。
-4. 接入 LLM service、Prompt 模板和输出 JSON 校验。
-5. 增加测试覆盖与前端联调。
+4. 接入 LLM service、Prompt 模板和输出 JSON 校验。（已完成）
+5. 增加测试覆盖与前端联调。（测试覆盖已完成，前端联调待办）
 6. 按部署环境收紧 CORS、文档入口和密钥配置。
 
 不要先接真实生图或视频 API。Demo 阶段 `marketing-asset` 返回海报文案、雷达图数据和 `image_prompt` 即可。
