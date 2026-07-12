@@ -1,0 +1,6 @@
+# 开发/测试依赖（不进运行时镜像）。
+# 安装：pip install -r requirements.txt -r requirements-dev.txt
+# 运行测试：cd backend && python -m pytest -v
+
+pytest>=8.0
+httpx>=0.27

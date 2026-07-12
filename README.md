@@ -36,7 +36,9 @@ backend/
   app/                 FastAPI 后端代码
   data/seeds/          当前 Demo 的 YAML seed 数据
   scripts/seed.py      后续接入 SQLite 的占位脚本
-  requirements.txt     Python 依赖
+  tests/               pytest 测试套件
+  requirements.txt     运行时 Python 依赖
+  requirements-dev.txt 开发/测试依赖（pytest、httpx）
   Dockerfile           后端容器镜像定义
 docker-compose.yml     本地 Docker Compose 配置
 docs/
@@ -58,6 +60,14 @@ Python 3.11+
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload
+```
+
+运行测试：
+
+```bash
+cd backend
+pip install -r requirements-dev.txt
+python -m pytest -v
 ```
 
 启动后访问：
