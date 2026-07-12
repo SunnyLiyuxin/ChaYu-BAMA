@@ -14,7 +14,7 @@ seed 存储字段（id / expression_type / strategy_id）为内部字段，
 from app import data_loader
 from app.config import get_settings
 from app.llm_schemas import CrossCulturalExpressionOutputs, DomesticExpressionOutputs
-from app.services import llm_service, prompts, rules_service
+from app.services import llm_service, output_store, prompts, rules_service
 
 # status：LLM 状态映射到 meta.llm_fallback_reason
 _LLM_OK = "ok"
@@ -68,15 +68,29 @@ def get_domestic_expression(
             tea_id=tea_id, tea=tea, flavor=flavor, knowledge=knowledge,
             audience=audience or record.get("audience", {}), style=style,
         )
-        llm_out, status = _resolve_llm(
-            system_prompt=system_prompt, user_prompt=user_prompt,
-            output_model=DomesticExpressionOutputs,
+        # 写路径缓存：同输入命中即复用，跳过本次 LLM 调用。
+        input_hash = output_store.compute_input_hash(
+            DomesticExpressionOutputs, system_prompt, user_prompt
         )
-        if status == _LLM_OK and llm_out:
-            outputs = llm_out
+        cached = output_store.get_cached(input_hash)
+        if cached is not None:
+            outputs = cached
             llm_generated = True
         else:
-            fallback_reason = status  # disabled / network_error / timeout / parse_error
+            llm_out, status = _resolve_llm(
+                system_prompt=system_prompt, user_prompt=user_prompt,
+                output_model=DomesticExpressionOutputs,
+            )
+            if status == _LLM_OK and llm_out:
+                outputs = llm_out
+                llm_generated = True
+                output_store.persist(
+                    output_type="domestic_expression",
+                    tea_id=tea_id, route_id=None,
+                    input_hash=input_hash, content=llm_out,
+                )
+            else:
+                fallback_reason = status  # disabled / network_error / timeout / parse_error
 
     data = {
         "expression_id": record["id"],
@@ -158,20 +172,39 @@ def get_cross_cultural_expression(
                 target_language=target_language, market=market,
                 audience_reference=audience_reference,
             )
-            llm_out, status = _resolve_llm(
-                system_prompt=system_prompt, user_prompt=user_prompt,
-                output_model=CrossCulturalExpressionOutputs,
+            # 写路径缓存：同输入命中即复用，跳过本次 LLM 调用。
+            input_hash = output_store.compute_input_hash(
+                CrossCulturalExpressionOutputs, system_prompt, user_prompt
             )
-            if status == _LLM_OK and llm_out:
+            cached = output_store.get_cached(input_hash)
+            if cached is not None:
                 outputs = {
-                    "literal_explanation": llm_out["literal_explanation"],
-                    "beginner_analogy": llm_out["beginner_analogy"],
-                    "cultural_narrative": llm_out["cultural_narrative"],
+                    "literal_explanation": cached["literal_explanation"],
+                    "beginner_analogy": cached["beginner_analogy"],
+                    "cultural_narrative": cached["cultural_narrative"],
                 }
-                analogy_rules = llm_out.get("analogy_rules", [])
+                analogy_rules = cached.get("analogy_rules", [])
                 llm_generated = True
             else:
-                fallback_reason = status
+                llm_out, status = _resolve_llm(
+                    system_prompt=system_prompt, user_prompt=user_prompt,
+                    output_model=CrossCulturalExpressionOutputs,
+                )
+                if status == _LLM_OK and llm_out:
+                    outputs = {
+                        "literal_explanation": llm_out["literal_explanation"],
+                        "beginner_analogy": llm_out["beginner_analogy"],
+                        "cultural_narrative": llm_out["cultural_narrative"],
+                    }
+                    analogy_rules = llm_out.get("analogy_rules", [])
+                    llm_generated = True
+                    output_store.persist(
+                        output_type="cross_cultural_expression",
+                        tea_id=tea_id, route_id=None,
+                        input_hash=input_hash, content=llm_out,
+                    )
+                else:
+                    fallback_reason = status
 
     data = {
         "translation_id": record["id"],

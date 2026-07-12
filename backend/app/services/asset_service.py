@@ -15,7 +15,7 @@ docs/接口文档.md（asset_id）。
 from app import data_loader
 from app.config import get_settings
 from app.llm_schemas import AssetCopy
-from app.services import llm_service, prompts, rules_service
+from app.services import llm_service, output_store, prompts, rules_service
 
 _LLM_OK = "ok"
 
@@ -74,20 +74,39 @@ def get_marketing_asset(
                 language=language, market=market,
                 audience_reference=audience_reference, platform=platform, style=style,
             )
-            llm_out, status = llm_service.generate(
-                system_prompt=system_prompt, user_prompt=user_prompt,
-                output_model=AssetCopy,
+            # 写路径缓存：同输入命中即复用，跳过本次 LLM 调用。
+            input_hash = output_store.compute_input_hash(
+                AssetCopy, system_prompt, user_prompt
             )
-            if status == _LLM_OK and llm_out:
+            cached = output_store.get_cached(input_hash)
+            if cached is not None:
                 copy = {
-                    "headline": llm_out["headline"],
-                    "subheadline": llm_out["subheadline"],
-                    "body": llm_out["body"],
+                    "headline": cached["headline"],
+                    "subheadline": cached["subheadline"],
+                    "body": cached["body"],
                 }
-                image_prompt = llm_out["image_prompt"]
+                image_prompt = cached["image_prompt"]
                 llm_generated = True
             else:
-                fallback_reason = status
+                llm_out, status = llm_service.generate(
+                    system_prompt=system_prompt, user_prompt=user_prompt,
+                    output_model=AssetCopy,
+                )
+                if status == _LLM_OK and llm_out:
+                    copy = {
+                        "headline": llm_out["headline"],
+                        "subheadline": llm_out["subheadline"],
+                        "body": llm_out["body"],
+                    }
+                    image_prompt = llm_out["image_prompt"]
+                    llm_generated = True
+                    output_store.persist(
+                        output_type="marketing_asset",
+                        tea_id=tea_id, route_id=route_id,
+                        input_hash=input_hash, content=llm_out,
+                    )
+                else:
+                    fallback_reason = status
 
     data = {
         "asset_id": record["id"],

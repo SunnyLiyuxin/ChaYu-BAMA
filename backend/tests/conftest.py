@@ -22,6 +22,7 @@ from fastapi.testclient import TestClient
 from app import config
 from app.config import Settings
 from app.main import app
+from app.services import output_store
 
 # 所有直接 `from app.config import get_settings` 后在运行时调用 get_settings() 的模块。
 # 改 app.config.get_settings 不影响它们持有的导入期引用，须逐模块 patch。
@@ -53,6 +54,19 @@ def llm_disabled(monkeypatch) -> Iterator[None]:
     """
     _patch_get_settings(monkeypatch, _DISABLED_SETTINGS)
     yield
+
+
+@pytest.fixture(autouse=True)
+def _isolated_output_db(tmp_path) -> Iterator[None]:
+    """把 output_store 的 generated_outputs 重定向到临时库，隔离真实 tea.db。
+
+    autouse=True：每个测试都用独立临时 DB，且 teardown dispose 释放文件锁。
+    否则 test_llm_fallback（LLM enabled 但失败）虽不写缓存，但若将来有
+    测试触发 persist，会在仓库内生成 stray tea.db。
+    """
+    output_store.set_test_db_path(tmp_path / "test_outputs.db")
+    yield
+    output_store.reset_engine()
 
 
 @pytest.fixture(scope="session")
