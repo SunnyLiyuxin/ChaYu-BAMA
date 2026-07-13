@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     """LLM 接入配置。
 
     所有字段大小写不敏感读取（LLM_API_KEY ↔ llm_api_key）。
+    IMAGE_* 是智谱 CogView 生图专用，与 LLM_* 相互独立——生图不回退
+    LLM_*（当前 LLM_* 指向 DeepSeek，不覆盖智谱 /images/generations），
+    必须独立配 IMAGE_API_KEY / IMAGE_BASE_URL 指向智谱。
     """
 
     llm_api_key: str = ""
@@ -26,10 +29,26 @@ class Settings(BaseSettings):
     llm_timeout: float = 30.0
     llm_supports_json_mode: bool = True
 
+    # 智谱 CogView 生图（与 LLM_* 相互独立；空 → 生图禁用，不回退 LLM_*）
+    image_api_key: str = ""
+    image_base_url: str = ""
+    image_model: str = "cogview-4"
+    image_size: str = "1024x1024"
+    image_timeout: float = 60.0  # 生图比文本慢，给 60s
+
     @property
     def llm_enabled(self) -> bool:
         """key 与 base_url 都配置了才视为启用。"""
         return bool(self.llm_api_key and self.llm_base_url)
+
+    @property
+    def image_enabled(self) -> bool:
+        """智谱 CogView key 与 base_url 都配置才启用（不回退 LLM_*）。"""
+        return bool(self.image_api_key and self.image_base_url)
+
+    def image_credentials(self) -> tuple[str, str]:
+        """生图凭证：不回退 LLM_*（当前是 DeepSeek，非智谱端点）。"""
+        return self.image_api_key, self.image_base_url
 
     model_config = SettingsConfigDict(
         env_file=Path(__file__).resolve().parent.parent / ".env",

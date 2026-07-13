@@ -68,3 +68,16 @@ class NaturalLanguageIntent(BaseModel):
 
     tea_id: str | None
     chain: Literal["domestic", "cross_cultural"]
+
+
+class ImageResult(BaseModel):
+    """生图结果（CogView-4 输出）。
+
+    作 output_store 缓存的命名空间隔离（与文本输出哈希空间不相交）+
+    存储载体。非 LLM 文本输出，故不参与 llm_service 的校验流程。
+    仅 url 必填；model / size / created_at 作为缓存元数据随存。
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    url: str

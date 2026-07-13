@@ -33,6 +33,7 @@ _SETTINGS_MODULES = (
     "app.services.asset_service",
     "app.services.intent_service",
     "app.services.llm_service",
+    "app.services.image_service",
     "app.routers.debug",
     "app.main",
 )
