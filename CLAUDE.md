@@ -12,9 +12,11 @@
 
 两条链路均已在后端以 YAML seed 数据跑通：国内链面向国内消费者，跨文化链面向欧美精品咖啡爱好者。两条链共享同一款茶的知识与风味坐标，跨文化表达由国内表达按规则横向翻译派生而来。
 
-三个生成接口（国内表达 / 跨文化表达 / 营销物料）已接入 LLM（OpenAI 兼容 SDK，默认指向 GLM，经 `backend/.env` 配置）。LLM 负责文本字段生成，ID / trace / source / 雷达数值仍由 seed 提供；未配置 key 或调用失败时透明退回 seed 预置表达（mock 兜底），不白屏。
+三个文本生成接口（国内表达 / 跨文化表达 / 营销物料）已接入 LLM（OpenAI 兼容 SDK，默认指向 GLM，经 `backend/.env` 配置）。LLM 负责文本字段生成，ID / trace / source / 雷达数值仍由 seed 提供；未配置 key 或调用失败时透明退回 seed 预置表达（mock 兜底），不白屏。真实生图不调 LLM，由 image_service 直接调 CogView-4（见下段）。
 
 真实生图已接入：`POST /api/image/generate` 调智谱 CogView-4（`quality=hd` + 关闭水印），返回临时图片 URL（30 天有效，同 prompt+size 按 input_hash 缓存 29 天）。与 `marketing-asset` 两步联调——物料层只产 `image_prompt`，生图拆为独立接口（解耦耗时）。生图时后端给精短 prompt 套确定性质量后缀（专业商品摄影 / 光照 / 构图 / 负面词），不调 LLM、零幻觉、确定性；`marketing-asset.image_prompt` 字段仍保持精短。生图凭证独立走 `IMAGE_*`（`backend/.env`），与 `LLM_*` 相互独立、不回退——当前 `LLM_*` 多半指向 DeepSeek，不覆盖智谱 `/images/generations`，故生图必须独立配 `IMAGE_*` 指向智谱。未配置 / 失败走 fallback（生图无 seed 兜底）。视频生成仍为 P2 占位。
+
+**⚠️ 生图效果待修（2026-07-13）**：CogView-4 链路（service / 路由 / 缓存 / fallback）已正确，但实测出图质量未达预期。诊断方向：seed `mock_outputs.yaml` 的 `image_prompt` 文案偏"海报排版"描述（如"现代中式排版"），画面物体（茶具 / 茶汤 / 道具 / 场景 / 光照）描述不足——CogView 需要画面物体描述，富化后缀救不了抽象的排版描述。后续大概率调整 seed `image_prompt` 文案为画面物体描述，而非改生图逻辑（生图逻辑不动）。
 
 不要默认扩展到多茶品、其他市场、其他受众参照系或真实视频生成。未开放能力应返回 fallback。
 
@@ -239,11 +241,12 @@ Dockerfile / docker-compose 后端服务
 2. ~~建 SQLAlchemy models，并让 `seed.py --reset` 从 YAML 生成 SQLite。~~ ✅
 3. ~~将当前内存查询逐步替换为数据库查询。~~ ✅（读路径已切库）
 4. ~~接入 LLM service、Prompt 模板和输出 JSON 校验。~~ ✅
-5. ~~接入真实生图（CogView-4，POST /api/image/generate）。~~ ✅
-6. 增加测试覆盖与前端联调。（测试覆盖已完成，前端联调待办）
-7. 按部署环境收紧 CORS、文档入口和密钥配置。
+5. ~~接入真实生图（CogView-4，POST /api/image/generate）。~~ ✅（链路就位；出图质量待修）
+6. 修生图出图质量（调整 seed `image_prompt` 文案为画面物体描述，不动生图逻辑）。（待办）
+7. 增加测试覆盖与前端联调。（测试覆盖已完成，前端联调待办）
+8. 按部署环境收紧 CORS、文档入口和密钥配置。
 
-不要接真实视频 API；真实生图已接入 CogView-4（智谱，经 `IMAGE_*` 配置，与 `LLM_*` 相互独立），经 `POST /api/image/generate` 暴露。`marketing-asset` 仍返 `image_prompt` 作为生图输入（两步联调）。
+不要接真实视频 API；真实生图已接入 CogView-4（智谱，经 `IMAGE_*` 配置，与 `LLM_*` 相互独立），经 `POST /api/image/generate` 暴露。`marketing-asset` 仍返 `image_prompt` 作为生图输入（两步联调）。生图出图质量待修（见上「⚠️ 生图效果待修」）。
 
 ## 协作注意
 

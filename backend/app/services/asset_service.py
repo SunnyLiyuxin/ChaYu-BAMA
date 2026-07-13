@@ -7,7 +7,8 @@ language=en → 读取跨文化表达生成英文物料，source_translation_id 
 在规则约束下接入 LLM 生成海报文案 copy + image_prompt；雷达数值
 visual_data 是事实数据，始终从 seed 取，LLM 不碰。未启用 / 失败时透明
 退回 seed 文案。LLM 生成结果经 output_store 按 input_hash 缓存进
-generated_outputs 表。真图 / 真视频仍为 P2 fallback（image_generation_enabled=false）。
+generated_outputs 表。物料接口本身不调生图（image_generation_enabled=false），
+真实出图走独立接口 image_service / POST /api/image/generate（CogView-4）。
 
 seed 存储字段（id / tea_id / asset_type）为内部字段，响应字段名严格对齐
 docs/接口文档.md（asset_id）。

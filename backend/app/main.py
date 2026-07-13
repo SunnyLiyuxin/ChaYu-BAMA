@@ -3,7 +3,8 @@
 运行时读路径已切库：data_loader getter 查 backend/data/tea.db（由
 seed.py --reset 灌表）；写路径经 output_store 查/写 generated_outputs 表。
 未灌表时启动打印警告，读路径返回空/404 不白屏。LLM 已接入（可选，
-未配置 key 或失败时透明退回 seed 兜底）。未接真实生图 / 视频。
+未配置 key 或失败时透明退回 seed 兜底）。真实生图已接入（image_service，
+CogView-4，未配置/失败走 fallback，无 seed 兜底）；视频生成仍走 fallback。
 
 启动：
     cd backend
