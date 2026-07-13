@@ -68,6 +68,18 @@ class MarketingAssetRequest(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# 6.2 生图（image/generate）
+# ---------------------------------------------------------------------------
+
+
+class ImageGenerateRequest(BaseModel):
+    prompt: str = Field(..., description="图片生成 prompt（通常来自 marketing-asset.image_prompt）")
+    size: str | None = Field(default=None, description="如 1024x1024 / 1440x720；空用配置默认")
+    tea_id: str | None = Field(default=None, description="溯源用，不参与生图")
+    route_id: str | None = Field(default=None, description="溯源用，不参与生图")
+
+
+# ---------------------------------------------------------------------------
 # 8.1 Fallback
 # ---------------------------------------------------------------------------
 

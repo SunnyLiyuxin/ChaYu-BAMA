@@ -29,12 +29,10 @@ def test_catch_all_unknown_api(client):
 
 
 def test_p2_placeholders_return_fallback(client):
-    """P2 占位接口仍返回 fallback（video/translate/image/audio）。"""
+    """P2 占位接口仍返回 fallback（video/translate/audio；image/generate 已升级真实生图）。"""
     r = client.post(f"/api/teas/{TEA_ID}/video-asset")
     assert r.json()["meta"]["fallback"] is True
     r = client.post("/api/translate", json={})
-    assert r.json()["meta"]["fallback"] is True
-    r = client.post("/api/image/generate", json={})
     assert r.json()["meta"]["fallback"] is True
     r = client.post("/api/audio/generate", json={})
     assert r.json()["meta"]["fallback"] is True

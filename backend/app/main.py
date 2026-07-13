@@ -29,7 +29,7 @@ from fastapi.responses import JSONResponse
 from app import data_loader  # noqa: F401  lifespan 启动时检查 DB 灌表状态
 from app import responses
 from app.config import get_settings
-from app.routers import assets, debug, expressions, fallback, teas, trace
+from app.routers import assets, debug, expressions, fallback, images, teas, trace
 
 
 @asynccontextmanager
@@ -143,6 +143,7 @@ async def _validation_exception_handler(request: Request, exc: RequestValidation
 app.include_router(teas.router)
 app.include_router(expressions.router)
 app.include_router(assets.router)
+app.include_router(images.router)
 app.include_router(trace.router)
 app.include_router(debug.router)  # /api/health-llm（调试用，非 P0 契约）
 app.include_router(fallback.router)  # 含 P1/P2 占位 + /api/* 全局 catch-all

@@ -38,7 +38,7 @@ _SETTINGS_MODULES = (
     "app.main",
 )
 
-_DISABLED_SETTINGS = Settings(llm_api_key="", llm_base_url="")
+_DISABLED_SETTINGS = Settings(llm_api_key="", llm_base_url="", image_api_key="", image_base_url="")
 
 
 def _patch_get_settings(monkeypatch, settings: Settings) -> None:

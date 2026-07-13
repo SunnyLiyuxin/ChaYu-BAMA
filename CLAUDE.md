@@ -14,6 +14,8 @@
 
 三个生成接口（国内表达 / 跨文化表达 / 营销物料）已接入 LLM（OpenAI 兼容 SDK，默认指向 GLM，经 `backend/.env` 配置）。LLM 负责文本字段生成，ID / trace / source / 雷达数值仍由 seed 提供；未配置 key 或调用失败时透明退回 seed 预置表达（mock 兜底），不白屏。
 
+真实生图已接入：`POST /api/image/generate` 调智谱 CogView-4，返回临时图片 URL（30 天有效，同 prompt+size 按 input_hash 缓存 29 天）。与 `marketing-asset` 两步联调——物料层只产 `image_prompt`，生图拆为独立接口（解耦耗时）。生图凭证独立走 `IMAGE_*`（`backend/.env`），与 `LLM_*` 相互独立、不回退——当前 `LLM_*` 多半指向 DeepSeek，不覆盖智谱 `/images/generations`，故生图必须独立配 `IMAGE_*` 指向智谱。未配置 / 失败走 fallback（生图无 seed 兜底）。视频生成仍为 P2 占位。
+
 不要默认扩展到多茶品、其他市场、其他受众参照系或真实视频生成。未开放能力应返回 fallback。
 
 ## 必读文档
@@ -166,10 +168,11 @@ GET  /api/teas/{tea_id}/component-flavor
 POST /api/teas/{tea_id}/domestic-expression
 POST /api/teas/{tea_id}/cross-cultural-expression
 POST /api/teas/{tea_id}/marketing-asset
+POST /api/image/generate
 GET  /api/trace/{output_id}
 ```
 
-国内链与跨文化链均为主路径，`domestic-expression` 升级为 P0：它是跨文化表达横向翻译的源文，且国内物料同样走到物料层。
+国内链与跨文化链均为主路径，`domestic-expression` 升级为 P0：它是跨文化表达横向翻译的源文，且国内物料同样走到物料层。`POST /api/image/generate` 升级为 P0：真实生图（CogView-4）已接入，与 `marketing-asset` 两步联调。
 
 P1 建议：
 
@@ -183,13 +186,12 @@ P2 占位：
 ```http
 POST /api/teas/{tea_id}/video-asset
 POST /api/translate
-POST /api/image/generate
 POST /api/audio/generate
 GET  /api/markets
 GET  /api/audience-references
 ```
 
-P2 接口可以先注册路由并返回 fallback。其中 `GET /api/markets` 与 `GET /api/audience-references` 已升级为真实枚举列表（从 `demo_routes` 派生），其余仍为占位 fallback。
+P2 接口可以先注册路由并返回 fallback。其中 `GET /api/markets` 与 `GET /api/audience-references` 已升级为真实枚举列表（从 `demo_routes` 派生），其余仍为占位 fallback。`POST /api/image/generate` 已升级为真实生图（见上），从 P2 移出。
 
 ## Fallback 规则
 
@@ -222,11 +224,12 @@ data_loader 读路径切库（getter 查 SQLite，best-effort 降级不白屏）
 SQLAlchemy models（13 表）
 seed.py --reset（从 YAML 灌表，行数校验）
 output_store（generated_outputs 表作 LLM 输出缓存，写路径接库）
-P0 API
+P0 API（含真实生图 POST /api/image/generate，CogView-4）
 P1 fallback
-P2 占位 fallback（markets / audience-references 已升级为真实列表）
+P2 占位 fallback（markets / audience-references 已升级为真实列表；image/generate 已升级为真实生图）
 LLM service、Prompt 模板、输出 JSON 校验（LLM-primary + seed-fallback）
-pytest 测试覆盖（P0 / 生成 / 追溯 / LLM 降级 / fallback / 读路径 shape 对齐）
+image_service（CogView-4 生图 + output_store 缓存，未启用/失败走 fallback）
+pytest 测试覆盖（P0 / 生成 / 追溯 / LLM 降级 / 生图 / fallback / 读路径 shape 对齐）
 Dockerfile / docker-compose 后端服务
 ```
 
@@ -236,10 +239,11 @@ Dockerfile / docker-compose 后端服务
 2. ~~建 SQLAlchemy models，并让 `seed.py --reset` 从 YAML 生成 SQLite。~~ ✅
 3. ~~将当前内存查询逐步替换为数据库查询。~~ ✅（读路径已切库）
 4. ~~接入 LLM service、Prompt 模板和输出 JSON 校验。~~ ✅
-5. 增加测试覆盖与前端联调。（测试覆盖已完成，前端联调待办）
-6. 按部署环境收紧 CORS、文档入口和密钥配置。
+5. ~~接入真实生图（CogView-4，POST /api/image/generate）。~~ ✅
+6. 增加测试覆盖与前端联调。（测试覆盖已完成，前端联调待办）
+7. 按部署环境收紧 CORS、文档入口和密钥配置。
 
-不要先接真实生图或视频 API。Demo 阶段 `marketing-asset` 返回海报文案、雷达图数据和 `image_prompt` 即可。
+不要接真实视频 API；真实生图已接入 CogView-4（智谱，经 `IMAGE_*` 配置，与 `LLM_*` 相互独立），经 `POST /api/image/generate` 暴露。`marketing-asset` 仍返 `image_prompt` 作为生图输入（两步联调）。
 
 ## 协作注意
 

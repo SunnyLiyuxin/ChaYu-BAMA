@@ -1,8 +1,8 @@
 """Fallback 路由。
 
 P1：GET/POST /api/fallback —— 显式 fallback 入口。
-P2：占位接口（video-asset / translate / image/generate / audio/generate）统一
-     返回 fallback，避免 404。
+P2：占位接口（video-asset / translate / audio/generate）统一返回 fallback，
+     避免 404。image/generate 已升级为真实生图（见 routers/images.py）。
      markets / audience-references 已从占位升级为真实列表（见下）。
 """
 
@@ -50,14 +50,6 @@ def translate(body: dict | None = None):
     """通用翻译（P2 占位）。"""
     return responses.fallback_response(
         message="通用翻译 Demo 阶段暂不开放，跨文化表达请走 cross-cultural-expression。"
-    )
-
-
-@router.post("/image/generate")
-def image_generate(body: dict | None = None):
-    """真实生图（P2 占位）。"""
-    return responses.fallback_response(
-        message="真实生图 Demo 阶段暂不开放，marketing-asset 返回 image_prompt 供前端渲染。"
     )
 
 
