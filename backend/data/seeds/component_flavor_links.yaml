@@ -1,0 +1,132 @@
+# 成分 → 口感 映射（第 1→2 层桥接关系的物化）
+# 把散落在 component_notes / dimensions.description / evidence.notes 里的
+# "成分→口感"对应结构化成行，供 UI"成分追溯"板块直接渲染。
+#
+# 科学性原则：每条只挂有直接文献支持的论断，不硬凑证据不足的映射。
+#   confidence 如实区分：medium = 直接支持（文献研究对象含该茶/该品类），
+#   low = 品类代理 / 综述共性（非单品实测，不代表八马单品检测值）。
+#   evidence_ids 全部指向 evidence.yaml 已有条目，不新造证据。
+#
+# 这是第 1→2 层桥接关系，不是纵向追溯链的一层：
+#   "成分追溯"指每条论断的证据溯源（靠 evidence_ids 指向论文），
+#   不进 trace_links 表、不新增 level。
+#
+# flavor_key 指向该茶 flavor_profiles.dimensions[].key（茶级归属，因茶而异）；
+# 若某成分对应不到现成 dimension，置空只给 flavor_label。
+#
+# 枚举约定（seed 注释说明，不在 ORM 层硬约束——遵循"字段不齐一律 nullable"）：
+#   component_category: aroma_compound（挥发物） | taste_compound（滋味成分） | process_proxy（机理代理如美拉德、焙火路径）
+#   relationship:       primary_driver（主要造就） | contributes_to（共同贡献） | participant（参与）
+#   confidence:         high | medium | low
+
+component_flavor_links:
+  # ===== 赛珍珠铁观音 BAMA_SZZ_TGY_NX =====
+  - id: link_szz_maillard_toasted_rice
+    tea_id: BAMA_SZZ_TGY_NX
+    component: 美拉德反应产物
+    component_category: process_proxy
+    flavor_key: roasted
+    flavor_label: 炒米香
+    mechanism: 浓香型焙火促进美拉德反应产物形成
+    relationship: primary_driver
+    evidence_ids: ["evidence_wang_2023_oolong"]
+    confidence: medium
+    notes: "wang_2023 含铁观音烘焙前后对比，焙火增加烘焙/焦糖样挥发物；非赛珍珠实际焙火温度"
+
+  - id: link_szz_nerolidol_orchid
+    tea_id: BAMA_SZZ_TGY_NX
+    component: 橙花叔醇/茉莉内酯/苯乙醛
+    component_category: aroma_compound
+    flavor_key: floral
+    flavor_label: 兰花香
+    mechanism: 做青与焙火共同形成的特征挥发物
+    relationship: primary_driver
+    evidence_ids: ["evidence_wang_2023_oolong"]
+    confidence: medium
+    notes: "wang_2023 把铁观音花香/果甜香特征挥发物指向橙花叔醇、茉莉内酯、苯乙醛；非赛珍珠单品检测值"
+
+  - id: link_szz_caffeine_astringency
+    tea_id: BAMA_SZZ_TGY_NX
+    component: 咖啡碱
+    component_category: taste_compound
+    flavor_key: astringency
+    flavor_label: 收敛感
+    mechanism: 咖啡碱等滋味成分参与收敛结构
+    relationship: participant
+    evidence_ids: ["evidence_public_oolong_components", "evidence_chen_2023_foods"]
+    confidence: low
+    notes: "乌龙茶品类层成分综述与商业样本统计代理，非赛珍珠单品实测值"
+
+  # ===== 牛一大红袍 BAMA_NY_WRT_DHP =====
+  - id: link_ny_pyrazine_nutty
+    tea_id: BAMA_NY_WRT_DHP
+    component: 吡嗪/吡咯/呋喃
+    component_category: aroma_compound
+    flavor_key: roasted_nutty
+    flavor_label: 烘焙坚果香
+    mechanism: 高温焙火促进吡嗪、吡咯、呋喃等烘焙香物质形成
+    relationship: primary_driver
+    evidence_ids: ["evidence_zhan_2023_wrt", "evidence_wang_2023_theanine"]
+    confidence: medium
+    notes: "武夷岩茶焙火专属研究；不代表牛一实际焙火温度"
+
+  - id: link_ny_theanine_roasting
+    tea_id: BAMA_NY_WRT_DHP
+    component: 茶氨酸
+    component_category: taste_compound
+    flavor_key: roasted_nutty
+    flavor_label: 焙火烘焙香
+    mechanism: 茶氨酸参与焙火吡嗪形成，焙火后下降约52%–80%
+    relationship: participant
+    evidence_ids: ["evidence_wang_2023_theanine", "evidence_liu_2021_wrt_roasting"]
+    confidence: medium
+    notes: "茶氨酸参与焙火吡嗪形成；不代表牛一实际焙火程度"
+
+  - id: link_ny_caffeine_structure
+    tea_id: BAMA_NY_WRT_DHP
+    component: 咖啡碱
+    component_category: taste_compound
+    flavor_key: body
+    flavor_label: 醇厚结构感
+    mechanism: 咖啡碱等滋味成分参与岩韵口腔结构感
+    relationship: participant
+    evidence_ids: ["evidence_liu_2021_wrt_roasting", "evidence_public_oolong_components"]
+    confidence: low
+    notes: "岩茶咖啡碱约19–23 mg/g（品类层），非牛一单品实测值"
+
+  # ===== 鼎红金骏眉 BAMA_DH_BT_JJM =====
+  - id: link_dh_linalool_honey_floral
+    tea_id: BAMA_DH_BT_JJM
+    component: 芳樟醇及氧化物/苯乙醇/苯乙醛/橙花醛
+    component_category: aroma_compound
+    flavor_key: honeyed_sweetness
+    flavor_label: 花蜜甜香
+    mechanism: 关键香气物共同参与花蜜香形成
+    relationship: primary_driver
+    evidence_ids: ["evidence_lin_2025_wuyi_bt"]
+    confidence: medium
+    notes: "Lin 2025 从花蜜香武夷红茶中识别出芳樟醇等关键香气物，与鼎红官方描述一致；非鼎红单品检测值"
+
+  - id: link_dh_theaflavins_liquor
+    tea_id: BAMA_DH_BT_JJM
+    component: 茶黄素/茶红素
+    component_category: taste_compound
+    flavor_key: liquor_color
+    flavor_label: 汤色与亮度
+    mechanism: 茶黄素/茶红素参与红茶汤色、亮度与厚度
+    relationship: participant
+    evidence_ids: ["evidence_chen_2025_blacktea"]
+    confidence: low
+    notes: "红茶品类层滋味化学综述，非鼎红单品实测值"
+
+  - id: link_dh_caffeine_bitter
+    tea_id: BAMA_DH_BT_JJM
+    component: 咖啡碱
+    component_category: taste_compound
+    flavor_key: bitterness
+    flavor_label: 苦感
+    mechanism: 咖啡碱参与红茶苦感结构
+    relationship: participant
+    evidence_ids: ["evidence_chen_2025_blacktea", "evidence_chen_2023_foods"]
+    confidence: low
+    notes: "红茶咖啡碱均值43.43 mg/g、样本差异极大（Chen 2023），非鼎红单品实测值"

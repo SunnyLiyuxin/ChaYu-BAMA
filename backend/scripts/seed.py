@@ -38,6 +38,7 @@ _SEED_PLAN: list[tuple[str, type[Base]]] = [
     ("tea_knowledge", models.TeaKnowledge),
     ("flavor_profiles", models.FlavorProfile),
     ("demo_routes", models.DemoRoute),
+    ("component_flavor_links", models.ComponentFlavorLink),
     ("rules", models.GenerationRule),  # seed 顶层键是 rules，表名 generation_rules
     ("cross_cultural_terms", models.CrossCulturalTerm),
     ("expression_strategies", models.ExpressionStrategy),
@@ -53,6 +54,7 @@ _MODEL_TO_SEED_KEY = {
     models.TeaKnowledge: "tea_knowledge",
     models.FlavorProfile: "flavor_profiles",
     models.DemoRoute: "demo_routes",
+    models.ComponentFlavorLink: "component_flavor_links",
     models.GenerationRule: "rules",
     models.CrossCulturalTerm: "cross_cultural_terms",
     models.ExpressionStrategy: "expression_strategies",

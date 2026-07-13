@@ -102,6 +102,31 @@ class DemoRoute(Base):
     description: Mapped[str | None] = mapped_column(String)
 
 
+class ComponentFlavorLink(Base):
+    """成分 → 口感 映射：第 1→2 层桥接关系的物化，不进纵向追溯链。
+
+    把散落在 component_notes / dimensions.description / evidence.notes 里的
+    "成分→口感"对应结构化成行。flavor_key 指向该茶 flavor_profiles.dimensions[].key
+    （茶级归属、因茶而异）；evidence_ids 指向 evidence_sources 已有条目，不新造证据。
+    """
+
+    __tablename__ = "component_flavor_links"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    tea_id: Mapped[str | None] = mapped_column(
+        String, ForeignKey("teas.id"), index=True
+    )
+    component: Mapped[str | None] = mapped_column(String)
+    component_category: Mapped[str | None] = mapped_column(String)
+    flavor_key: Mapped[str | None] = mapped_column(String, index=True)
+    flavor_label: Mapped[str | None] = mapped_column(String)
+    mechanism: Mapped[str | None] = mapped_column(String)
+    relationship: Mapped[str | None] = mapped_column(String)
+    evidence_ids: Mapped[list | None] = mapped_column(JSON)  # list[str]
+    confidence: Mapped[str | None] = mapped_column(String)
+    notes: Mapped[str | None] = mapped_column(String)
+
+
 class GenerationRule(Base):
     __tablename__ = "generation_rules"
 

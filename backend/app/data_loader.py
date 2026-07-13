@@ -70,6 +70,7 @@ def all_seeds() -> dict:
         "assets": _load("mock_outputs").get("assets", []),
         "trace_nodes": _load("trace_links").get("trace_nodes", []),
         "tea_terms": _load("trace_links").get("tea_terms", {}),
+        "component_flavor_links": _load("component_flavor_links").get("component_flavor_links", []),
     }
 
 
