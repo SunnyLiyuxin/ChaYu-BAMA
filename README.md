@@ -8,9 +8,7 @@
 铁观音 × 图片物料 ×（国内链 + 跨文化链）
 ```
 
-后端已实现 P0 Demo 接口。数据源头是 `backend/data/seeds/*.yaml` 静态 seed；运行时读路径查 `backend/data/tea.db`（由 `seed.py --reset` 灌表），写路径经 `output_store` 查/写 `generated_outputs` 表作 LLM 输出缓存。三个文本生成接口（国内表达 / 跨文化表达 / 营销物料）已接入 LLM（基于 OpenAI 兼容 SDK，默认指向 GLM，可经 `.env` 切换），未配置 LLM key 或调用失败时透明退回 seed 预置表达（mock 兜底）。真实生图已接入（`POST /api/image/generate`，智谱 CogView-4，与 `marketing-asset` 两步联调），未配置 / 失败走 fallback（生图无 seed 兜底）；视频生成仍走 fallback。
-
-**注意（生图效果待修）**：CogView-4 生图链路已通（`quality=hd` + 关闭水印 + 确定性 prompt 富化），但当前 `marketing-asset.image_prompt` 文案偏"海报排版"描述、画面物体（茶具 / 茶汤 / 道具 / 场景）描述不足，出图质量未达预期。后续大概率调整 seed `image_prompt` 文案为画面物体描述，而非改生图逻辑。
+后端已实现 P0 Demo 接口。数据源头是 `backend/data/seeds/*.yaml` 静态 seed；运行时读路径查 `backend/data/tea.db`（由 `seed.py --reset` 灌表），写路径经 `output_store` 查/写 `generated_outputs` 表作 LLM 输出缓存。三个文本生成接口（国内表达 / 跨文化表达 / 营销物料）已接入 LLM（基于 OpenAI 兼容 SDK，默认指向 GLM，可经 `.env` 切换），未配置 LLM key 或调用失败时透明退回 seed 预置表达（mock 兜底）。真实生图已接入（`POST /api/image/generate`，豆包 Seedream（火山方舟 Ark），图内渲染中文知识文字，与 `marketing-asset` 两步联调），未配置 / 失败走 fallback（生图无 seed 兜底）；视频生成仍走 fallback。
 
 ## 当前能力
 
@@ -143,7 +141,7 @@ http://localhost:8000/health
 生产环境鉴权与安全配置
 ```
 
-真实生图（CogView-4）已接入 `POST /api/image/generate`，但出图质量未达预期、待修（详见上「注意（生图效果待修）」）。
+真实生图（豆包 Seedream）已接入 `POST /api/image/generate`，图内渲染中文知识文字（传 `tea_id + language` 时后端取 seed copy 印进图）；凭证独立走 `IMAGE_*`，未配置时走 fallback。
 
 SQLite 持久化已接入（读路径查 `data/tea.db`、写路径缓存 `generated_outputs` 表）；`data/tea.db` 由 `seed.py --reset` 生成、被 gitignore，不手动维护。
 

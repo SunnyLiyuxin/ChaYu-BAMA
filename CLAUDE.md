@@ -239,7 +239,7 @@ Dockerfile / docker-compose 后端服务
 2. ~~建 SQLAlchemy models，并让 `seed.py --reset` 从 YAML 生成 SQLite。~~ ✅
 3. ~~将当前内存查询逐步替换为数据库查询。~~ ✅（读路径已切库）
 4. ~~接入 LLM service、Prompt 模板和输出 JSON 校验。~~ ✅
-5. ~~接入真实生图（CogView-4，POST /api/image/generate）。~~ ✅（链路就位；出图质量待修）
+5. ~~接入真实生图（CogView-4，POST /api/image/generate）。~~ ✅（链路就位；图源后已切豆包 Seedream 并修复出图质量，见下第 6、7 项）
 6. ~~修生图出图质量——P1 清商务信号词 + P2 style 风格维度（fresh/business）+ P3 scene 镜头维度（closeup/landscape/product），seed 退化为纯画面物体。~~ ✅（代码已改、测试全绿；实测复核中）
 7. ~~图源切豆包 Seedream + 图内渲染中文知识文字（CogView 中文渲染不稳，改用 Seedream；后端按 tea_id+language 取 seed copy 印进图）。~~ ✅
 8. 增加测试覆盖与前端联调。（测试覆盖已完成，前端联调待办）
