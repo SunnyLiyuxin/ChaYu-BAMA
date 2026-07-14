@@ -56,12 +56,14 @@ FALLBACK_GATEWAY = "gateway_error"
 # 确定性质量后缀：富化 CogView 出图，加在用户 prompt 之后。
 # 不依赖 LLM、零幻觉、确定性。含正向画质词 + 负面词（避免常见翻车）。
 # quality / watermark_enabled 走请求体参数，不在此串里。
+# 注意：刻意不写 "Professional commercial product photography" / "elegant composition"
+# 这类企业画册美学词——实测会把 CogView 拽向"商务老气"风。这里只给中性构图 + 光照 +
+# 画质 + 负面词，让出图回归茶本身审美。风格化（光照/色调/氛围）见 style 片段（后续 P2）。
 _QUALITY_SUFFIX = (
-    ". Professional commercial product photography, vertical 9:16 mobile poster "
-    "composition, main subject in the lower-middle frame, clean uncluttered "
-    "text-safe area occupying about 25-35% of the upper frame for later headline "
-    "overlay, soft natural lighting, shallow depth of field, sharp focus on the "
-    "subject, elegant composition, high detail, 8k, photorealistic. "
+    ". Vertical 9:16 mobile poster composition, main subject in the lower-middle "
+    "frame, clean uncluttered text-safe area occupying about 25-35% of the upper "
+    "frame for later headline overlay, soft natural lighting, shallow depth of "
+    "field, sharp focus on the subject, high detail, 8k, photorealistic. "
     "No text, no watermark, no generated text, no logo, no distorted proportions, no extra objects."
 )
 

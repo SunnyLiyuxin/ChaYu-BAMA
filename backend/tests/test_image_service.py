@@ -85,9 +85,13 @@ def test_generate_image_success(monkeypatch):
     assert sent["n"] == 1
     assert sent["quality"] == "hd"
     assert sent["extra_body"] == {"watermark_enabled": False}
-    # prompt 被富化：原"赛珍珠铁观音海报"+质量后缀，必须含 "professional"
+    # prompt 被富化：原"赛珍珠铁观音海报"+质量后缀，必须含中性画质标记 + 负面词
     assert "赛珍珠铁观音海报" in sent["prompt"]
-    assert "Professional commercial product photography" in sent["prompt"]
+    # 商务信号词已清除（实测会把出图拽向商务老气风）
+    assert "Professional commercial product photography" not in sent["prompt"]
+    assert "elegant composition" not in sent["prompt"]
+    # 中性画质 + 构图 + 负面词仍在
+    assert "photorealistic" in sent["prompt"]
     assert "No text, no watermark" in sent["prompt"]
     # 写了一条缓存
     assert output_store.count_rows() == 1
@@ -98,9 +102,11 @@ def test_enrich_prompt_deterministic():
     a = image_service._enrich_prompt("茶海报")
     b = image_service._enrich_prompt("茶海报")
     assert a == b, "同 prompt 富化结果应一致"
-    # 含质量后缀关键词
-    assert "Professional commercial product photography" in a
+    # 含质量后缀关键词（中性画质 + 负面词），不含已清除的商务信号词
+    assert "photorealistic" in a
     assert "No text, no watermark" in a
+    assert "Professional commercial product photography" not in a
+    assert "elegant composition" not in a
     # 去末尾句号后补后缀，避免双句号
     assert image_service._enrich_prompt("海报。") == image_service._enrich_prompt("海报")
     assert image_service._enrich_prompt("Poster.") == image_service._enrich_prompt("Poster")

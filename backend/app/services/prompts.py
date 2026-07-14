@@ -188,7 +188,7 @@ def build_asset_copy_prompt(
         "- image_prompt 用英文写（用于后续接生图 API）。\n"
         "- image_prompt 必须是具体画面描述，而不是抽象海报排版描述；必须包含主体茶品、茶具、茶汤颜色、干茶形态、场景/道具、光线、构图、质感和负面约束。\n"
         "- 海报主要在移动端展示，image_prompt 必须明确 vertical 9:16 mobile poster composition；主体放在中下部，上方保留约 25%-35% 干净文字安全区，供前端叠加 headline/subheadline/body，避免横版构图。\n"
-        "- image_prompt 禁止只写 premium poster / modern layout / editorial layout；生图模型不要直接生成文字，末尾应包含 no generated text, no logo, no watermark。\n"
+        "- image_prompt 禁止只写 premium poster / modern layout / editorial layout；也禁止写 professional commercial product photography / elegant composition / premium realistic product photograph / refined atmosphere 等企业画册美学词（实测会把出图拽向商务老气风）；生图模型不要直接生成文字，末尾应包含 no generated text, no logo, no watermark。\n"
     )
 
     style_hint = f"风格：{style}。" if style else ""

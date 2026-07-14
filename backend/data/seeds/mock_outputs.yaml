@@ -159,7 +159,7 @@ assets:
         - { label: 焙火感, value: 5 }
         - { label: 回甘与尾韵, value: 8 }
     image_prompt: >-
-      Vertical 9:16 mobile poster composition, premium realistic product photograph for Saizhenzhu Tieguanyin oolong tea. A white porcelain gaiwan filled with clear golden tea liquor is placed on a dark walnut tea table. Rolled Tieguanyin tea leaves sit beside the gaiwan, with a small warm beige cloth and a few pale orchid flowers in the background to suggest toasted-rice warmth and orchid aroma. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Soft warm side lighting, shallow depth of field, elegant Chinese tea room atmosphere, high detail, photorealistic, no generated text, no logo, no watermark.
+      Vertical 9:16 mobile poster composition, product photograph of Saizhenzhu Tieguanyin oolong tea. A white porcelain gaiwan filled with clear golden tea liquor is placed on a dark walnut tea table. Rolled Tieguanyin tea leaves sit beside the gaiwan, with a small warm beige cloth and a few pale orchid flowers in the background to suggest toasted-rice warmth and orchid aroma. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Soft warm side lighting, shallow depth of field, Chinese tea room atmosphere, high detail, photorealistic, no generated text, no logo, no watermark.
     source_expression_id: expr_cn_szz_tgy_nx
     source_translation_id: null
     trace_id: asset_szz_poster_zh
@@ -181,7 +181,7 @@ assets:
         - { label: "Roasted Note", value: 5 }
         - { label: "Lingering Finish", value: 8 }
     image_prompt: >-
-      Vertical 9:16 mobile poster composition, premium realistic product photograph for Saizhenzhu Tieguanyin roasted oolong tea. Center composition with a white porcelain gaiwan and a small tasting cup filled with clear golden tea liquor on a dark wooden table. Rolled dark green Tieguanyin leaves are scattered near the cup, with pale orchid flowers and a warm toasted-rice colored linen cloth as subtle props. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Soft amber side light, clean background, shallow depth of field, refined tea tasting mood for Western specialty coffee lovers, high detail, photorealistic, no generated text, no logo, no watermark.
+      Vertical 9:16 mobile poster composition, product photograph of Saizhenzhu Tieguanyin roasted oolong tea. Center composition with a white porcelain gaiwan and a small tasting cup filled with clear golden tea liquor on a dark wooden table. Rolled dark green Tieguanyin leaves are scattered near the cup, with pale orchid flowers and a warm toasted-rice colored linen cloth as subtle props. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Soft amber side light, clean background, shallow depth of field, tea tasting mood, high detail, photorealistic, no generated text, no logo, no watermark.
     source_expression_id: null
     source_translation_id: expr_en_szz_tgy_nx_coffee
     trace_id: asset_szz_poster_en
@@ -204,7 +204,7 @@ assets:
         - { label: 收敛感, value: 5 }
         - { label: 回甘与尾韵, value: 8 }
     image_prompt: >-
-      Vertical 9:16 mobile poster composition, premium realistic product photograph for Niuyi Da Hong Pao Wuyi rock tea. A dark clay teapot and a small ceramic cup of amber tea liquor sit on a rugged stone tea tray. Twisted dark oolong leaves are placed beside the cup, with a textured Wuyi rock surface and muted cliff-like stone background suggesting Yan Yun and roasted warmth. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Warm low side lighting, deep brown and amber color palette, soft steam, shallow depth of field, high detail, photorealistic, no generated text, no logo, no watermark.
+      Vertical 9:16 mobile poster composition, product photograph of Niuyi Da Hong Pao Wuyi rock tea. A dark clay teapot and a small ceramic cup of amber tea liquor sit on a rugged stone tea tray. Twisted dark oolong leaves are placed beside the cup, with a textured Wuyi rock surface and muted cliff-like stone background suggesting Yan Yun and roasted warmth. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Warm low side lighting, deep brown and amber color palette, soft steam, shallow depth of field, high detail, photorealistic, no generated text, no logo, no watermark.
     source_expression_id: expr_cn_ny_wrt_dhp
     source_translation_id: null
     trace_id: asset_ny_poster_zh
@@ -226,7 +226,7 @@ assets:
         - { label: Astringency, value: 5 }
         - { label: "Lingering Finish", value: 8 }
     image_prompt: >-
-      Vertical 9:16 mobile poster composition, premium realistic product photograph for Niuyi Da Hong Pao Wuyi rock tea. A dark purple clay teapot, a tasting cup with bright amber tea liquor, and twisted roasted oolong leaves are arranged on a natural stone slab. Behind them is a blurred Wuyi cliff texture with warm roasting tones, suggesting rock tea terroir without literal stone flavor. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Dramatic but natural side lighting, rich brown and copper colors, shallow depth of field, refined tasting atmosphere for Western specialty coffee lovers, high detail, photorealistic, no generated text, no logo, no watermark.
+      Vertical 9:16 mobile poster composition, product photograph of Niuyi Da Hong Pao Wuyi rock tea. A dark purple clay teapot, a tasting cup with bright amber tea liquor, and twisted roasted oolong leaves are arranged on a natural stone slab. Behind them is a blurred Wuyi cliff texture with warm roasting tones, suggesting rock tea terroir without literal stone flavor. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Dramatic but natural side lighting, rich brown and copper colors, shallow depth of field, tasting atmosphere, high detail, photorealistic, no generated text, no logo, no watermark.
     source_expression_id: null
     source_translation_id: expr_en_ny_wrt_dhp_coffee
     trace_id: asset_ny_poster_en
@@ -249,7 +249,7 @@ assets:
         - { label: 苦感, value: 2 }
         - { label: 回甘与尾韵, value: 7 }
     image_prompt: >-
-      Vertical 9:16 mobile poster composition, premium realistic product photograph for Dinghong Jin Jun Mei black tea. A white porcelain cup filled with bright golden-red tea liquor sits on a light wooden table. Fine golden tea buds and dry black tea leaves are arranged beside the cup, with soft bamboo leaves and a warm honey-colored background suggesting Tongmuguan mountain freshness and honeyed floral aroma. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Gentle morning natural light, clean warm atmosphere, shallow depth of field, high detail, photorealistic, no generated text, no logo, no watermark.
+      Vertical 9:16 mobile poster composition, product photograph of Dinghong Jin Jun Mei black tea. A white porcelain cup filled with bright golden-red tea liquor sits on a light wooden table. Fine golden tea buds and dry black tea leaves are arranged beside the cup, with soft bamboo leaves and a warm honey-colored background suggesting Tongmuguan mountain freshness and honeyed floral aroma. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Gentle morning natural light, clean warm atmosphere, shallow depth of field, high detail, photorealistic, no generated text, no logo, no watermark.
     source_expression_id: expr_cn_dh_bt_jjm
     source_translation_id: null
     trace_id: asset_dh_poster_zh
@@ -271,7 +271,7 @@ assets:
         - { label: Bitterness, value: 2 }
         - { label: "Lingering Finish", value: 7 }
     image_prompt: >-
-      Vertical 9:16 mobile poster composition, premium realistic product photograph for Dinghong Jin Jun Mei black tea. A white porcelain tasting cup with clear golden-red tea liquor is placed on a pale wooden surface, surrounded by fine golden tea buds, a small glass jar of dry black tea leaves, and softly blurred bamboo leaves in the background. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Warm honey-toned natural light, clean airy composition, delicate floral and ripe-fruit mood, refined tea tasting atmosphere for Western audience, high detail, photorealistic, no generated text, no logo, no watermark.
+      Vertical 9:16 mobile poster composition, product photograph of Dinghong Jin Jun Mei black tea. A white porcelain tasting cup with clear golden-red tea liquor is placed on a pale wooden surface, surrounded by fine golden tea buds, a small glass jar of dry black tea leaves, and softly blurred bamboo leaves in the background. Main subject centered in the lower-middle frame, with a clean uncluttered text-safe area occupying about 30% of the upper frame for headline overlay on mobile. Warm honey-toned natural light, clean airy composition, delicate floral and ripe-fruit mood, tea tasting atmosphere, high detail, photorealistic, no generated text, no logo, no watermark.
     source_expression_id: null
     source_translation_id: expr_en_dh_bt_jjm_wine
     trace_id: asset_dh_poster_en
