@@ -1,258 +1,62 @@
 # CLAUDE.md
 
-本文件用于 Claude Code 在本仓库中协作开发时快速理解项目目标、工程边界和实现约定。
+本文件用于 Claude Code 在本仓库中协作开发时快速理解**工程边界与协作约束**。
+项目设计、数据约定、API 契约、fallback 规则等细节不在本文件重复——读对应权威文档。
+
+## 必读文档（按需阅读，各司其职）
+
+| 文档 | 职责 | 何时读 |
+|---|---|---|
+| [README.md](./README.md) | 项目入口、本地复现、文档索引 | 新进仓库 |
+| [docs/系统架构.md](./docs/系统架构.md) | 赛题理解、设计依据（why） | 需理解设计动机时 |
+| [docs/技术架构.md](./docs/技术架构.md) | 四层架构、数据流、技术栈、数据策略、追溯机制（how） | 改后端结构/数据/规则前 |
+| [docs/接口文档.md](./docs/接口文档.md) | API 契约、字段定义、P0/P1/P2、fallback 接口 | 改任何 API / 联调前 |
+
+指针速查（详见对应文档）：
+- 四层架构 / 总体设计 → `docs/技术架构.md §2 / §3`
+- 技术栈 → `§4`；数据策略（seed / SQLite / 证据字段 / 规则数据）→ `§6`
+- LLM 调用边界与降级 → `§9`；fallback 设计 → `§10`；API 分层 → `§11`；可追溯机制 → `§12`
+- API 字段 / 请求响应 / 优先级 / fallback 接口 → `docs/接口文档.md`（§6.2 生图、§7 追溯、§8 fallback、§10 优先级）
+- 赛题理解 / 风味轮研究 / 跨文化类比依据 → `docs/系统架构.md`
+
+**接口字段变更必须同步更新 `docs/接口文档.md`。**
 
 ## 项目状态
 
-本项目处于可运行后端 Demo 阶段，项目名称尚未最终确定。当前目标是围绕主路径完成前后端联调与展示：
+可运行后端 Demo，项目名未定。主路径与当前进度见 README「文档」与下「实现进度」；四层架构、数据流、生图、降级、fallback 等设计细节见技术架构 / 接口文档，本文件不重复。未开放能力返回 fallback；不默认扩展到多茶品 / 其他市场 / 其他受众 / 真实视频。
 
-```text
-1 款茶（铁观音）× 图片物料 ×（国内链 + 跨文化链）两条同构链路
-```
+## 协作约束（代码不可推断的红线，必守）
 
-两条链路均已在后端以 YAML seed 数据跑通：国内链面向国内消费者，跨文化链面向欧美精品咖啡爱好者。两条链共享同一款茶的知识与风味坐标，跨文化表达由国内表达按规则横向翻译派生而来。
+- **不要引入未确定项目名。**
+- **不要把代理数据写成八马单品实测数据。**（成分代理数据须标注为"公开文献代理数据"，见技术架构 §3.1 / §14.1）
+- **不要手动维护 SQLite `.db`。**（`data/tea.db` 由 `seed.py --reset` 从 YAML 灌表，被 gitignore）
+- **不要把缓存结果提交到 Git。**（`.db` / 生图 URL 缓存均不入库）
+- **不要把所有规则硬编码进 Python 或超长 prompt。**（规则结构化存 `backend/data/seeds/generation_rules.yaml`，按任务/市场/受众/术语筛选后注入，见技术架构 §6.4）
+- **不要随意修改 API 字段。**（改了须同步 `docs/接口文档.md`）
+- **不要接真实视频 API。**（`video-asset` 等保持 P2 fallback）
+- 保持实现范围围绕主路径，其他能力用 fallback 预留。
 
-三个文本生成接口（国内表达 / 跨文化表达 / 营销物料）已接入 LLM（OpenAI 兼容 SDK，默认指向 GLM，经 `backend/.env` 配置）。LLM 负责文本字段生成，ID / trace / source / 雷达数值仍由 seed 提供；未配置 key 或调用失败时透明退回 seed 预置表达（mock 兜底），不白屏。真实生图不调 LLM，由 image_service 直接调豆包 Seedream（见下段）。
+## 密钥约定
 
-真实生图已接入：`POST /api/image/generate` 调豆包 Seedream（火山方舟 Ark，`doubao-seedream-5-0-pro-260628`），关闭水印（`extra_body.watermark=false`），返回临时图片 URL（30 天有效，同 prompt+size+style+scene+language 按 input_hash 缓存 29 天）。图源已从智谱 CogView-4 切换为 Seedream——CogView 中文文字渲染能力不稳，而海报初衷是把"知识点 + 产品文案"印在图上；Seedream 图内中文渲染准确，`response_format="url"` 直接返临时 URL（无需改 b64 落盘架构）。与 `marketing-asset` 两步联调——物料层只产 `image_prompt`（纯画面物体 + 产地线索），生图拆为独立接口（解耦耗时）。生图时后端给 prompt 套确定性片段 + 图内中文文字（不调 LLM、零幻觉、确定性）：① `prompt`（画面物体 + 产地）；② `scene` 片段（镜头/构图，`closeup` 特写 / `landscape` 产地广角 / `product` 商品罐图）；③ `style` 片段（光照/色调/氛围，`fresh` 默认清新 / `business` 商务）；④ 图内中文文字段（传 `tea_id + language` 时，后端从 seed asset 表取 copy：`headline/subheadline/body`，full-bleed 直接叠在照片上无白边、带暗色渐变）；⑤ 画质后缀。刻意不含 `Professional commercial product photography / elegant composition` 这类企业画册美学词，要商务感由调用方显式传 `style=business`。`scene` × `style` 正交（6 种出图方向），缓存键含 `(prompt, size, style, scene, language)` 防投毒——language 尤其关键，不进键会串成错语言文字的图。生图凭证独立走 `IMAGE_*`（`backend/.env`），与 `LLM_*` 相互独立、不回退——当前 `LLM_*` 多半指向 DeepSeek，不覆盖 Ark `/images/generations`，故生图必须独立配 `IMAGE_*` 指向火山方舟（需在控制台开通该模型并关闭"安全体验模式"推理限额，否则 429）。未配置 / 失败走 fallback（生图无 seed 兜底）。Seedream 无 `quality` 参数（CogView 的 `quality=hd` 已废弃，`IMAGE_QUALITY` 留空）。视频生成仍为 P2 占位。
+- LLM / API key 只在 `backend/.env`（gitignored），**绝不**进被跟踪文件或 Docker 镜像。
+- `backend/.env` 原则上不得由助手读取。
+- `health-llm` 调试接口不输出明文 key，`base_url` 仅回显 scheme + host。
+- 生图凭证独立走 `IMAGE_*`（指向火山方舟 Ark），与 `LLM_*` 相互独立、不回退——ARK key 需在控制台开通模型并关闭"安全体验模式"推理限额，否则 429。
 
-不要默认扩展到多茶品、其他市场、其他受众参照系或真实视频生成。未开放能力应返回 fallback。
+## 实现进度
 
-## 必读文档
-
-开发前先阅读：
-
-```text
-README.md
-docs/技术架构.md
-docs/接口文档.md
-```
-
-参考资料：
-
-```text
-docs/系统架构.pdf
-docs/赛题录屏.txt
-```
-
-`docs/接口文档.md` 是前后端 API 协作基准。接口字段变更必须同步更新该文档。
-
-## 核心设计
-
-系统采用四层架构：
-
-```text
-第 1 层：知识 / 证据层   （成分：茶品事实、工艺、成分、文化）
-第 2 层：风味结构化层     （感知：成分 → 风味坐标）
-第 3 层：表达生成层       （具象化：感知 → 可理解话术）
-第 4 层：营销物料层       （多模态物料：表达 → 海报 / 雷达 / image_prompt）
-```
-
-四层在第 3、4 层各自分出国内、跨文化两条同构链路，共享第 1、2 层茶品事实。跨文化表达由国内表达按规则横向翻译派生而来——这是同层横向派生，不是纵向追溯链的一层。
-
-每层都应能独立输出结果，并尽量能追溯到上一层依据。国内链与跨文化链各自纵向追溯，结构对称、各四层；翻译关系通过 `source_expression_id` 字段另行记录，不进入纵向追溯链。
-
-核心原则：
-
-```text
-结构化知识库约束事实
-结构化规则库约束判断
-风味坐标承接感知
-工作流负责任务拆解
-LLM 负责在规则约束下表达转译
-物料层负责传播展示
-纵向追溯链证明每个输出有事实依据
-翻译与类比为同层横向派生，不进纵向链
-fallback 保证未开放功能也能稳定交互
-```
-
-## 技术栈约定
-
-后端：
-
-```text
-FastAPI
-SQLite
-SQLAlchemy
-Pydantic
-YAML / JSON seed 文件
-内存缓存
-LLM API 可选
-```
-
-前端由前端组负责。后端只需保证接口稳定、JSON 字段清晰、Swagger 可调试、fallback 不白屏。
-
-## 数据约定
-
-运行时读路径已切库：`data_loader` 的 getter 查 `backend/data/tea.db`（由 `seed.py --reset` 从 `backend/data/seeds/*.yaml` 灌表）；写路径经 `output_store` 查/写 `generated_outputs` 表（LLM 输出缓存）。YAML 仍是数据源头，改了重跑 `seed.py --reset` 即生效。`all_seeds()` 仅 `seed.py` 灌表时用，运行时不再走内存 registry。
-
-数据流：
-
-```text
-backend/data/seeds/*.yaml → backend/scripts/seed.py --reset → backend/data/tea.db（读真源 + LLM 输出缓存）
-```
-
-fresh clone 后须先跑 `python scripts/seed.py --reset` 灌表，否则启动会打印警告、读路径返回空/404。未灌表不 crash、不自动灌（显式匹配 runbook）。
-
-`.db` 文件应被 gitignore。
-
-每条关键数据统一字段：
-
-```yaml
-id:
-type:
-claim:
-content:
-source_type:
-source:
-confidence:
-notes:
-```
-
-`source_type` 推荐取值：
-
-```text
-public_standard
-paper
-official_website
-ecommerce
-interview
-social_media
-team_assumption
-industry_article
-```
-
-`confidence` 取值：
-
-```text
-high
-medium
-low
-```
-
-Agent 可以辅助收集和格式化科学信息，但来源和可信度由团队人工确认。业务信息以人类调研为主，Agent 只辅助整理。
-
-规则同样是数据，不要硬编码成一个长 prompt。规则应放在 seed 文件中并导入 SQLite，例如：
-
-```text
-backend/data/seeds/generation_rules.yaml
-```
-
-运行时根据任务、市场、受众和茶品术语筛选相关规则，再注入 LLM prompt。
-
-推荐规则字段：
-
-```yaml
-id:
-scope:
-market:
-audience_reference:
-trigger_terms:
-priority:
-instruction:
-negative_example:
-positive_example:
-enabled:
-```
-
-## API 优先级
-
-P0 已实现：
-
-```http
-GET  /api/demo-routes
-GET  /api/teas
-GET  /api/teas/{tea_id}/knowledge
-GET  /api/teas/{tea_id}/flavor-profile
-GET  /api/teas/{tea_id}/component-flavor
-POST /api/teas/{tea_id}/domestic-expression
-POST /api/teas/{tea_id}/cross-cultural-expression
-POST /api/teas/{tea_id}/marketing-asset
-POST /api/image/generate
-GET  /api/trace/{output_id}
-```
-
-国内链与跨文化链均为主路径，`domestic-expression` 升级为 P0：它是跨文化表达横向翻译的源文，且国内物料同样走到物料层。`POST /api/image/generate` 升级为 P0：真实生图（豆包 Seedream，图内渲染中文知识文字）已接入，与 `marketing-asset` 两步联调。
-
-P1 建议：
-
-```http
-GET  /api/fallback
-POST /api/fallback
-```
-
-P2 占位：
-
-```http
-POST /api/teas/{tea_id}/video-asset
-POST /api/translate
-POST /api/audio/generate
-GET  /api/markets
-GET  /api/audience-references
-```
-
-P2 接口可以先注册路由并返回 fallback。其中 `GET /api/markets` 与 `GET /api/audience-references` 已升级为真实枚举列表（从 `demo_routes` 派生），其余仍为占位 fallback。`POST /api/image/generate` 已升级为真实生图（见上），从 P2 移出。
-
-## Fallback 规则
-
-Demo 阶段未开放功能不要返回默认 404 或导致前端白屏。建议对 `/api/*` 未知路由统一返回 fallback JSON：
-
-```json
-{
-  "success": true,
-  "data": {
-    "title": "功能暂未开放",
-    "message": "该能力已在产品规划中，Demo 阶段暂不提供真实生成结果。",
-    "available_route_id": "szz_western_coffee_poster"
-  },
-  "meta": {
-    "demo_mode": true,
-    "fallback": true,
-    "fallback_reason": "feature_not_available"
-  }
-}
-```
-
-## 实现建议
-
-当前后端已完成：
-
-```text
-FastAPI 路由
-YAML seed 数据
-data_loader 读路径切库（getter 查 SQLite，best-effort 降级不白屏）
-SQLAlchemy models（13 表）
-seed.py --reset（从 YAML 灌表，行数校验）
-output_store（generated_outputs 表作 LLM 输出缓存，写路径接库）
-P0 API（含真实生图 POST /api/image/generate，豆包 Seedream，图内渲染中文知识文字）
-P1 fallback
-P2 占位 fallback（markets / audience-references 已升级为真实列表；image/generate 已升级为真实生图）
-LLM service、Prompt 模板、输出 JSON 校验（LLM-primary + seed-fallback）
-image_service（豆包 Seedream 生图 + output_store 缓存 + 图内渲染中文知识文字，未启用/失败走 fallback）
-pytest 测试覆盖（P0 / 生成 / 追溯 / LLM 降级 / 生图 / fallback / 读路径 shape 对齐）
-Dockerfile / docker-compose 后端服务
-```
+已完成：FastAPI 路由 / SQLAlchemy models（13 表）/ `seed.py --reset` / 读路径切库 / LLM service + Prompt + JSON 校验 / 真实生图（豆包 Seedream）/ output_store 缓存 / pytest 覆盖 / Dockerfile + compose。
 
 后续优先顺序：
 
 1. ~~搭建 FastAPI 项目结构。~~ ✅
-2. ~~建 SQLAlchemy models，并让 `seed.py --reset` 从 YAML 生成 SQLite。~~ ✅
-3. ~~将当前内存查询逐步替换为数据库查询。~~ ✅（读路径已切库）
+2. ~~建 SQLAlchemy models，`seed.py --reset` 从 YAML 生成 SQLite。~~ ✅
+3. ~~内存查询替换为数据库查询。~~ ✅（读路径已切库）
 4. ~~接入 LLM service、Prompt 模板和输出 JSON 校验。~~ ✅
-5. ~~接入真实生图（CogView-4，POST /api/image/generate）。~~ ✅（链路就位；图源后已切豆包 Seedream 并修复出图质量，见下第 6、7 项）
-6. ~~修生图出图质量——P1 清商务信号词 + P2 style 风格维度（fresh/business）+ P3 scene 镜头维度（closeup/landscape/product），seed 退化为纯画面物体。~~ ✅（代码已改、测试全绿；实测复核中）
-7. ~~图源切豆包 Seedream + 图内渲染中文知识文字（CogView 中文渲染不稳，改用 Seedream；后端按 tea_id+language 取 seed copy 印进图）。~~ ✅
+5. ~~接入真实生图。~~ ✅（图源后已切豆包 Seedream 并修复出图质量，见下第 6、7 项）
+6. ~~修生图出图质量——清商务信号词 + style 风格维度 + scene 镜头维度，seed 退化为纯画面物体。~~ ✅
+7. ~~图源切豆包 Seedream + 图内渲染中文知识文字。~~ ✅（详见接口文档 §6.2）
 8. 增加测试覆盖与前端联调。（测试覆盖已完成，前端联调待办）
 9. 按部署环境收紧 CORS、文档入口和密钥配置。
 
-不要接真实视频 API；真实生图已接入豆包 Seedream（火山方舟 Ark，经 `IMAGE_*` 配置，与 `LLM_*` 相互独立），经 `POST /api/image/generate` 暴露，支持 `scene`（closeup/landscape/product）× `style`（fresh/business）双维度，传 `tea_id + language` 时图内渲染中文知识文字（后端取 seed copy 印进图）。`marketing-asset` 仍返 `image_prompt` + `copy` 作为生图输入（两步联调）。
-
-## 协作注意
-
-- 不要引入未确定项目名。
-- 不要把代理数据写成八马单品实测数据。
-- 不要手动维护 SQLite `.db`。
-- 不要把缓存结果提交到 Git。
-- 不要把所有规则硬编码进 Python 或一个超长 prompt；规则应结构化存储、按需筛选。
-- 不要随意修改 API 字段；如需修改，同步更新 `docs/接口文档.md`。
-- 保持实现范围围绕主路径，其他能力用 fallback 预留。
+> fresh clone 后须先跑 `python scripts/seed.py --reset` 灌表，否则启动打印警告、读路径返回空 / 404。未灌表不 crash、不自动灌。
