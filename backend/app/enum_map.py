@@ -11,8 +11,9 @@
   后原样透传，由 LLM / 下游自行消化。这避免前端临时新增枚举时后端阻断。
 
 仅 marketing-asset 的 platform / style / content_theme 用到，domestic-expression /
-cross-cultural-expression 的 tone / length 用到。表达接口的 style 是后端自有枚举
-（store_sales 等），不走本表。time_node 不映射（自由文本，原样透传进 prompt）。
+cross-cultural-expression 的 tone / length / task_type / flavor_reference 用到。
+表达接口的 style 是后端自有枚举（store_sales 等），不走本表。time_node 不映射
+（自由文本，原样透传进 prompt）。
 """
 
 import logging
@@ -82,6 +83,26 @@ CONTENT_THEME_ALIASES: dict[str, str] = {
     "tea_culture": "tea_culture",
 }
 
+# 表达任务类型（task_type）：前端 value 是英文短横线枚举。
+# 后端统一成下划线内部值，并收两套形式自映射。
+# component-to-flavor = 成分→风味（把成分翻译成消费者听得懂的风味）
+# vague-to-vivid = 模糊→形象描述（抽象表述转具象画面）
+TASK_TYPE_ALIASES: dict[str, str] = {
+    "component-to-flavor": "component_to_flavor",
+    "vague-to-vivid": "vague_to_vivid",
+    "component_to_flavor": "component_to_flavor",
+    "vague_to_vivid": "vague_to_vivid",
+}
+
+# 风味参照体系（flavor_reference）：前端 value 已是英文（coffee / wine / none），
+# 无需翻译，但走同一套"未知值透传 + 自映射"通路，保证口径统一。
+# coffee = 参考咖啡风味体系；wine = 参考红酒风味体系；none = 纯中式茶文化语境。
+FLAVOR_REFERENCE_ALIASES: dict[str, str] = {
+    "coffee": "coffee",
+    "wine": "wine",
+    "none": "none",
+}
+
 
 def _resolve(value: str | None, aliases: dict[str, str], field_name: str) -> str | None:
     """通用映射：查表命中返内部值，未命中 warn 后原样透传。
@@ -121,3 +142,13 @@ def resolve_expression_length(length: str | None) -> str | None:
 def resolve_content_theme(content_theme: str | None) -> str | None:
     """前端内容主题 → 内部值（tea-marketing → tea_marketing，连字符转下划线）。未知值透传。"""
     return _resolve(content_theme, CONTENT_THEME_ALIASES, "content_theme")
+
+
+def resolve_task_type(task_type: str | None) -> str | None:
+    """前端任务类型 → 内部值（component-to-flavor → component_to_flavor，连字符转下划线）。未知值透传。"""
+    return _resolve(task_type, TASK_TYPE_ALIASES, "task_type")
+
+
+def resolve_flavor_reference(flavor_reference: str | None) -> str | None:
+    """风味参照体系 → 内部值（coffee/wine/none 自映射）。未知值透传。"""
+    return _resolve(flavor_reference, FLAVOR_REFERENCE_ALIASES, "flavor_reference")

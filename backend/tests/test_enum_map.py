@@ -172,3 +172,57 @@ def test_content_theme_underscore_self_mapped():
     """前端已传下划线内部值时原样通过。"""
     assert enum_map.resolve_content_theme("tea_marketing") == "tea_marketing"
     assert enum_map.resolve_content_theme("tea_culture") == "tea_culture"
+
+
+# ---------------------------------------------------------------------------
+# task_type（连字符 → 下划线）
+# ---------------------------------------------------------------------------
+
+
+def test_task_type_hyphen_to_underscore():
+    assert enum_map.resolve_task_type("component-to-flavor") == "component_to_flavor"
+    assert enum_map.resolve_task_type("vague-to-vivid") == "vague_to_vivid"
+
+
+def test_task_type_none_and_empty():
+    assert enum_map.resolve_task_type(None) is None
+    assert enum_map.resolve_task_type("") is None
+
+
+def test_task_type_unknown_passthrough(caplog):
+    import logging
+
+    with caplog.at_level(logging.WARNING, logger="app.enum_map"):
+        result = enum_map.resolve_task_type("flavor-to-story")
+    assert result == "flavor-to-story", "未知值原样透传，连字符也保留"
+    assert any("task_type" in r.message for r in caplog.records)
+
+
+def test_task_type_underscore_self_mapped():
+    assert enum_map.resolve_task_type("component_to_flavor") == "component_to_flavor"
+    assert enum_map.resolve_task_type("vague_to_vivid") == "vague_to_vivid"
+
+
+# ---------------------------------------------------------------------------
+# flavor_reference（coffee/wine/none 自映射）
+# ---------------------------------------------------------------------------
+
+
+def test_flavor_reference_aliases():
+    assert enum_map.resolve_flavor_reference("coffee") == "coffee"
+    assert enum_map.resolve_flavor_reference("wine") == "wine"
+    assert enum_map.resolve_flavor_reference("none") == "none"
+
+
+def test_flavor_reference_none_and_empty():
+    assert enum_map.resolve_flavor_reference(None) is None
+    assert enum_map.resolve_flavor_reference("") is None
+
+
+def test_flavor_reference_unknown_passthrough(caplog):
+    import logging
+
+    with caplog.at_level(logging.WARNING, logger="app.enum_map"):
+        result = enum_map.resolve_flavor_reference("sake")
+    assert result == "sake"
+    assert any("flavor_reference" in r.message for r in caplog.records)

@@ -126,6 +126,8 @@ def test_cross_cultural_expression_hint_fields_echo(client):
             "tone": "专业严谨",
             "length": "中（80-200字）",
             "time_node": "圣诞节",
+            "task_type": "vague-to-vivid",
+            "flavor_reference": "wine",
         },
     )
     assert resp.status_code == 200
@@ -133,3 +135,17 @@ def test_cross_cultural_expression_hint_fields_echo(client):
     assert d["tone"] == "professional"
     assert d["length"] == "medium"
     assert d["time_node"] == "圣诞节"
+    assert d["task_type"] == "vague_to_vivid", "连字符枚举应转下划线回显"
+    assert d["flavor_reference"] == "wine"
+
+
+def test_domestic_expression_task_type_flavor_reference_echo(client):
+    """task_type 连字符转下划线回显；flavor_reference 透传回显。"""
+    resp = client.post(
+        f"/api/teas/{TEA_ID}/domestic-expression",
+        json={"task_type": "component-to-flavor", "flavor_reference": "coffee"},
+    )
+    assert resp.status_code == 200
+    d = resp.json()["data"]
+    assert d["task_type"] == "component_to_flavor"
+    assert d["flavor_reference"] == "coffee"

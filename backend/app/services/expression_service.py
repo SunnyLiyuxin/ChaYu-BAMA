@@ -38,14 +38,17 @@ def get_domestic_expression(
     tone: str | None = None,
     length: str | None = None,
     time_node: str | None = None,
+    task_type: str | None = None,
+    flavor_reference: str | None = None,
 ) -> tuple[dict | None, str, dict]:
     """生成国内中文表达。
 
     Args:
         directive: 自然语言入口（POST /api/natural-expression）传来的原始用户指令，
             透传进 prompt 作生成要求；现有 domestic-expression 接口调用时传 None，行为不变。
-        tone / length / time_node: 结构化接口的可选 hint（经 enum_map 翻译后传入），
-            注入 prompt 影响话术调性 / 篇幅 / 场景化；为 None 时不注入。
+        tone / length / time_node / task_type / flavor_reference: 结构化接口的可选 hint
+            （经 enum_map 翻译后传入），注入 prompt 影响话术调性 / 篇幅 / 场景化 /
+            生成方向 / 风味参照；为 None 时不注入。
 
     Returns:
         (expression_data, status, llm_meta)。
@@ -81,6 +84,7 @@ def get_domestic_expression(
             tea_id=tea_id, tea=tea, flavor=flavor, knowledge=knowledge,
             audience=audience or record.get("audience", {}), style=style,
             directive=directive, tone=tone, length=length, time_node=time_node,
+            task_type=task_type, flavor_reference=flavor_reference,
         )
         # 写路径缓存：同输入命中即复用，跳过本次 LLM 调用。
         # hint 进了 user_prompt → 进 input_hash，不同 hint 不命中同一缓存。
@@ -124,6 +128,10 @@ def get_domestic_expression(
         data["length"] = length
     if time_node:
         data["time_node"] = time_node
+    if task_type:
+        data["task_type"] = task_type
+    if flavor_reference:
+        data["flavor_reference"] = flavor_reference
 
     llm_meta = {
         "llm_generated": llm_generated,
@@ -142,6 +150,8 @@ def get_cross_cultural_expression(
     tone: str | None = None,
     length: str | None = None,
     time_node: str | None = None,
+    task_type: str | None = None,
+    flavor_reference: str | None = None,
 ) -> tuple[dict | None, str, dict]:
     """生成跨文化表达。
 
@@ -152,7 +162,8 @@ def get_cross_cultural_expression(
     Args:
         directive: 自然语言入口（POST /api/natural-expression）传来的原始用户指令，
             透传进 prompt 作生成要求；现有 cross-cultural-expression 接口调用时传 None，行为不变。
-        tone / length / time_node: 结构化接口的可选 hint（经 enum_map 翻译后传入）。
+        tone / length / time_node / task_type / flavor_reference: 结构化接口的可选 hint
+            （经 enum_map 翻译后传入）。
 
     Returns:
         (expression_data, status, llm_meta)。
@@ -203,6 +214,7 @@ def get_cross_cultural_expression(
                 target_language=target_language, market=market,
                 audience_reference=audience_reference,
                 directive=directive, tone=tone, length=length, time_node=time_node,
+                task_type=task_type, flavor_reference=flavor_reference,
             )
             # 写路径缓存：同输入命中即复用，跳过本次 LLM 调用。
             input_hash = output_store.compute_input_hash(
@@ -256,6 +268,10 @@ def get_cross_cultural_expression(
         data["length"] = length
     if time_node:
         data["time_node"] = time_node
+    if task_type:
+        data["task_type"] = task_type
+    if flavor_reference:
+        data["flavor_reference"] = flavor_reference
 
     llm_meta = {
         "llm_generated": llm_generated,

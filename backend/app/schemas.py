@@ -44,6 +44,22 @@ class DomesticExpressionRequest(BaseModel):
             "让 LLM 结合节点生成场景化话术。国内 / 海外节点都走本字段，不区分。"
         ),
     )
+    task_type: str | None = Field(
+        default=None,
+        description=(
+            "任务类型 hint。前端 value：component-to-flavor（成分→风味，把成分翻译成消费者"
+            "听得懂的风味）/ vague-to-vivid（模糊→形象描述）。后端按 app.enum_map 翻成下划线"
+            "内部值；未知值透传。注入 prompt 引导生成方向。"
+        ),
+    )
+    flavor_reference: str | None = Field(
+        default=None,
+        description=(
+            "风味参照体系 hint。coffee=参考咖啡风味体系 / wine=参考红酒风味体系 / "
+            "none=纯中式茶文化语境。后端按 app.enum_map 透传（值即英文内部值）；未知值透传。"
+            "注入 prompt 决定跨文化类比时参照哪个风味体系。"
+        ),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -73,6 +89,20 @@ class CrossCulturalExpressionRequest(BaseModel):
     time_node: str | None = Field(
         default=None,
         description="时间节点 hint，自由文本（如'圣诞节''Prime会员日'）原样透传进 prompt。国内 / 海外节点都走本字段。",
+    )
+    task_type: str | None = Field(
+        default=None,
+        description=(
+            "任务类型 hint，与国内表达同一套枚举（component-to-flavor / vague-to-vivid "
+            "→ component_to_flavor / vague_to_vivid）。注入 prompt 引导生成方向。"
+        ),
+    )
+    flavor_reference: str | None = Field(
+        default=None,
+        description=(
+            "风味参照体系 hint（coffee / wine / none），与国内表达同一套。注入 prompt 决定"
+            "跨文化类比时参照哪个风味体系。"
+        ),
     )
 
 

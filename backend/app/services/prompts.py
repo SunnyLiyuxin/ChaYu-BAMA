@@ -52,13 +52,19 @@ def _hint_block(
     tone: str | None,
     length: str | None,
     time_node: str | None,
+    task_type: str | None = None,
+    flavor_reference: str | None = None,
 ) -> str:
-    """表达接口的可选 hint 段：语气 / 篇幅 / 时间节点。
+    """表达接口的可选 hint 段：语气 / 篇幅 / 时间节点 / 任务类型 / 风味参照。
 
     与 _directive_block（NL 入口的整段自由指令）不同：这是结构化接口的可选
-    参数，经 enum_map 翻成内部英文值（tone/length）或原样透传（time_node），
-    作为低优先级生成提示注入。三者都为 None 时不注入，行为同现状。
-    hint 进 user_prompt，从而进 input_hash（缓存键）——不同 hint 不命中同一缓存。
+    参数，经 enum_map 翻成内部英文值（tone/length/task_type/flavor_reference）
+    或原样透传（time_node），作为低优先级生成提示注入。全为 None 时不注入，
+    行为同现状。hint 进 user_prompt，从而进 input_hash（缓存键）——不同 hint
+    不命中同一缓存。
+
+    task_type 的内部值（component_to_flavor 等）是英文标识符，对 LLM 不直观，
+    故这里再翻成一句描述性中文喂给 LLM（enum_map 只负责值归一化，不负责文案）。
     """
     parts: list[str] = []
     if tone:
@@ -67,9 +73,29 @@ def _hint_block(
         parts.append(f"篇幅：{length}")
     if time_node:
         parts.append(f"时间节点：{time_node}")
+    if task_type:
+        desc = _TASK_TYPE_DESC.get(task_type)
+        parts.append(f"任务类型：{desc or task_type}")
+    if flavor_reference:
+        desc = _FLAVOR_REFERENCE_DESC.get(flavor_reference)
+        parts.append(f"风味参照体系：{desc or flavor_reference}")
     if not parts:
         return ""
     return "===生成提示（hint，在事实与规则约束下尽量满足）===\n" + "；".join(parts) + "。\n===生成提示结束===\n\n"
+
+
+# task_type 内部值 → 给 LLM 看的描述性中文（enum_map 只归一化值，文案在此）。
+_TASK_TYPE_DESC: dict[str, str] = {
+    "component_to_flavor": "成分→风味（把茶叶成分翻译成消费者听得懂的风味表达）",
+    "vague_to_vivid": "模糊→形象描述（把抽象表述转成具象画面）",
+}
+
+# flavor_reference 内部值 → 描述性中文。
+_FLAVOR_REFERENCE_DESC: dict[str, str] = {
+    "coffee": "参考咖啡风味体系作跨文化类比",
+    "wine": "参考红酒风味体系作跨文化类比",
+    "none": "纯中式茶文化语境，不作咖啡/红酒类比",
+}
 
 
 def build_domestic_prompt(
@@ -84,14 +110,17 @@ def build_domestic_prompt(
     tone: str | None = None,
     length: str | None = None,
     time_node: str | None = None,
+    task_type: str | None = None,
+    flavor_reference: str | None = None,
 ) -> tuple[str, str, list[dict]]:
     """国内中文表达 prompt。
 
     Args:
         directive: 自然语言入口传来的原始用户指令（语气 / 侧重 / 篇幅等）。
             现有 domestic-expression 接口调用时传 None，行为不变。
-        tone / length / time_node: 结构化接口的可选 hint，经 enum_map 翻译后注入。
-            hint 段与 directive 段都进 user_prompt（→ input_hash 缓存键）。
+        tone / length / time_node / task_type / flavor_reference: 结构化接口的
+            可选 hint，经 enum_map 翻译后注入。hint 段与 directive 段都进
+            user_prompt（→ input_hash 缓存键）。
 
     Returns:
         (system_prompt, user_prompt, selected_rules)。
@@ -120,7 +149,10 @@ def build_domestic_prompt(
     user += f"工艺：{knowledge.get('process', {}).get('key_technique', '')}\n"
     user += f"受众画像：{audience}\n"
     user += "===上下文结束===\n\n"
-    user += _hint_block(tone=tone, length=length, time_node=time_node)
+    user += _hint_block(
+        tone=tone, length=length, time_node=time_node,
+        task_type=task_type, flavor_reference=flavor_reference,
+    )
     user += _directive_block(directive)
     user += f"请基于上述事实与规则，生成面向国内消费者的中文表达。{style_hint}{directive_hint}"
 
@@ -142,6 +174,8 @@ def build_cross_cultural_prompt(
     tone: str | None = None,
     length: str | None = None,
     time_node: str | None = None,
+    task_type: str | None = None,
+    flavor_reference: str | None = None,
 ) -> tuple[str, str, list[dict]]:
     """跨文化表达 prompt（国内表达横向翻译）。
 
@@ -150,7 +184,8 @@ def build_cross_cultural_prompt(
     Args:
         directive: 自然语言入口传来的原始用户指令（语气 / 侧重 / 篇幅等）。
             现有 cross-cultural-expression 接口调用时传 None，行为不变。
-        tone / length / time_node: 结构化接口的可选 hint，经 enum_map 翻译后注入。
+        tone / length / time_node / task_type / flavor_reference: 结构化接口的
+            可选 hint，经 enum_map 翻译后注入。
     """
     rules_text, selected = _rules_block(
         scope="cross_cultural_expression", market=market,
@@ -185,7 +220,10 @@ def build_cross_cultural_prompt(
     user += f"scientific_style: {domestic_outputs.get('scientific_style', '')}\n"
     user += f"emotional_style: {domestic_outputs.get('emotional_style', '')}\n"
     user += "===源文结束===\n\n"
-    user += _hint_block(tone=tone, length=length, time_node=time_node)
+    user += _hint_block(
+        tone=tone, length=length, time_node=time_node,
+        task_type=task_type, flavor_reference=flavor_reference,
+    )
     user += _directive_block(directive)
     user += (
         f"请把上述国内表达横向翻译为 {target_language}，面向 {market} 市场 "
