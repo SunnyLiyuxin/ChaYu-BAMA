@@ -62,9 +62,24 @@ class NaturalExpressionRequest(BaseModel):
 class MarketingAssetRequest(BaseModel):
     route_id: str | None = Field(default=None, description="Demo 路径 ID")
     asset_type: str = Field(default="poster")
-    platform: str | None = Field(default=None, description="wechat / tiktok 等")
+    platform: str | None = Field(
+        default=None,
+        description=(
+            "投放平台。前端可传中文枚举（小红书/抖音/微信视频号/Instagram/TikTok/YouTube），"
+            "后端按 app.enum_map 翻成内部英文值（xiaohongshu/douyin/wechat_channels/"
+            "instagram/tiktok/youtube）；抖音 ≠ TikTok 不合并。未知值原样透传不报错。"
+        ),
+    )
     language: str = Field(default="en", description="zh=国内物料 / en=跨文化物料")
-    style: str | None = Field(default="premium_but_approachable")
+    style: str | None = Field(
+        default="premium_but_approachable",
+        description=(
+            "物料风格。前端可传中文枚举（年轻/商务/国风），后端按 app.enum_map 翻成"
+            "内部英文值（youthful/business/guofeng）；未知值原样透传。"
+            "注意：与生图接口 §6.2 的 style（fresh/business）是两套维度——本字段管文案调性，"
+            "生图 style 管画面光照色调。"
+        ),
+    )
 
 
 # ---------------------------------------------------------------------------

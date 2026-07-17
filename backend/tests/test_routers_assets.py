@@ -71,3 +71,39 @@ def test_asset_tea_not_found(client):
     resp = client.post("/api/teas/nonexistent/marketing-asset",
                        json={"language": "zh"})
     assert resp.json()["error"]["code"] == "TEA_NOT_FOUND"
+
+
+def test_asset_platform_and_style_chinese_enum_mapped(client):
+    """前端传中文枚举（小红书 / 国风）→ 后端翻成内部英文值后回显。
+
+    LLM disabled → copy 走 seed，platform / style 不影响 seed 文案，
+    但应原样回显翻译后的内部值（xiaohongshu / guofeng），不回显中文枚举。
+    """
+    resp = client.post(
+        f"/api/teas/{TEA_ID}/marketing-asset",
+        json={"language": "zh", "platform": "小红书", "style": "国风"},
+    )
+    assert resp.status_code == 200
+    d = resp.json()["data"]
+    assert d["platform"] == "xiaohongshu", "中文枚举应翻成内部英文值回显"
+    assert d["style"] == "guofeng"
+
+
+def test_asset_platform_internal_value_passthrough(client):
+    """前端传内部英文值时原样通过（自映射），不误判。"""
+    resp = client.post(
+        f"/api/teas/{TEA_ID}/marketing-asset",
+        json={"language": "en", "platform": "tiktok"},
+    )
+    assert resp.status_code == 200
+    assert resp.json()["data"]["platform"] == "tiktok"
+
+
+def test_asset_platform_unknown_value_passthrough(client):
+    """未知平台值不 422，原样透传回显（Demo 友好，前端临时新增枚举不阻断）。"""
+    resp = client.post(
+        f"/api/teas/{TEA_ID}/marketing-asset",
+        json={"language": "zh", "platform": "微博"},
+    )
+    assert resp.status_code == 200
+    assert resp.json()["data"]["platform"] == "微博"

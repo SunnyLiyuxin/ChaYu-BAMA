@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 
-from app import responses
+from app import enum_map, responses
 from app.schemas import MarketingAssetRequest
 from app.services import asset_service
 from app.routers.expressions import _llm_meta_kwargs
@@ -20,14 +20,18 @@ def create_marketing_asset(tea_id: str, body: MarketingAssetRequest):
     启用 LLM 时由规则约束生成 copy + image_prompt；雷达数值仍由 seed
     事实提供。物料接口本身不调生图（image_generation_enabled=false），
     真实出图走独立接口 POST /api/image/generate（豆包 Seedream，图内渲染中文知识文字）。
+
+    platform / style：前端可传中文枚举（小红书/国风等），此处按 app.enum_map
+    翻成内部英文值后再交给 service——service / prompt / 缓存键 / 响应回显
+    统一只认英文值，映射集中在 enum_map 一处。
     """
     asset, status, llm_meta = asset_service.get_marketing_asset(
         tea_id=tea_id,
         language=body.language,
         asset_type=body.asset_type,
-        platform=body.platform,
+        platform=enum_map.resolve_platform(body.platform),
         route_id=body.route_id,
-        style=body.style,
+        style=enum_map.resolve_marketing_style(body.style),
     )
 
     if status == "tea_not_found":
