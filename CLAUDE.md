@@ -63,7 +63,7 @@
 7. ~~图源切豆包 Seedream + 图内渲染中文知识文字。~~ ✅（详见接口文档 §6.2）
 8. ~~前端枚举映射 + Docker 一体化部署。~~ ✅（enum_map 统一前端中文枚举→后端英文内部值；nginx 反代 `/api`，前端同源调无跨域）
 9. ~~增加测试覆盖与前端联调。~~ ✅（测试 164 passed；前端 v2 已切纯后端对接 `api.js`，茶名对齐后端全名、枚举经 `enum_map` 映射；`api.js` BASE 自适应同源、`meta.fallback` 统一拦截已修，见 commit ca07362；对话框用户友好性三处修复——生成中即时 typing 指示器 + 分阶段文案、物料文案换行保留、fallback/错误视觉区分，见 commit 2a7f84c）
-10. 按部署环境收紧 CORS、文档入口和密钥配置。
+10. ~~按部署环境收紧 CORS、文档入口和密钥配置。~~ ✅（CORS 已收紧：`config.py` 增 `cors_allowed_origins`（env `CORS_ALLOWED_ORIGINS`，逗号分隔）+ `cors_origins()`；`main.py` 中间件由 `allow_origins=["*"]` 改为读 `cors_origins()`（默认空=同源 only）。Docker 部署下前端与 `/api` 经 nginx 同 origin，浏览器不发 `Origin` 头，不需要放行跨域——空即最严。`allow_credentials=false`、`allow_methods=GET,POST,OPTIONS`、`allow_headers=Content-Type`。`.env.example` 末尾加 `CORS_ALLOWED_ORIGINS=` 占位 + 说明。文档同步：接口文档 §1.5、README 两处、CLAUDE.md 此处。）
 11. ~~GitHub Actions 自动部署到云服务器（8080）。~~ ✅（`.github/workflows/deploy.yml` + `scripts/deploy-remote.sh`；密钥经仓库 Secret 注入）
 
 > fresh clone 后须先跑 `python scripts/seed.py --reset` 灌表，否则启动打印警告、读路径返回空 / 404。未灌表不 crash、不自动灌。（Docker 方式构建时镜像内自动跑 `seed.py --reset`，无需手动灌表。）

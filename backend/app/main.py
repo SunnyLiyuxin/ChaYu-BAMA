@@ -87,13 +87,20 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Demo 阶段放开 CORS，方便前端本地联调；上线前应收紧 origins。
+# CORS 收紧（上线调整）：
+#   - 生产默认（CORS_ALLOWED_ORIGINS 空）→ allow_origins=[]，同源 only。
+#     Docker 一体化部署下前端与 /api 经 nginx 同 origin，浏览器不发 Origin 头，
+#     天然不跨域，CORS 不拦 —— 等于不需要 CORS。
+#   - 仅在「浏览器直连后端 8000」联调时，于 backend/.env 配 CORS_ALLOWED_ORIGINS
+#     （逗号分隔，如 http://localhost:8080）放行对应来源。
+#   - allow_credentials 恒 False：不放行凭证（Demo 无 Cookie 鉴权），与收紧语义一致。
+_origins = get_settings().cors_origins()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=_origins,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 

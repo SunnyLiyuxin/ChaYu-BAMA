@@ -37,6 +37,11 @@ class Settings(BaseSettings):
     image_quality: str = ""  # Seedream 无 quality 参数；留空不传（CogView 时代遗留字段，Ark 忽略）
     image_timeout: float = 300.0  # Seedream pro 2K 出图偏慢（首图常 >90s）；超时也计费故给足 300s
 
+    # CORS 收紧：生产默认只放行经 nginx 网关的同源请求（前端与 /api 同 origin，
+    # 浏览器根本不发 Origin → CORS 不拦）。只有「浏览器直连后端 8000」时才需要放行，
+    # 由 CORS_ALLOWED_ORIGINS 配置（逗号分隔）。空 = 同源 only（最严，生产默认）。
+    cors_allowed_origins: str = ""
+
     @property
     def llm_enabled(self) -> bool:
         """key 与 base_url 都配置了才视为启用。"""
@@ -50,6 +55,22 @@ class Settings(BaseSettings):
     def image_credentials(self) -> tuple[str, str]:
         """生图凭证：不回退 LLM_*（当前是 DeepSeek，非 Ark 端点）。"""
         return self.image_api_key, self.image_base_url
+
+    def cors_origins(self) -> list[str]:
+        """CORS 放行来源。
+
+        空（默认）→ 返回空列表：CORSMiddleware 配 allow_origins=[] 等同「同源 only」
+        （浏览器同源请求不发 Origin 头，不触发预检；nginx 网关下前端与 /api 同 origin，
+        天然不跨域，这是生产形态）。
+
+        配了 CORS_ALLOWED_ORIGINS（逗号分隔，如
+        http://localhost:8080,https://chayu.example.com）→ 只放行这些来源，
+        供本地联调 / 多前端域直连后端 8000。
+        """
+        raw = self.cors_allowed_origins.strip()
+        if not raw:
+            return []
+        return [o.strip() for o in raw.split(",") if o.strip()]
 
     model_config = SettingsConfigDict(
         env_file=Path(__file__).resolve().parent.parent / ".env",
