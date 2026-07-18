@@ -1108,6 +1108,23 @@ function handleOption(act,lbl){
       paintMessages();
     });
   }else if(act==="confirm"){
+    // 视频：Demo 阶段不开放，直接调后端 P2 video-asset 占位接口（恒返回 fallback），
+    // 不经 marketingAsset / imageGenerate——后者会真去生图，与"视频"语义不符且耗时长。
+    // 由 api.js request 层拦截 meta.fallback 抛带 message 的 Error，落到下方 .catch
+    // 展示"视频生成 Demo 阶段暂不开放"友好提示。
+    if(S.mat.modality==="video"){
+      S.typingText="正在请求视频生成…";S.typing=true;paintMessages();
+      BAMA_API.videoAsset(S.mat.teaCategory||"赛珍珠浓香型安溪铁观音").then(()=>{
+        S.typing=false;S.typingText="茶语正在努力输入中…";
+        pushMsg("assistant","视频生成 Demo 阶段暂不开放。","fallback");
+        S.stage="done";saveCurrentToHistory();paintMessages();
+      }).catch(e=>{
+        S.typing=false;S.typingText="茶语正在努力输入中…";
+        pushMsg("assistant",(e.fallback?"":"物料生成失败：")+e.message,e.fallback?"fallback":"error");
+        S.stage="done";saveCurrentToHistory();paintMessages();
+      });
+      return;
+    }
     S.typingText="正在准备物料文案…";S.typing=true;paintMessages();
     const tea=S.mat.teaCategory||"茶叶";
     const routeId="demo_"+(S.mat.teaCategory||"tea");

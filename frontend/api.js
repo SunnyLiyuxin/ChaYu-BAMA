@@ -159,7 +159,15 @@ const BAMA_API=(function(){
     return request("POST", "/api/image/generate", body);
   }
 
-  // 6. 追溯链
+  // 6. 视频生成（Demo 阶段不开放，后端 P2 占位接口恒返回 fallback；
+  //    前端在确认生成视频时直接调它，不经 marketingAsset / imageGenerate，
+  //    由 request 层统一拦截 meta.fallback 抛带 message 的 Error 展示友好提示）
+  async function videoAsset(teaName){
+    const teaId=getTeaId(teaName);
+    return request("POST", `/api/teas/${teaId}/video-asset`);
+  }
+
+  // 7. 追溯链
   async function getTrace(outputId){
     return request("GET", `/api/trace/${outputId}`);
   }
@@ -167,7 +175,7 @@ const BAMA_API=(function(){
   return {
     init, getTeaId, giftToRecipient,
     getTeas, domesticExpression, crossCulturalExpression,
-    marketingAsset, imageGenerate, getTrace
+    marketingAsset, imageGenerate, videoAsset, getTrace
   };
 })();
 
