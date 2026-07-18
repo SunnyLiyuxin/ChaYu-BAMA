@@ -1,4 +1,4 @@
-# 中国茶 AI 表达 Demo——Chayu 八马茶语
+# 八马茶语 · ChaYu-BAMA
 
 面向飞书 AI 创赛的 Demo 原型：用结构化茶品知识、风味坐标和表达规则，生成面向国内消费者与海外受众的茶文化表达与营销物料数据。
 
@@ -64,7 +64,7 @@ http://localhost:8000/docs      # 直连后端（也可，CORS 已放开）
 
 ```bash
 # 1. 服务器上 clone 仓库
-git clone <repo> && cd Eighthorse-Tea-project
+git clone <repo> && cd ChaYu-BAMA
 # 2. 放置密钥（不进 Git）
 cp backend/.env.example backend/.env   # 填入 LLM_API_KEY / IMAGE_API_KEY 等
 # 3. 拉起

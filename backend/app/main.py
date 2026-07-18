@@ -78,7 +78,7 @@ def _check_seeded() -> None:
 
 
 app = FastAPI(
-    title="中国茶 AI 表达 Demo",
+    title="八马茶语 · ChaYu-BAMA",
     description=(
         "中国茶感知与文化表达的分层翻译系统 Demo。"
         "主路径：1 款茶（铁观音）× 图片物料 ×（国内链 + 跨文化链）两条同构链路。"
@@ -101,7 +101,7 @@ app.add_middleware(
 def root():
     """根路径：给个入口提示，非业务接口。"""
     return {
-        "name": "中国茶 AI 表达 Demo",
+        "name": "八马茶语 · ChaYu-BAMA",
         "docs": "/docs",
         "main_routes": [
             "/api/demo-routes",
