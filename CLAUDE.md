@@ -62,7 +62,7 @@
 6. ~~修生图出图质量——清商务信号词 + style 风格维度 + scene 镜头维度，seed 退化为纯画面物体。~~ ✅
 7. ~~图源切豆包 Seedream + 图内渲染中文知识文字。~~ ✅（详见接口文档 §6.2）
 8. ~~前端枚举映射 + Docker 一体化部署。~~ ✅（enum_map 统一前端中文枚举→后端英文内部值；nginx 反代 `/api`，前端同源调无跨域）
-9. ~~增加测试覆盖与前端联调。~~ ✅（测试 164 passed；前端 v2 已切纯后端对接 `api.js`，茶名对齐后端全名、枚举经 `enum_map` 映射；`api.js` BASE 自适应同源、`meta.fallback` 统一拦截已修，见 commit ca07362）
+9. ~~增加测试覆盖与前端联调。~~ ✅（测试 164 passed；前端 v2 已切纯后端对接 `api.js`，茶名对齐后端全名、枚举经 `enum_map` 映射；`api.js` BASE 自适应同源、`meta.fallback` 统一拦截已修，见 commit ca07362；对话框用户友好性三处修复——生成中即时 typing 指示器 + 分阶段文案、物料文案换行保留、fallback/错误视觉区分，见 commit 2a7f84c）
 10. 按部署环境收紧 CORS、文档入口和密钥配置。
 11. ~~GitHub Actions 自动部署到云服务器（8080）。~~ ✅（`.github/workflows/deploy.yml` + `scripts/deploy-remote.sh`；密钥经仓库 Secret 注入）
 
