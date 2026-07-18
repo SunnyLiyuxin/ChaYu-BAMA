@@ -5,6 +5,7 @@ Demo 调试友好：不强制前端传齐所有字段，请求体字段均设默
 """
 
 from pydantic import BaseModel, Field
+from typing import Literal
 
 
 # ---------------------------------------------------------------------------
@@ -197,3 +198,50 @@ class FallbackRequest(BaseModel):
     feature: str | None = Field(default=None, description="前端标记的功能名")
     requested_path: str | None = Field(default=None, description="前端原本想访问的路径")
     reason: str | None = Field(default="frontend_placeholder")
+
+
+# ---------------------------------------------------------------------------
+# 5.4 工作台自由提问（chat）
+# ---------------------------------------------------------------------------
+
+
+class ChatRequest(BaseModel):
+    """工作台自由提问请求：用户在文案 / 物料工作台输入框敲一段自由文本。
+
+    工作台已在前置选择里定死 tea_id + 链路 + 模式，本入口不识别茶品，只做：
+    1. 前置一次意义评判 LLM，拒绝无意义输入（如「？」）；无意义 → fallback。
+    2. 有意义 → 把 text 作为 directive 透传到 mode 对应的生成链路：
+       - domestic → 国内表达（5.1 shape）
+       - overseas → 跨文化表达（5.2 shape）
+       - material → 营销物料（6.1 shape，前端拿 image_prompt 再调 6.2 出图）
+
+    text 必填非空（Pydantic min_length=1，前端也会 trim）；其余为可选 hint，
+    语义与对应链路（domestic-expression / cross-cultural-expression /
+    marketing-asset）一致，经 enum_map 翻译后注入。
+    """
+
+    tea_id: str = Field(..., description="工作台前置选定的茶品 ID")
+    mode: Literal["domestic", "overseas", "material"] = Field(
+        ..., description="工作台模式：domestic 国内文案 / overseas 海外文案 / material 物料"
+    )
+    text: str = Field(..., min_length=1, description="用户自由提问原文（非空）")
+
+    # 文案 hint（domestic / overseas）
+    audience: DomesticAudience | None = Field(default=None, description="受众画像（文案用）")
+
+    # tone / length / time_node / task_type / flavor_reference / recipient：
+    # 文案 + 物料共用同一套可选 hint，语义见 5.1 表格。经 enum_map 翻译后注入。
+    tone: str | None = Field(default=None, description="语气 hint（温润亲切/... → warm/...）")
+    length: str | None = Field(default=None, description="篇幅 hint（短/中/长 → short/medium/long）")
+    time_node: str | None = Field(default=None, description="时间节点 hint，自由文本原样透传")
+    task_type: str | None = Field(default=None, description="任务类型 hint（component-to-flavor / vague-to-vivid）")
+    flavor_reference: str | None = Field(default=None, description="风味参照体系 hint（coffee/wine/none）")
+    recipient: str | None = Field(default=None, description="销售对象 hint（自己喝/送长辈/... → self/elder/...）")
+
+    # 物料参数（material）
+    language: str | None = Field(default=None, description="物料语言 zh/en（material 用；默认 zh）")
+    asset_type: str = Field(default="poster", description="物料类型，默认 poster")
+    platform: str | None = Field(default=None, description="投放平台（小红书/Instagram 等 → 内部值）")
+    route_id: str | None = Field(default=None, description="Demo 路径 ID（溯源用）")
+    style: str | None = Field(default=None, description="物料风格（年轻/商务/国风 → youthful/business/guofeng）")
+    content_theme: str | None = Field(default=None, description="内容主题（tea-marketing/tea-culture）")

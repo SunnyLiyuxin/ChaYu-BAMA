@@ -30,12 +30,16 @@ def get_marketing_asset(
     route_id: str | None = None,
     style: str | None = None,
     content_theme: str | None = None,
+    directive: str | None = None,
 ) -> tuple[dict | None, str, dict]:
     """生成营销物料。
 
     Args:
         content_theme: 内容主题（tea_marketing / tea_culture），注入 prompt 决定
             文案侧重营销还是文化叙事。None 时 LLM 默认偏营销。
+        directive: 工作台自由提问入口（POST /api/chat）传来的用户原文，透传给
+            build_asset_copy_prompt 作生成要求。现有 marketing-asset 接口调用点
+            传 None，行为同现状。directive 进 user_prompt → 进 input_hash。
 
     Returns:
         (asset_data, status, llm_meta)。
@@ -80,7 +84,7 @@ def get_marketing_asset(
                 expression_outputs=expr_record["outputs"],
                 language=language, market=market,
                 audience_reference=audience_reference, platform=platform, style=style,
-                content_theme=content_theme,
+                content_theme=content_theme, directive=directive,
             )
             # 写路径缓存：同输入命中即复用，跳过本次 LLM 调用。
             input_hash = output_store.compute_input_hash(

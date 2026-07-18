@@ -1300,7 +1300,9 @@ function handleUserInput(text){
   updateChatArea();
   S.typingText="正在生成茶语文案…";S.typing=true;updateChatArea();
   const isOvs=S.edition==="overseas";
-  const apiCall=isOvs?BAMA_API.crossCulturalExpression(S.copySel.teaCategory, S.copySel):BAMA_API.domesticExpression(S.copySel.teaCategory, S.copySel);
+  // 自由提问走 /api/chat：先经意义评判 LLM，无意义输入被拒（fallback）；
+  // 有意义把 text 作为 directive 透传，真正影响生成（不再输什么都给一大段）。
+  const apiCall=BAMA_API.chat(S.copySel.teaCategory, S.copySel, {mode:isOvs?"overseas":"domestic", text});
   apiCall.then(r=>{
     S.typing=false;
     S.typingText="茶语正在努力输入中";

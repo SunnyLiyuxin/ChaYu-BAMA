@@ -29,6 +29,7 @@ from openai import (
 from app.config import get_settings
 from app.llm_schemas import (
     AssetCopy,
+    ChatQueryIntent,
     CrossCulturalExpressionOutputs,
     DomesticExpressionOutputs,
     NaturalLanguageIntent,
@@ -42,6 +43,7 @@ _VALIDATORS: dict[type, Any] = {
     CrossCulturalExpressionOutputs: CrossCulturalExpressionOutputs,
     AssetCopy: AssetCopy,
     NaturalLanguageIntent: NaturalLanguageIntent,
+    ChatQueryIntent: ChatQueryIntent,
 }
 
 # status → 归并到 meta.llm_fallback_reason 的取值

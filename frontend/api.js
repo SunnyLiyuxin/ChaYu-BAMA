@@ -167,6 +167,49 @@ const BAMA_API=(function(){
     return request("POST", `/api/teas/${teaId}/video-asset`);
   }
 
+  // 7. 工作台自由提问（POST /api/chat）
+  // 文案 / 物料工作台的自由输入框统一走本入口：先经后端「意义评判」LLM，
+  // 无意义输入（如「？」）被拒（fallback 友好提示）；有意义输入把 text 作为
+  // directive 透传到 mode 对应生成链路，真正影响生成。
+  //   mode="domestic"|"overseas" → 复用文案 hint，响应 shape 同 domestic/cross-cultural。
+  //   mode="material" → 复用物料字段，响应 shape 同 marketing-asset（含 image_prompt）。
+  // opts={mode, text, routeId?}。fallback 由 request 层统一拦截抛 Error。
+  async function chat(teaName, sel, opts){
+    const teaId=getTeaId(teaName);
+    const mode=opts&&opts.mode;
+    const text=((opts&&opts.text)||"").trim();
+    const body={tea_id:teaId, mode, text};
+    if(mode==="material"){
+      body.route_id=opts.routeId||("demo_"+teaId);
+      body.asset_type="poster";
+      if(sel.platform)body.platform=sel.platform;
+      body.language=sel.language||"zh";
+      if(sel.style)body.style=sel.style;
+      if(sel.content)body.content_theme=sel.content.replace(/-/g,"_");
+    }else{
+      body.audience={
+        knowledge_level: sel.targetConsumer==="入门"?"beginner":(sel.targetConsumer==="专业"?"expert":"intermediate"),
+        scenario: "store_sales",
+        psychology: ""
+      };
+      if(sel.tone)body.tone=sel.tone;
+      if(sel.length)body.length=sel.length;
+      if(sel.timeNode)body.time_node=sel.timeNode;
+      if(sel.taskType)body.task_type=sel.taskType;
+      if(sel.flavorReference)body.flavor_reference=sel.flavorReference;
+      const rec=giftToRecipient(sel.giftScene);
+      if(rec)body.recipient=rec;
+      if(mode==="overseas"){
+        body.target_language=sel.language||"en";
+        body.market="western";
+        body.audience_reference="specialty_coffee_lovers";
+        body.audience_level=sel.targetConsumer==="入门"?"beginner":(sel.targetConsumer==="专业"?"expert":"intermediate");
+        body.preserve_chinese_terms=true;
+      }
+    }
+    return request("POST", "/api/chat", body);
+  }
+
   // 7. 追溯链
   async function getTrace(outputId){
     return request("GET", `/api/trace/${outputId}`);
@@ -175,7 +218,7 @@ const BAMA_API=(function(){
   return {
     init, getTeaId, giftToRecipient,
     getTeas, domesticExpression, crossCulturalExpression,
-    marketingAsset, imageGenerate, videoAsset, getTrace
+    marketingAsset, imageGenerate, videoAsset, getTrace, chat
   };
 })();
 

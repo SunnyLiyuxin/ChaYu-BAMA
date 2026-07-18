@@ -70,6 +70,27 @@ class NaturalLanguageIntent(BaseModel):
     chain: Literal["domestic", "cross_cultural"]
 
 
+class ChatQueryIntent(BaseModel):
+    """工作台自由提问的意义评判输出（POST /api/chat 前置判定）。
+
+    meaningful：用户输入是否构成一个对茶品表达 / 物料生成有意义的需求。
+    - true → 把原文作为 directive 透传给对应生成链路（文案 / 物料）。
+    - false → 返回 fallback（empty_or_meaningless_query），不调生成 LLM，
+      避免用户输「？」也生成一大段。纯标点 / 单个感叹词 / 与茶无关的乱码
+      判 false；正常提问（哪怕短到「兰花香」「回甘」）判 true——比硬编码
+      字符数阈值更灵活，不会误杀合法短输入。
+    reason：可选，LLM 给出的简短判断依据（便于调试 / 日志，不进响应）。
+
+    评判 LLM 复用 llm_service.generate（同一 LLM_* 配置），结果按 input_hash
+    缓存（output_store，namespace=chat_query_intent），同输入二次不重判。
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    meaningful: bool
+    reason: str | None = None
+
+
 class ImageResult(BaseModel):
     """生图结果（豆包 Seedream 输出）。
 
