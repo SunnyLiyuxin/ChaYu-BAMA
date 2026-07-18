@@ -256,8 +256,11 @@ input,textarea{font-family:inherit}
 .trace-chain::before{content:"";position:absolute;left:0;right:0;top:-8px;height:1px;background:linear-gradient(90deg,transparent,rgba(232,213,163,.7) 20%,rgba(232,213,163,.7) 80%,transparent)}
 .trace-head{display:flex;align-items:center;gap:6px;font-family:"Noto Serif SC",serif;font-weight:700;font-size:12px;color:var(--goldD);letter-spacing:.05em;margin-bottom:10px}
 .trace-head .ic{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:rgba(212,165,116,.18);color:var(--goldD);font-size:11px}
+.trace-hint{margin-left:auto;font-weight:400;font-size:10px;color:rgba(184,147,90,.7);letter-spacing:0}
 .pc-flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
-.pc-node{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;border:1.5px solid transparent;background:rgba(255,255,255,.5);transition:all .2s}
+.pc-node{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;border:1.5px solid transparent;background:rgba(255,255,255,.5);transition:all .2s;cursor:pointer}
+.pc-node:hover{border-color:var(--gold);background:rgba(184,147,90,.12);transform:translateY(-1px)}
+.pc-node:active{transform:translateY(0)}
 .pc-node .pc-ic{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
 .pc-node .pc-info{display:flex;flex-direction:column;gap:1px;min-width:0}
 .pc-node .pc-lbl{font-family:"Noto Serif SC",serif;font-weight:600;font-size:12.5px;color:var(--brothD);white-space:nowrap}
@@ -336,6 +339,21 @@ input,textarea{font-family:inherit}
 
 .modal-card.single{max-width:640px}
 .modal-card.single .field-opts{gap:8px}
+
+/* 追溯节点详情弹窗（复用 .modal-card.single） */
+.td-body{padding:16px 22px 22px}
+.td-sec{margin-bottom:16px}
+.td-sec:last-child{margin-bottom:0}
+.td-sec-h{font-family:"Noto Serif SC",serif;font-weight:700;font-size:13px;color:var(--goldD);letter-spacing:.05em;margin-bottom:6px;padding-bottom:4px;border-bottom:1px dashed rgba(184,147,90,.3)}
+.td-p{font-size:13px;line-height:1.7;color:var(--broth);white-space:pre-wrap;word-break:break-word}
+.td-list{display:flex;flex-direction:column;gap:8px}
+.td-item{padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.5);border:1px solid rgba(184,147,90,.15)}
+.td-item .td-i-hd{font-weight:600;font-size:12.5px;color:var(--brothD);display:flex;align-items:center;gap:8px}
+.td-item .td-i-lv{font-family:"Cormorant Garamond",serif;font-weight:700;color:var(--gold);font-size:14px}
+.td-item .td-i-desc{font-size:12px;color:rgba(139,61,34,.8);margin-top:3px;line-height:1.6}
+.td-fallback{padding:14px 16px;border-radius:12px;border:1px dashed var(--gold);background:rgba(184,147,90,.08);color:var(--goldD);font-size:13px;line-height:1.7;white-space:pre-wrap}
+.td-loading{display:flex;align-items:center;gap:8px;padding:20px;color:var(--brothL);font-size:13px}
+.td-loading .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:typing 1.4s ease-in-out infinite}
 
 .shortcut-hint{position:fixed;right:24px;bottom:24px;z-index:30;padding:8px 12px;border-radius:12px;background:rgba(194,97,59,.8);color:rgba(245,239,227,.7);font-size:11px;backdrop-filter:blur(8px);border:1px solid rgba(184,147,90,.3);display:flex;align-items:center;gap:8px}
 .shortcut-hint svg{width:14px;height:14px;color:var(--gold)}
@@ -531,6 +549,8 @@ const OVERSEAS_PLATFORMS=["Instagram","TikTok","YouTube"];
 const h=(tag,cls)=>{const e=document.createElement(tag);if(cls)e.className=cls;return e;};
 const svg=(id)=>`<svg><use href="#i-${id}"/></svg>`;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function escapeHtml(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+const escapeAttr=escapeHtml;
 function fuzzyMatch(input,cands){const n=input.trim().toLowerCase();if(!n)return null;for(const c of cands){if(c.toLowerCase()===n)return c;}for(const c of cands){if(c.toLowerCase().includes(n)||n.includes(c.toLowerCase()))return c;}return null;}
 function consumerLabel(v){const c=TARGET_CONSUMERS.find(x=>x.value===v);return c?c.label:"";}
 function flavorLabel(v){const f=FLAVOR_REFERENCES.find(x=>x.value===v);return f?f.label:"";}
@@ -1028,10 +1048,10 @@ function renderTraceChain(trace){
     const showDur=status==="completed"&&dur!=null;
     const summary=s.summary?String(s.summary):"";
     const ic=status==="completed"?"✓":status==="failed"?"!":status==="active"?"●":"○";
-    const node=`<div class="pc-node pc-${status}" title="${summary}">
+    const node=`<div class="pc-node pc-${status}" data-key="${escapeAttr(s.key||"")}" data-label="${escapeAttr(label)}" title="${escapeAttr(summary)}">
       <div class="pc-ic">${ic}</div>
       <div class="pc-info">
-        <div class="pc-lbl">${label}</div>
+        <div class="pc-lbl">${escapeHtml(label)}</div>
         ${showDur?`<div class="pc-dur">${dur}ms</div>`:""}
       </div>
     </div>`;
@@ -1039,7 +1059,7 @@ function renderTraceChain(trace){
     return node+arrow;
   }).join("");
   return `<div class="trace-chain">
-    <div class="trace-head"><span class="ic">🧠</span><span>生成逻辑链追溯</span></div>
+    <div class="trace-head"><span class="ic">🧠</span><span>生成逻辑链追溯</span><span class="trace-hint">点击节点查看依据</span></div>
     <div class="pc-flow">${chainHtml}</div>
   </div>`;
 }
@@ -1056,6 +1076,15 @@ function bindChat(){
     inp.value="";
     handleUserInput(text);
   });
+  // 追溯链节点点击 → 弹详情（事件委托，消息重渲染后仍生效）
+  const area=document.getElementById("chatArea");
+  if(area){
+    area.addEventListener("click",e=>{
+      const node=e.target.closest(".pc-node");
+      if(!node||!node.dataset.key)return;
+      openTraceDetail(node.dataset.key, node.dataset.label||node.title||"");
+    });
+  }
 }
 
 function startCopyChat(){
@@ -1692,8 +1721,70 @@ function renderShortcutHint(){
   return ``;
 }
 
+// ===== 追溯链节点详情弹窗 =====
+// 点追溯节点 → modal-card.single 展示该层完整内容。
+// 知识层/风味层调已有 GET（/api/teas/{id}/knowledge、/flavor-profile）；
+// 表达层/物料层无 GET 路由 → 走 fallback 提示，不新增后端接口。
+function closeTraceDetail(){
+  const m=document.querySelector(".trace-detail-modal");
+  if(m)m.remove();
+}
+function openTraceDetail(nodeKey,label){
+  closeTraceDetail();
+  const app=document.getElementById("app");
+  const modal=h("div","modal trace-detail-modal");
+  modal.innerHTML=`
+    <div class="mask" onclick="closeTraceDetail()"></div>
+    <div class="modal-card single">
+      <div class="modal-head">
+        <div class="lt">
+          <span class="seal" style="padding:2px 8px;font-size:10px">追溯</span>
+          <div>
+            <div class="ttl">${escapeHtml(label||"节点详情")}</div>
+            <div class="sub">依据来源 · 点击遮罩或 Esc 关闭</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body"><div class="td-body" id="tdBody"><div class="td-loading"><span class="dot"></span><span>正在加载依据…</span></div></div></div>
+    </div>`;
+  app.appendChild(modal);
+  renderTraceDetailContent(nodeKey);
+}
+function renderTraceDetailContent(nodeKey){
+  const body=document.getElementById("tdBody");
+  if(!body)return;
+  const k=String(nodeKey||"");
+  const renderFallback=(msg)=>{body.innerHTML=`<div class="td-fallback">${escapeHtml(msg)}</div>`;};
+  if(k.startsWith("knowledge_")){
+    BAMA_API.getKnowledgeByNode(k).then(r=>{
+      const d=(r&&r.data)||{};const parts=[];
+      const o=d.origin||{};
+      if(o.region||o.terroir)parts.push(`<div class="td-sec"><div class="td-sec-h">产地</div><div class="td-p">${escapeHtml([o.region,o.terroir,o.source_note].filter(Boolean).join("\n"))}</div></div>`);
+      const p=d.process||{};
+      if(p.name||p.steps||p.key_technique){
+        const steps=Array.isArray(p.steps)&&p.steps.length?("步骤："+p.steps.join(" · ")):"";
+        parts.push(`<div class="td-sec"><div class="td-sec-h">工艺</div><div class="td-p">${escapeHtml([p.name,steps,p.key_technique,p.brand_claim].filter(Boolean).join("\n"))}</div></div>`);
+      }
+      const st=d.story||{};
+      if(st.content)parts.push(`<div class="td-sec"><div class="td-sec-h">${escapeHtml(st.title||"故事")}</div><div class="td-p">${escapeHtml(st.content)}</div></div>`);
+      const ev=d.evidence||[];
+      if(ev.length)parts.push(`<div class="td-sec"><div class="td-sec-h">证据</div><div class="td-list">${ev.map(e=>`<div class="td-item"><div class="td-i-hd"><span class="td-i-lv">${escapeHtml(e.confidence||"")}</span>${escapeHtml(e.title||e.source||"")}</div>${e.note?`<div class="td-i-desc">${escapeHtml(e.note)}</div>`:""}</div>`).join("")}</div></div>`);
+      body.innerHTML=parts.length?parts.join(""):`<div class="td-fallback">该层暂无详细内容。</div>`;
+    }).catch(e=>renderFallback(e.fallback?e.message:("加载失败："+e.message)));
+  }else if(k.startsWith("flavor_")){
+    BAMA_API.getFlavorByNode(k).then(r=>{
+      const d=(r&&r.data)||{};const dims=d.dimensions||[];
+      const items=dims.map(dm=>`<div class="td-item"><div class="td-i-hd"><span class="td-i-lv">${escapeHtml(String(dm.intensity))}</span>${escapeHtml(dm.label_zh||dm.label_en||dm.key||"")}</div>${dm.description?`<div class="td-i-desc">${escapeHtml(dm.description)}</div>`:""}</div>`).join("");
+      body.innerHTML=`<div class="td-sec"><div class="td-sec-h">风味坐标</div><div class="td-list">${items||'<div class="td-p">暂无维度数据。</div>'}</div></div>`;
+    }).catch(e=>renderFallback(e.fallback?e.message:("加载失败："+e.message)));
+  }else{
+    renderFallback("该层（"+k+"）的完整内容见上方对话或物料卡，本层暂不支持展开。\n\nDemo 阶段仅知识依据、风味坐标两层提供详情展开（复用已有 GET 接口）。");
+  }
+}
+
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&S.preOpen){e.preventDefault();closePreSelect();return;}
+  if(e.key==="Escape"&&document.querySelector(".trace-detail-modal")){e.preventDefault();closeTraceDetail();return;}
   if(e.altKey&&e.shiftKey){
     const k=e.key.toLowerCase();
     if(k==="d"){e.preventDefault();goWorkbench("domestic");}

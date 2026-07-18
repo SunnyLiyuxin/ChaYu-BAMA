@@ -215,10 +215,32 @@ const BAMA_API=(function(){
     return request("GET", `/api/trace/${outputId}`);
   }
 
+  // 追溯节点 id → tea_id（仅知识层 / 风味层节点 id 可解析）：
+  //   knowledge_szz_tgy_nx / flavor_szz_tgy_nx → BAMA_SZZ_TGY_NX
+  // 三茶 abbr 与 tea_id 一致（已验证）。表达层（expr_*）/物料层（asset_*）
+  // 节点 id 不走此解析——那两层无 GET 路由，前端不展开。
+  function nodeToTeaId(nodeKey){
+    const m=String(nodeKey||"").match(/^(?:knowledge|flavor)_(.+)$/);
+    return m?("BAMA_"+m[1].toUpperCase()):null;
+  }
+
+  // 8. 追溯节点详情：知识层 / 风味层（复用已有 GET，不新增后端接口）
+  async function getKnowledgeByNode(nodeKey){
+    const teaId=nodeToTeaId(nodeKey);
+    if(!teaId) return Promise.reject(new Error("无法从节点解析茶品 id："+nodeKey));
+    return request("GET", `/api/teas/${teaId}/knowledge`);
+  }
+  async function getFlavorByNode(nodeKey){
+    const teaId=nodeToTeaId(nodeKey);
+    if(!teaId) return Promise.reject(new Error("无法从节点解析茶品 id："+nodeKey));
+    return request("GET", `/api/teas/${teaId}/flavor-profile`);
+  }
+
   return {
     init, getTeaId, giftToRecipient,
     getTeas, domesticExpression, crossCulturalExpression,
-    marketingAsset, imageGenerate, videoAsset, getTrace, chat
+    marketingAsset, imageGenerate, videoAsset, getTrace, chat,
+    nodeToTeaId, getKnowledgeByNode, getFlavorByNode
   };
 })();
 
