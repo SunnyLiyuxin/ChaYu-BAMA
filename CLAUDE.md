@@ -50,7 +50,7 @@
 
 ## 实现进度
 
-已完成：FastAPI 路由 / SQLAlchemy models（16 表）/ `seed.py --reset` / 读路径切库 / LLM service + Prompt + JSON 校验 / 真实生图（豆包 Seedream）/ output_store 缓存 / pytest 覆盖（164 passed）/ 前后端枚举映射（`app/enum_map.py`：platform/style/tone/length/content_theme/task_type/flavor_reference）/ 前端 v2 纯后端对接版（`frontend/desktop-v2.html` + `mobile-v2.html` + `api.js`，已取代 v1 mock 原型）/ Docker 一体化部署（`docker-compose.yml` backend + frontend nginx 网关，已构建验证全链路）/ GitHub Actions 自动部署（`.github/workflows/deploy.yml` + `scripts/deploy-remote.sh`，推 main 即部署到云服务器 8080，密钥经仓库 Secret 注入）。
+已完成：FastAPI 路由 / SQLAlchemy models（16 表）/ `seed.py --reset` / 读路径切库 / LLM service + Prompt + JSON 校验 / 真实生图（豆包 Seedream）/ output_store 缓存 / pytest 覆盖（164 passed）/ 前后端枚举映射（`app/enum_map.py`：platform/style/tone/length/content_theme/task_type/flavor_reference）/ 前端 v2 纯后端对接版（`frontend/desktop-v2.html` + `mobile-v2.html` + `api.js`，已取代 v1 mock 原型）/ Docker 一体化部署（`docker-compose.yml` backend + frontend nginx 网关，已构建验证全链路）/ GitHub Actions 自动部署（`.github/workflows/deploy.yml` + `scripts/deploy-remote.sh`，推 main 即部署到云服务器 8080，密钥经仓库 Secret 注入）/ 前端 favicon + `apple-touch-icon`（复用 `frontend/bama-logo.png`，两 HTML `<head>` 引用）。
 
 后续优先顺序：
 
