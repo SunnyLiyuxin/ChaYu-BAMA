@@ -226,3 +226,9 @@ backend/data/*.db-journal
 
 # Claude Code: local-only settings. Shared settings.json / agents/ / skills/ stay in VCS.
 .claude/settings.local.json
+
+# --- CI deploy keys (local-only) ---
+# GitHub Actions 用部署密钥，本地生成、绝不提交。
+.deploy_key
+.deploy_key.pub
+.github/workflows/.secrets*

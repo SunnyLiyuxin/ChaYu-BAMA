@@ -1,0 +1,32 @@
+name: Deploy to Server
+
+# 推到 main 即部署；也支持手动触发（Actions 页面 "Run workflow"）。
+# 部署方式：SSH 到服务器，拉取最新代码，docker compose up -d --build。
+# 依赖两个仓库 Secret：SSH_PRIVATE_KEY、SSH_HOST（见 scripts/deploy-remote.sh 顶部说明）。
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 同一时刻只允许一个部署；新触发排队，不中断进行中的部署。
+concurrency:
+  group: deploy-server
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy over SSH
+        run: |
+          ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 \
+              root@${{ secrets.SSH_HOST }} 'bash -s' < scripts/deploy-remote.sh
