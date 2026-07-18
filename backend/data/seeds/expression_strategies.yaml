@@ -59,3 +59,82 @@ expression_strategies:
     audience_reference: any
     output_slots: ["hook", "shot_list", "voiceover", "on_screen_text", "caption", "cta", "claim_trace", "cultural_translation_notes"]
     instruction: "TikTok物料：竖屏9:16，前3秒钩子→12秒品饮体验→6秒文化概念→CTA；附审核卡"
+
+  # ===== 3 级表达深度（文档 §19.1） =====
+  - id: strategy_depth_novice
+    scope: any
+    market: any
+    audience_reference: any
+    output_slots: ["sensory_hook", "familiar_reference"]
+    instruction: "入门版表达：1-3个可感知词 + 一个熟悉参照物（食物/饮品）。不堆术语和数字。knowledge_depth=novice, technical_detail=plain, max_terms=3"
+
+  - id: strategy_depth_intermediate
+    scope: any
+    market: any
+    audience_reference: any
+    output_slots: ["product_context", "process_origin", "cultural_concept"]
+    instruction: "进阶版表达：加入工艺、品种、产区和一个文化概念。knowledge_depth=intermediate, technical_detail=sensory|process, show_evidence=true"
+
+  - id: strategy_depth_expert
+    scope: any
+    market: any
+    audience_reference: any
+    output_slots: ["standard_reference", "research_method", "evidence_boundary", "data_gap"]
+    instruction: "专业版表达：标准引用、研究方法、证据等级和不确定性。使用更精确的术语并完整展示证据边界。knowledge_depth=expert, technical_detail=scientific, show_evidence=true, show_uncertainty=true"
+
+  # ===== 8 种操作员角色策略（文档 §18.2） =====
+  - id: strategy_role_store_guide
+    scope: domestic_expression
+    market: domestic
+    audience_reference: domestic_general
+    output_slots: ["30s_explanation", "brewing_tip", "expandable_evidence"]
+    instruction: "门店导购/茶艺师：默认输出消费者易懂的L2语言，再提供可展开的L1依据。输出30秒讲解+冲泡提示+证据卡。最终受众：国内顾客、海外到店顾客"
+
+  - id: strategy_role_trainer
+    scope: domestic_expression
+    market: domestic
+    audience_reference: tea_professional
+    output_slots: ["training_script", "terminology_glossary", "faq"]
+    instruction: "产品培训人员：制作新品培训材料、统一术语。输出培训讲义+术语对照+常见问答。最终受众：内部门店员工、经销商"
+
+  - id: strategy_role_overseas_sales
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: specialty_coffee_lovers
+    output_slots: ["familiar_entry", "chinese_tea_difference", "cultural_term", "product_fact"]
+    instruction: "海外商务/渠道销售：输出四段式——熟悉入口→中国茶差异→文化专名→产品事实。不能为了促成交易把代理数据说成商品检测。最终受众：海外采购商、经销商、餐饮渠道"
+
+  - id: strategy_role_social_media
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: tea_novice
+    output_slots: ["hook_3s", "visual_tasting_12s", "cultural_concept_6s", "cta", "claim_trace_card"]
+    instruction: "海外社媒运营：调用L2+L3+L4层。0-3s感官钩子→3-12s可视化品饮体验→12-18s文化概念→CTA。L1只负责后台校验，不应把视频写成化学课。最终受众：海外平台用户"
+
+  - id: strategy_role_domestic_content
+    scope: domestic_expression
+    market: domestic
+    audience_reference: domestic_general
+    output_slots: ["graphic_card", "short_video_script", "longform_outline"]
+    instruction: "国内内容运营：小红书、抖音、公众号科普。调用L1+L2+L4层。输出图文卡片+短视频脚本+长文提纲。最终受众：国内茶小白、年轻消费者"
+
+  - id: strategy_role_brand_pr
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: tea_novice
+    output_slots: ["bilingual_story", "media_kit", "speech_notes"]
+    instruction: "品牌/公关人员：文化传播、国际活动材料。调用L3+L4层。输出双语品牌故事+媒体资料+演讲稿。最终受众：媒体、机构、活动嘉宾"
+
+  - id: strategy_role_product_rd
+    scope: any
+    market: any
+    audience_reference: tea_professional
+    output_slots: ["gap_checklist", "data_entry_form", "version_diff"]
+    instruction: "产品与研发人员：检查知识缺口、接入新品资料。调用L1层+数据治理层。输出缺口清单+数据录入表+版本差异。最终受众：内部产品/品控团队"
+
+  - id: strategy_role_legal_review
+    scope: any
+    market: any
+    audience_reference: tea_professional
+    output_slots: ["claim_extraction", "evidence_verification", "risk_flag", "revision_suggestion"]
+    instruction: "法务/品控审核：审核成分、功效、产地及荣誉声明。全层追溯，不生成新营销语言，只做声明抽取和证据核验。最终受众：内部发布审批人"

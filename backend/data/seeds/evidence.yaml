@@ -235,3 +235,41 @@ evidence_sources:
     evidence_level: C
     collected_by: "团队（2026-07-12实采）"
     notes: "多种规格可选，Demo需选一个确定规格"
+
+  # ===== 冲泡方法（A-级，官方产品页实采，待包装复核） =====
+  - id: evidence_brew_szz_3123
+    claim: "赛珍珠官方'3123'冲泡法：8.3g/120mL盖碗，95℃以上，即冲即饮，30s→10s→20s→30s，第一泡饮用不倒掉"
+    source_type: official_website
+    source: "八马官方商品详情页——赛珍珠冲泡指南"
+    confidence: high
+    evidence_level: B
+    collected_by: "团队（2026-07-12实采）"
+    notes: "官方建议第一泡保留（品牌声称第一泡含多达40%营养物质，该主张待科学验证）；具体批次应以包装为准"
+
+  - id: evidence_brew_ny_5512
+    claim: "牛一大红袍官方'5512'冲泡法：10g，茶水比约1:15，95-100℃，不洗茶，5s→5s→10s→20s，第一道茶汤留作'回味茶'最后品饮"
+    source_type: official_website
+    source: "八马官方商品详情页——牛一大红袍冲泡指南"
+    confidence: high
+    evidence_level: B
+    collected_by: "团队（2026-07-12实采）"
+    notes: "建议同时显示5s→5s→10s→20s，避免海外用户或新员工误解；悬壶高冲，从注水完成开始计时"
+
+  - id: evidence_brew_dh_5511
+    claim: "鼎红金骏眉官方'5511'冲泡法：95-100℃，洗茶可选，定点注水细水低斟，5s→5s→10s→10s"
+    source_type: official_website
+    source: "八马官方商品详情页——鼎红金骏眉冲泡指南"
+    confidence: high
+    evidence_level: B
+    collected_by: "团队（2026-07-12实采）"
+    notes: "感官目标：高温冲泡使香气更浓郁、口感更饱满；注水从完成开始计时"
+
+  # ===== 共用滋味骨架（B级，品类代理） =====
+  - id: evidence_taste_skeleton_common
+    claim: "六类成分/成分类别共同构成茶汤滋味骨架：咖啡碱（苦味）、儿茶素/茶多酚（涩感）、游离氨基酸含茶氨酸（鲜爽醇和）、可溶性糖（甜感前体）、茶黄素/茶红素（红茶汤色与收敛）、水浸出物（浓度基础）"
+    source_type: paper
+    source: "综合多篇茶学文献的品类层滋味化学共识"
+    confidence: medium
+    evidence_level: B
+    collected_by: "团队"
+    notes: "品类层共同机制，不构成单品实测值。关系强度：咖啡碱苦味=较强关联、儿茶素涩感=较强关联、氨基酸鲜爽=较强关联、可溶性糖=中等关联、氧化产物=品类层较强、水浸出物=间接关联"

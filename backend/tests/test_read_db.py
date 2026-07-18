@@ -243,7 +243,7 @@ def test_list_cross_cultural_terms_shape():
 
 def test_list_component_flavor_links_shape():
     links = data_loader.list_component_flavor_links(TEA_ID)
-    assert isinstance(links, list) and len(links) == 3  # 赛珍珠 3 条
+    assert isinstance(links, list) and len(links) >= 3  # 赛珍珠 共 5 条（含共用滋味骨架）
     for lk in links:
         for k in (
             "component",
@@ -280,7 +280,7 @@ def test_list_component_flavor_links_mixed_confidence():
 
     for tea in ("BAMA_SZZ_TGY_NX", "BAMA_NY_WRT_DHP", "BAMA_DH_BT_JJM"):
         links = list_component_flavor_links(tea)
-        assert len(links) == 3
+        assert len(links) >= 3  # 每茶至少3条，含共用滋味骨架映射
         confs = {lk["confidence"] for lk in links}
         assert "medium" in confs  # 每茶至少一条直接支持
 

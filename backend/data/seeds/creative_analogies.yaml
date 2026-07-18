@@ -1,0 +1,85 @@
+# 创意类比候选池（文档 §20）
+# 创意可被保存、筛选和测试，验证前禁止自动进入正式外部物料。
+# mapping_type: creative_hypothesis → 未验证的创意假设
+#   approved_narrative_bridge → 已完成测试升级的叙事类比
+# validation_status: untested → blinded → audience_tested → approved
+# allowed_use: internal_ideation_only → approved_external
+
+creative_analogies:
+  # ===== 赛珍珠铁观音 =====
+  - id: CA_SZZ_GRAIN_FLORAL_CONTRAST_001
+    tea_id: BAMA_SZZ_TGY_NX
+    reference_category: food_experience
+    reference_object: "烘焙谷物+花香的反差体验"
+    shared_sensory_cues: ["toasted_rice", "roasted_warmth", "floral_lift", "orchid_like"]
+    mapping_type: creative_hypothesis
+    scientific_equivalence: false
+    validation_status: untested
+    requires_blind_tasting: true
+    requires_audience_test: true
+    allowed_use: internal_ideation_only
+    risk_notes: "未测试前不得指定某种咖啡产地或烘焙度作为确定等价位"
+    approved_sensory_cues: ["用熟悉食物解释先后层次：先烘焙谷物温暖感，再花香展开"]
+    must_avoid: ["指定为某产地/某烘焙度咖啡的等价物", "声称与某款具体咖啡味道相同"]
+
+  # ===== 牛一大红袍 =====
+  - id: CA_NY_DARK_ROAST_COFFEE_002
+    tea_id: BAMA_NY_WRT_DHP
+    reference_category: coffee
+    reference_object: "深烘咖啡的坚果/焦糖线索"
+    shared_sensory_cues: ["roasted", "nutty", "caramel_like", "warm"]
+    mapping_type: creative_hypothesis
+    scientific_equivalence: false
+    validation_status: untested
+    requires_blind_tasting: true
+    requires_audience_test: true
+    allowed_use: internal_ideation_only
+    risk_notes: "不得声称'茶中espresso''等同曼特宁'等确定定位。茶体更轻，有花香和回甘，整体体验与咖啡不同"
+    approved_sensory_cues: ["共享热反应路径形成的烘烤感入口", "坚果和焦糖样温暖香气的熟悉感"]
+    must_avoid: ["茶中espresso", "等同曼特宁", "茶版深烘咖啡", "声称body等同"]
+
+  - id: CA_NY_WINE_TERROIR_003
+    tea_id: BAMA_NY_WRT_DHP
+    reference_category: wine
+    reference_object: "葡萄酒terroir概念"
+    shared_sensory_cues: ["地域与风格关联", "山场特征", "年份变化可能"]
+    mapping_type: creative_hypothesis
+    scientific_equivalence: false
+    validation_status: untested
+    requires_blind_tasting: true
+    requires_audience_test: true
+    allowed_use: internal_ideation_only
+    risk_notes: "不得声称土壤矿物直接进入茶汤形成矿物味。茶的地域、品种、工艺关系有自身体系"
+    approved_sensory_cues: ["帮助理解地域与风格的关系"]
+    must_avoid: ["土壤矿物直接形成茶汤矿物味", "某地块等同于某葡萄酒产区"]
+
+  # ===== 鼎红金骏眉 =====
+  - id: CA_DH_AROMATIC_PROGRESSION_004
+    tea_id: BAMA_DH_BT_JJM
+    reference_category: wine
+    reference_object: "芳香型饮品的品饮结构"
+    shared_sensory_cues: ["花香前段", "果甜中段", "余韵尾段"]
+    mapping_type: creative_hypothesis
+    scientific_equivalence: false
+    validation_status: untested
+    requires_blind_tasting: true
+    requires_audience_test: true
+    allowed_use: internal_ideation_only
+    risk_notes: "不得指定某款具体葡萄酒为等价物。茶无酒精，酸度结构不同"
+    approved_sensory_cues: ["帮助用户观察花香→果甜→余韵的层次", "借用aroma→palate→finish品饮顺序"]
+    must_avoid: ["指定某款葡萄酒品种或产区为等价物", "声称酸度或酒体相似"]
+
+  - id: CA_DH_HONEY_FLORAL_FOOD_005
+    tea_id: BAMA_DH_BT_JJM
+    reference_category: food_experience
+    reference_object: "蜂蜜、熟果、鲜花等日常食物参照"
+    shared_sensory_cues: ["honey_sweetness", "ripe_fruit", "floral_aroma", "smooth"]
+    mapping_type: creative_hypothesis
+    scientific_equivalence: false
+    validation_status: untested
+    requires_blind_tasting: true
+    requires_audience_test: true
+    allowed_use: internal_ideation_only
+    risk_notes: "不得将蜜香误写成添加蜂蜜或高糖。甜感来自茶叶本身，非添加糖"
+    approved_sensory_cues: ["使用人类共同食物/气味经验：蜂蜜、熟果、鲜花"]
+    must_avoid: ["暗示添加蜂蜜或糖", "声称含糖量等同于某食物", "写成糖水或蜜水"]

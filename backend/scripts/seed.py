@@ -45,6 +45,8 @@ _SEED_PLAN: list[tuple[str, type[Base]]] = [
     ("expressions", models.Expression),
     ("assets", models.Asset),
     ("trace_nodes", models.TraceLink),  # seed 顶层键是 trace_nodes，表名 trace_links
+    ("quarantine_items", models.QuarantineItem),
+    ("creative_analogies", models.CreativeAnalogy),
 ]
 
 # ORM 模型 → seed 顶层键（用于行数校验；tea_terms 单独处理）。
@@ -61,6 +63,8 @@ _MODEL_TO_SEED_KEY = {
     models.Expression: "expressions",
     models.Asset: "assets",
     models.TraceLink: "trace_nodes",
+    models.QuarantineItem: "quarantine_items",
+    models.CreativeAnalogy: "creative_analogies",
 }
 
 

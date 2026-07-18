@@ -26,12 +26,14 @@ from app.database import DB_PATH, make_engine, make_session
 from app.models import (
     Asset,
     ComponentFlavorLink,
+    CreativeAnalogy,
     CrossCulturalTerm,
     DemoRoute,
     EvidenceSource,
     Expression,
     FlavorProfile,
     GenerationRule,
+    QuarantineItem,
     Tea,
     TeaKnowledge,
     TeaTerm,
@@ -72,6 +74,8 @@ def all_seeds() -> dict:
         "trace_nodes": _load("trace_links").get("trace_nodes", []),
         "tea_terms": _load("trace_links").get("tea_terms", {}),
         "component_flavor_links": _load("component_flavor_links").get("component_flavor_links", []),
+        "quarantine_items": _load("quarantine").get("quarantine_items", []),
+        "creative_analogies": _load("creative_analogies").get("creative_analogies", []),
     }
 
 
@@ -447,3 +451,27 @@ def list_component_flavor_links(tea_id: str) -> list[dict]:
             }
         )
     return links
+
+
+# ---------------------------------------------------------------------------
+# 新增表查询：quarantine_items + creative_analogies
+# ---------------------------------------------------------------------------
+
+
+@_safe_query(default=[])
+def list_quarantine_items() -> list[dict]:
+    """全部高风险隔离条目（供规则引擎和审核模块调用）。"""
+    with make_session(_current_read_engine()) as s:
+        rows = s.execute(select(QuarantineItem)).scalars().all()
+    return [_row_to_dict(r) for r in rows]
+
+
+@_safe_query(default=[])
+def list_creative_analogies(tea_id: str | None = None) -> list[dict]:
+    """创意类比候选池列表，可按 tea_id 筛选。"""
+    with make_session(_current_read_engine()) as s:
+        stmt = select(CreativeAnalogy)
+        if tea_id:
+            stmt = stmt.where(CreativeAnalogy.tea_id == tea_id)
+        rows = s.execute(stmt).scalars().all()
+    return [_row_to_dict(r) for r in rows]

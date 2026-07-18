@@ -130,3 +130,52 @@ component_flavor_links:
     evidence_ids: ["evidence_chen_2025_blacktea", "evidence_chen_2023_foods"]
     confidence: low
     notes: "红茶咖啡碱均值43.43 mg/g、样本差异极大（Chen 2023），非鼎红单品实测值"
+
+  # ===== 共用滋味骨架映射（§5.1，品类层，三款茶共用机制） =====
+  - id: link_szz_catechins_astringency
+    tea_id: BAMA_SZZ_TGY_NX
+    component: 儿茶素/茶多酚
+    component_category: taste_compound
+    flavor_key: astringency
+    flavor_label: 收敛感/涩感
+    mechanism: 酯型儿茶素（EGCG、ECG等）参与茶汤涩感与结构感
+    relationship: contributes_to
+    evidence_ids: ["evidence_public_oolong_components", "evidence_chen_2023_foods", "evidence_taste_skeleton_common"]
+    confidence: medium
+    notes: "较强关联；涩感还受浓度、温度和其他物质调节。红茶中部分儿茶素进一步氧化"
+
+  - id: link_szz_amino_acid_finish
+    tea_id: BAMA_SZZ_TGY_NX
+    component: 游离氨基酸（含茶氨酸）
+    component_category: taste_compound
+    flavor_key: finish
+    flavor_label: 回甘与鲜爽
+    mechanism: 茶氨酸等游离氨基酸贡献鲜爽、醇和口感，并可能缓和苦涩感知
+    relationship: contributes_to
+    evidence_ids: ["evidence_public_oolong_components", "evidence_liu_2021_wrt_roasting", "evidence_taste_skeleton_common"]
+    confidence: medium
+    notes: "较强关联但含量高不等于一定'更鲜'，需考虑比例与冲泡。焙火会显著降低茶氨酸含量（下降约52%–80%）"
+
+  - id: link_dh_soluble_sugar_sweetness
+    tea_id: BAMA_DH_BT_JJM
+    component: 可溶性糖
+    component_category: taste_compound
+    flavor_key: honeyed_sweetness
+    flavor_label: 蜜甜感
+    mechanism: 可溶性糖参与茶汤甜感及香气反应前体形成
+    relationship: contributes_to
+    evidence_ids: ["evidence_chen_2025_blacktea", "evidence_taste_skeleton_common"]
+    confidence: low
+    notes: "中等关联；茶汤甜感不只由糖含量决定，还受氨基酸、香气物质与回甘机制共同影响"
+
+  - id: link_ny_water_extract_body
+    tea_id: BAMA_NY_WRT_DHP
+    component: 水浸出物
+    component_category: taste_compound
+    flavor_key: body
+    flavor_label: 醇厚度
+    mechanism: 水浸出物代表可溶性物质总量，为茶汤浓度与醇厚度提供物质基础
+    relationship: participant
+    evidence_ids: ["evidence_public_oolong_components", "evidence_taste_skeleton_common"]
+    confidence: low
+    notes: "间接关联；水浸出物总量不能直接等同于'醇厚度'，后者由多成分比例、冲泡和感官协同决定"

@@ -1,0 +1,114 @@
+# 高风险知识隔离清单（文档 §23）
+# 以下内容在取得可靠证据前进入 quarantine 状态，
+# 禁止被 Agent 检索到外部发布答案中。
+# review_status: quarantine → 隔离中 | verified → 已核验可启用
+# retrievable_for_external_generation: false → 外部生成不可检索
+
+quarantine_items:
+  - id: quarantine_01_unattributed_numbers
+    content: "未标来源的茶多酚、氨基酸、咖啡碱、水浸出物等精确数字"
+    reason: "可能把论文样品值或推算值冒充SKU数据"
+    re_enable_condition: "找到原报告，确认研究对象、批次、检测方法和单位"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["batch_report", "official_product_spec"]
+    review_owner: "brand_quality_or_legal"
+
+  - id: quarantine_02_yan_yun_formula
+    content: "岩韵=高茶多酚+高矿物+低氨基酸"
+    reason: "将复杂感官文化概念简化为未经验证公式"
+    re_enable_condition: "有针对岩韵的多变量感官与成分研究支持"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["multi_variable_sensory_study", "component_sensory_correlation"]
+    review_owner: "brand_quality_or_legal"
+
+  - id: quarantine_03_soil_mineral_taste
+    content: "土壤矿物直接形成茶汤矿物味"
+    reason: "从地质成分跳跃推导感官结果，缺乏植物吸收、茶叶含量及感官因果证据"
+    re_enable_condition: "有植物吸收研究、茶叶含量数据及感官因果实验支持"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["plant_uptake_study", "tea_mineral_content", "sensory_causality"]
+    review_owner: "brand_quality_or_legal"
+
+  - id: quarantine_04_volcanic_terroir
+    content: "武夷山火山砾岩及volcanic terroir表述"
+    reason: "地质表述可能不准确"
+    re_enable_condition: "以权威地质或地理标志资料核定"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["authoritative_geology_report", "gi_official_documentation"]
+    review_owner: "brand_quality_or_legal"
+
+  - id: quarantine_05_niuyi_roasting_params
+    content: "牛一具体焙火温度与曲线"
+    reason: "可能把论文实验条件当品牌工艺"
+    re_enable_condition: "八马具体SKU工艺资料授权"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["bama_official_process_doc", "sku_specific_tech_spec"]
+    review_owner: "brand_quality_or_legal"
+
+  - id: quarantine_06_pyrazine_aging_conversion
+    content: "吡嗪陈化后转化为呋喃、3-5年最佳饮用期"
+    reason: "当前缺乏对应产品的充分证据"
+    re_enable_condition: "针对该产品的纵向储存研究"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["longitudinal_storage_study", "sku_specific_aging_data"]
+    review_owner: "brand_quality_or_legal"
+
+  - id: quarantine_07_health_claims
+    content: "茶多糖降血糖、茶氨酸安神、产品助眠等健康功效表述"
+    reason: "食品健康功效与广告合规风险"
+    re_enable_condition: "法务审核且有人体/产品级证据支持"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["legal_review_approval", "human_study_evidence"]
+    review_owner: "legal"
+
+  - id: quarantine_08_specific_mountain_sites
+    content: "具体山场如牛栏坑、三坑两涧等SKU原料产地确认"
+    reason: "高价值产地声明，SKU未核实"
+    re_enable_condition: "包装溯源信息或企业正式证明"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["package_traceability", "official_origin_certificate"]
+    review_owner: "brand_quality_or_legal"
+
+  - id: quarantine_09_shared_dna_analogy
+    content: "与具体威士忌、葡萄酒、香水共享DNA"
+    reason: "感官类比被包装成化学等同"
+    re_enable_condition: "双边化学研究+盲评+受众测试+法务审核"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["bilateral_chemical_study", "blind_tasting_report", "audience_test", "legal_review"]
+    review_owner: "legal"
+
+  - id: quarantine_10_price_equals_collectible
+    content: "高价产品自动归类为收藏/投资级别"
+    reason: "价格不等于收藏性，可能构成误导"
+    re_enable_condition: "企业正式定位、储存研究和合规审核"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["official_product_positioning", "storage_study", "compliance_review"]
+    review_owner: "legal"
+
+  - id: quarantine_11_folklore_as_history
+    content: "托梦、状元报恩、御封等故事作为确定历史"
+    reason: "民间传说与史实混淆"
+    re_enable_condition: "标注为local_legend并使用'相传''地方传说认为'等传说口吻"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["historical_documentation", "folklore_attribution"]
+    review_owner: "brand_quality_or_legal"
+
+  - id: quarantine_12_brand_copy_conflict
+    content: "品牌信息口径冲突版本（如赛珍珠三香感官动作对应关系的备用版本）"
+    reason: "同一信息存在多个版本时不得随机混用，以免传播不一致的品牌话术"
+    re_enable_condition: "品牌方确认最新统一话术"
+    review_status: quarantine
+    retrievable_for_external_generation: false
+    required_evidence: ["official_brand_calibration", "latest_sensory_terminology"]
+    review_owner: "brand_quality_or_legal"

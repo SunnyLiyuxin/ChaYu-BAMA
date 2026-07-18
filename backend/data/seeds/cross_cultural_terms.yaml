@@ -6,6 +6,7 @@ cross_cultural_terms:
   - id: term_guanyin_yun
     chinese: 观音韵
     english: Guanyin Yun
+    not_recommended: "Guanyin rhyme 单独使用（'韵'不是声音押韵，也不是单一香气）"
     explanation: "Guanyin Yun refers to the lingering impression Tieguanyin leaves after drinking, including aroma, aftertaste, and mouthfeel. It is the unity of the Tieguanyin cultivar, Anxi terroir, traditional craft, and aftertaste — not a single aroma."
     analogy_strategy: "用 specialty coffee 的 floral finish 作入门类比降低门槛，但不等同单一风味物质"
     preserve_strategy: "保留拼音 Guanyin Yun 并附文化解释，不得替换为咖啡/酒术语"
@@ -23,6 +24,7 @@ cross_cultural_terms:
   - id: term_saizhenzhu
     chinese: 赛珍珠
     english: Saizhenzhu Tieguanyin
+    not_recommended: "Pearl Competition（品牌系列专名保留拼音）"
     explanation: "Bama Tea's flagship Tieguanyin series. 'Saizhenzhu' is the brand series name and should be kept in pinyin."
     analogy_strategy: "不逐字翻译为 Pearl Competition"
     preserve_strategy: "保留拼音 Saizhenzhu，首次可补充'Bama's signature roasted Tieguanyin'"
@@ -31,6 +33,7 @@ cross_cultural_terms:
   - id: term_tieguanyin
     chinese: 铁观音
     english: Tieguanyin oolong
+    not_recommended: "Iron Goddess tea 作为唯一名称（可能造成品类搜索断裂；首次可补充 traditionally known as Iron Goddess of Mercy）"
     explanation: "One of China's most famous oolong teas, known for its floral character and complex processing."
     analogy_strategy: "首次可补充'traditionally known as Iron Goddess of Mercy'"
     preserve_strategy: "主名用 Tieguanyin，不推荐 Iron Goddess tea 作为唯一名称（可能造成品类搜索断裂）"
@@ -39,6 +42,7 @@ cross_cultural_terms:
   - id: term_niuyi
     chinese: 牛一
     english: Niuyi Wuyi rock tea
+    not_recommended: "Number-one cow tea（品牌名保留拼音）"
     explanation: "Bama Tea's flagship Wuyi rock tea series. The name is a brand designation."
     analogy_strategy: "不翻译为 Number-one cow tea"
     preserve_strategy: "保留拼音 Niuyi"
@@ -47,6 +51,7 @@ cross_cultural_terms:
   - id: term_yan_cha
     chinese: 岩茶
     english: Wuyi rock tea
+    not_recommended: "仅写 oolong（海外茶圈已有 Wuyi rock tea 稳定表达，oolong 不足以区分岩茶品类）"
     explanation: "Oolong tea from the Wuyi mountain region, shaped by unique terroir and roasting craft."
     analogy_strategy: "海外茶圈已有相对稳定表达 Wuyi rock tea"
     preserve_strategy: "不只用 oolong 概括，保留 rock tea 品类识别"
@@ -55,6 +60,7 @@ cross_cultural_terms:
   - id: term_yan_yun
     chinese: 岩韵
     english: Yan Yun
+    not_recommended: "rock taste（避免让人以为茶里有石头味）"
     explanation: "A persistent structure and aftertaste associated with Wuyi terroir and craft. 'Yan' (rock) refers to the terroir, not a literal taste of stone. It encompasses mountain character, varietal, craft, and mouthfeel structure."
     analogy_strategy: "避免让人以为茶里有石头味；帮助理解结构感与余韵"
     preserve_strategy: "保留拼音 Yan Yun 并完整解释，不可简化为 mineral flavor 或 rock taste"
@@ -63,6 +69,7 @@ cross_cultural_terms:
   - id: term_dahongpao
     chinese: 大红袍
     english: Da Hong Pao
+    not_recommended: "Big Red Robe 作为主名（海外茶圈普遍使用 Da Hong Pao，拼音已有识别度；可在文化故事中解释字面含义）"
     explanation: "A prestigious Wuyi rock tea. The name literally means 'Big Red Robe' based on folklore."
     analogy_strategy: "海外茶圈普遍使用 Da Hong Pao，拼音已有识别度"
     preserve_strategy: "主名用 Da Hong Pao；文化故事中解释字面意义，不作为主名"
@@ -71,6 +78,7 @@ cross_cultural_terms:
   - id: term_dinghong
     chinese: 鼎红
     english: Dinghong Black Tea
+    not_recommended: "Cauldron Red（'红茶'国际通用为 black tea）"
     explanation: "Bama Tea's flagship black tea series from Wuyi mountains."
     analogy_strategy: "不翻译为 Cauldron Red"
     preserve_strategy: "保留拼音 Dinghong；注意'红茶'国际通用为 black tea"
@@ -79,6 +87,7 @@ cross_cultural_terms:
   - id: term_jinjunmei
     chinese: 金骏眉
     english: Jin Jun Mei black tea
+    not_recommended: "Golden Horse Eyebrow / Golden Steed Eyebrow（保留中国茶产品专名拼音）"
     explanation: "A premium bud-type black tea from the Wuyi region. The name is a Chinese tea product proper name."
     analogy_strategy: "不逐字翻译为 Golden Horse Eyebrow"
     preserve_strategy: "保留拼音 Jin Jun Mei，解释为芽型武夷红茶"
@@ -88,6 +97,7 @@ cross_cultural_terms:
   - id: term_huigan
     chinese: 回甘
     english: hui gan
+    not_recommended: "仅写 sweet aftertaste（回甘强调吞咽后甜感重新出现，有时来自喉部或在数分钟后显现，比 simple aftertaste 更复杂）"
     explanation: "A returning sweetness after swallowing — a sweetness that reappears in the mouth and throat, sometimes minutes after drinking."
     analogy_strategy: "首次出现保留拼音并解释，后文可只用 hui gan"
     preserve_strategy: "不只用 sweet aftertaste 概括；回甘强调吞咽后甜感重新出现，有时来自喉部或在数分钟后显现"

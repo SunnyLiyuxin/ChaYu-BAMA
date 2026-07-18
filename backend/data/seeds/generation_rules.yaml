@@ -186,3 +186,192 @@ rules:
     negative_example: "茶多酚含量：25.98 mg/g（只显示一个没有上下文的数字）。"
     positive_example: "结论：咖啡碱通常参与茶汤苦味 | 当前证据：42个商业乌龙茶样本，均值25.98 mg/g | 适用边界：品类研究参考，具体含量待产品检测"
     enabled: true
+
+  # ===== 拒答与风险规则（文档 §15） =====
+  - id: rule_refuse_no_product_measurement
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["含量", "检测", "实测", "具体数值", "百分比", "mg/g"]
+    priority: high
+    instruction: "用户询问某SKU精确成分含量，但数据库只有国标阈值或品类论文时，不给出产品数字。应返回品类研究参考范围并说明'当前为非产品实测值，具体含量待检测确认'。"
+    negative_example: "针对用户'赛珍珠咖啡碱含量多少'的提问，直接回复'25.98 mg/g'。"
+    positive_example: "42个商业乌龙茶样本咖啡碱均值25.98 mg/g，范围0-147.47。这是品类研究参考，非赛珍珠单品实测值。"
+    enabled: true
+
+  - id: rule_refuse_unverified_origin
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["山场", "牛栏坑", "三坑两涧", "年份", "采摘季", "具体品种"]
+    priority: high
+    instruction: "用户询问具体山场、年份、采摘季或品种，而包装未确认时，返回待核实。不得用系列宣传语代替SKU级别的产地证据。"
+    negative_example: "牛一大红袍的原料来自牛栏坑。"
+    positive_example: "八马页面表述为'以牛栏坑为代表的正岩山场'，但该SKU具体原料产地需以包装溯源信息为准，当前无SKU级确认。"
+    enabled: true
+
+  - id: rule_refuse_single_compound_causal
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["造成", "导致", "就是", "全部香气", "唯一原因"]
+    priority: high
+    instruction: "不把某一挥发物的存在直接写成'它造成了全部香气'。风味由浓度、阈值、协同效应、工艺和冲泡共同决定。使用supports/associated_with/共同参与等措辞。"
+    negative_example: "赛珍珠的兰花香就是由橙花叔醇造成的。"
+    positive_example: "同类铁观音研究显示橙花叔醇、茉莉内酯等可能参与花香和果甜香的形成。"
+    enabled: true
+
+  - id: rule_refuse_price_equals_quality
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["价格", "最贵", "顶级", "收藏", "投资"]
+    priority: medium
+    instruction: "不把价格、外交场合使用或奖项直接等同于感官质量。价格不等于品质；高价产品不等同于收藏/投资属性。"
+    negative_example: "这款茶价格最高，所以品质最好，值得收藏。"
+    positive_example: "这款茶是八马核心系列之一。关于是否适合收藏，需考虑储存条件和品质变化，建议咨询品牌官方。"
+    enabled: true
+
+  - id: rule_refuse_analogy_equals_identical
+    scope: cross_cultural_expression
+    market: western
+    audience_reference: any
+    trigger_terms: ["就像", "等同于", "和某咖啡一样", "就是茶中的"]
+    priority: high
+    instruction: "不把咖啡/葡萄酒类比写成感官完全相同。类比必须同时保留关键差异提醒（如'茶体更轻'、'无酒精'、'酸度结构不同'）。不指定具体咖啡产地/烘焙度或葡萄酒品种作为确定等价位。"
+    negative_example: "鼎红金骏眉就是茶中的勃艮第黑皮诺。"
+    positive_example: "借用葡萄酒的aroma→palate→finish结构帮助品饮，但金骏眉没有葡萄酒的酒精和酸度结构，甜感来自茶叶本身而非添加糖分。"
+    enabled: true
+
+  - id: rule_refuse_standard_version_conflict
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["标准", "GB", "国标", "执行标准"]
+    priority: high
+    instruction: "标准尚未实施、已修订或状态冲突时，同时显示所有版本的日期与状态，不自行选择有利版本。"
+    negative_example: "牛一大红袍执行GB/T 18745标准。（只提一个版本）"
+    positive_example: "武夷岩茶现行标准为GB/T 18745-2006；新版GB/T 18745-2026已发布，将于2027-04-01实施。具体SKU以包装标注为准。"
+    enabled: true
+
+  - id: rule_refuse_copy_conflict
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["三香", "口径", "版本"]
+    priority: medium
+    instruction: "同一品牌信息存在多个版本/口径冲突时，以官方页面截图清晰呈现的版本为准，备用版本进入copy_conflict标记，不得随机混用。"
+    negative_example: "随机使用三香的不同感官动作对应版本。"
+    positive_example: "当前使用主口径'闻干茶：炒米香 / 闻茶汤：果味甜香 / 品滋味：兰花香'。备用版本已标记copy_conflict，待品牌方确认。"
+    enabled: true
+
+  # ===== 意图路由规则（文档 §19.2） =====
+  - id: rule_intent_first_contact
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["介绍", "是什么", "一句话", "简单说"]
+    priority: high
+    instruction: "首次接触意图：输出核心风味+一个差异点，不超过一句话。不堆砌术语、工艺和证据。调用L2层，不调用L1层。"
+    negative_example: "这款茶来自福建安溪，采用非遗技艺制作，含有多种挥发物。"
+    positive_example: "赛珍珠浓香铁观音：先有温暖的炒米香，入口后花香和甜感慢慢展开，喝完喉咙里甜感重新回来。"
+    enabled: true
+
+  - id: rule_intent_flavor_query
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["喝起来", "味道", "口感", "香气", "风味", "什么味"]
+    priority: high
+    instruction: "风味查询意图：输出香气、味觉、口感、余韵分开描述，不混成一个指标。优先调用L2风味坐标层。"
+    negative_example: "很好喝，香气浓郁。"
+    positive_example: "干茶是炒米香，茶汤闻起来有果甜香，入口后兰花香展开。口感甘醇，适度涩感，喝完回甘明显。"
+    enabled: true
+
+  - id: rule_intent_chemistry_query
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["为什么", "成分", "化学", "分子", "怎么形成"]
+    priority: high
+    instruction: "化学/机制查询意图：输出工艺→成分类别→可能感知贡献，附证据边界。调用L1层，必须标注品类代理还是产品实测。"
+    negative_example: "因为含有橙花叔醇所以有兰花香。"
+    positive_example: "同类铁观音研究显示，做青与焙火共同促进橙花叔醇等花香型挥发物形成，它们可能共同参与兰花香的塑造。当前成分解释基于品类研究，非单品实测值。"
+    enabled: true
+
+  - id: rule_intent_process_query
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["工艺", "怎么做", "加工", "浓香", "清香", "区别", "差别"]
+    priority: high
+    instruction: "工艺查询意图：输出工艺差异及其感官影响。对新手用可感知结果解释，对进阶用户再讲技术细节。"
+    negative_example: "浓香型和清香型只是焙火时间不同。"
+    positive_example: "清香型铁观音以做青为主，呈现清新花香；浓香型在做青后增加焙火，形成炒米香和更醇厚的口感。"
+    enabled: true
+
+  - id: rule_intent_origin_query
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["产地", "来自", "哪里", "山场", "武夷山", "安溪", "桐木关"]
+    priority: high
+    instruction: "产地查询意图：只回答已核实的产地信息。未核实的山场/具体地块不能以系列宣传语代替SKU证据。"
+    negative_example: "牛一大红袍全部原料来自牛栏坑核心正岩山场。"
+    positive_example: "牛一大红袍来自武夷岩茶核心产区。品牌页面表述'以牛栏坑为代表的正岩山场'，具体原料产地需以包装溯源信息确认。"
+    enabled: true
+
+  - id: rule_intent_culture_query
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["文化", "音韵", "岩韵", "观音韵", "传统", "典故", "故事"]
+    priority: high
+    instruction: "文化查询意图：输出拼音专名、简释、深层文化叙事。区分documented_history（有文献支持）、local_legend（传说须用相传）、brand_narrative（品牌自述）。"
+    negative_example: "观音韵就是铁观音的独特韵——押韵的韵。"
+    positive_example: "Guanyin Yun是铁观音品种、安溪地域和传统工艺共同形成的综合品质特征，不是单一香气或声音押韵。"
+    enabled: true
+
+  - id: rule_intent_brewing_query
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["泡", "冲泡", "水温", "时间", "茶水比", "怎么喝"]
+    priority: high
+    instruction: "冲泡查询意图：优先输出具体SKU官方冲泡参数。无官方数据时说明为品类建议。不可把品类通用建议写成产品官方参数。"
+    negative_example: "赛珍珠用85℃水泡最好。（与官方95℃以上矛盾）"
+    positive_example: "赛珍珠官方建议3123泡法：8.3g茶叶，120mL盖碗，95℃以上沸水，30s→10s→20s→30s。第一泡官方建议饮用。"
+    enabled: true
+
+  - id: rule_intent_comparison_query
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["像什么", "类比", "对比", "咖啡", "红酒", "葡萄酒", "相似"]
+    priority: high
+    instruction: "类比查询意图：输出映射类型（shared_sensory_reference | shared_chemical_pathway | narrative_bridge）、相似点、关键差异提醒。不可声称两个体系完全等价。"
+    negative_example: "牛一就是茶中的深烘曼特宁咖啡。"
+    positive_example: "牛一的焙火香与咖啡烘焙共享热反应路径，所以会有坚果、焦糖样的熟悉感。但茶体更轻，有花香和回甘，整体体验与咖啡不同。"
+    enabled: true
+
+  - id: rule_intent_content_task
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["生成", "脚本", "文案", "写一段", "TikTok", "物料", "海报"]
+    priority: high
+    instruction: "内容生成意图：调用L4物料层，按渠道和受众生成对应格式输出。必须同时生成审核卡（claim_trace + cultural_translation_notes），标注所有声明的证据追溯。"
+    negative_example: "生成一段TikTok脚本但不附审核卡。"
+    positive_example: "TikTok脚本：0-3s钩子 → 3-12s品饮体验 → 12-18s文化概念 → CTA。单独附审核卡列出每句声明的证据来源。"
+    enabled: true
+
+  - id: rule_intent_claim_check
+    scope: any
+    market: any
+    audience_reference: any
+    trigger_terms: ["审核", "能不能说", "检查", "合规", "这句", "声明"]
+    priority: high
+    instruction: "声明审核意图：拆解声明中的每个断言→逐一比对证据→标注风险等级→给出修改建议。包含数值、产地、健康、奖项、销量、具体山场的句子自动进入高风险队列。"
+    negative_example: "这句话挺好的，可以发。"
+    positive_example: "声明'牛栏坑正岩原料'核验：当前SKU主档无牛栏坑溯源证明，建议改为'武夷岩茶核心产区'或补充溯源材料后发布。风险等级：高。"
+    enabled: true

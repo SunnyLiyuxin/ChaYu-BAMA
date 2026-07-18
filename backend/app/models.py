@@ -148,6 +148,7 @@ class CrossCulturalTerm(Base):
     id: Mapped[str] = mapped_column(String, primary_key=True)
     chinese: Mapped[str | None] = mapped_column(String)
     english: Mapped[str | None] = mapped_column(String)
+    not_recommended: Mapped[str | None] = mapped_column(String)  # 不推荐的译法
     explanation: Mapped[str | None] = mapped_column(String)
     analogy_strategy: Mapped[str | None] = mapped_column(String)
     preserve_strategy: Mapped[str | None] = mapped_column(String)
@@ -230,6 +231,44 @@ class TeaTerm(Base):
         String, ForeignKey("teas.id"), index=True
     )
     term: Mapped[str | None] = mapped_column(String, index=True)
+
+
+class QuarantineItem(Base):
+    """高风险知识隔离清单（§23）：禁止对外发布的内容，取得可靠证据后可重新启用。"""
+
+    __tablename__ = "quarantine_items"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    content: Mapped[str | None] = mapped_column(String)
+    reason: Mapped[str | None] = mapped_column(String)
+    re_enable_condition: Mapped[str | None] = mapped_column(String)
+    review_status: Mapped[str | None] = mapped_column(String)  # quarantine / verified
+    retrievable_for_external_generation: Mapped[bool | None] = mapped_column(Boolean)
+    required_evidence: Mapped[list | None] = mapped_column(JSON)  # list[str]
+    review_owner: Mapped[str | None] = mapped_column(String)
+
+
+class CreativeAnalogy(Base):
+    """创意类比候选池（§20）：创意可被保存、筛选和测试，验证前禁止自动进入外部物料。"""
+
+    __tablename__ = "creative_analogies"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    tea_id: Mapped[str | None] = mapped_column(
+        String, ForeignKey("teas.id"), index=True
+    )
+    reference_category: Mapped[str | None] = mapped_column(String)  # coffee / wine / spirits / perfume
+    reference_object: Mapped[str | None] = mapped_column(String)
+    shared_sensory_cues: Mapped[list | None] = mapped_column(JSON)  # list[str]
+    mapping_type: Mapped[str | None] = mapped_column(String)  # creative_hypothesis / approved_narrative_bridge
+    scientific_equivalence: Mapped[bool | None] = mapped_column(Boolean)
+    validation_status: Mapped[str | None] = mapped_column(String)  # untested / blinded / audience_tested / approved
+    requires_blind_tasting: Mapped[bool | None] = mapped_column(Boolean)
+    requires_audience_test: Mapped[bool | None] = mapped_column(Boolean)
+    allowed_use: Mapped[str | None] = mapped_column(String)  # internal_ideation_only / approved_external
+    risk_notes: Mapped[str | None] = mapped_column(String)
+    approved_sensory_cues: Mapped[list | None] = mapped_column(JSON)  # 可借用的部分
+    must_avoid: Mapped[list | None] = mapped_column(JSON)  # 必须避免的表述
 
 
 class GeneratedOutput(Base):

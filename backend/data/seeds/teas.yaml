@@ -51,6 +51,7 @@ teas:
     demo_sku: "鼎红10000金骏眉，特级，50g"
     grade: 特级
     shelf_life_months: 36
+    standard: "GH/T 1118-2015（平台状态信息存在矛盾，具体SKU应以包装执行标准为准）"
     brand_sensory: "干茶花果香、茶汤花蜜甜香、滋味花蜜香；3D萃香：初显花香→中段果蜜香→尾调薄荷甜香"
     cultural_core: "金骏眉是中文产品专名，保留拼音Jin Jun Mei并解释其为芽型武夷红茶"
     core_process: "萎凋、揉捻、氧化（行业常称'发酵'）、干燥"
