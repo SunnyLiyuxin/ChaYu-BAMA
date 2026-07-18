@@ -1084,7 +1084,7 @@ function handleOption(act,lbl){
       }
     }).catch(e=>{
       S.typing=false;
-      pushMsg("assistant","生成失败："+e.message,"text");
+      pushMsg("assistant",(e.fallback?"":"生成失败：")+e.message,"text");
       S.stage="done";
       saveCurrentToHistory();
       paintMessages();
@@ -1135,7 +1135,7 @@ function handleOption(act,lbl){
       });
     }).catch(e=>{
       S.typing=false;
-      pushMsg("assistant","物料生成失败："+e.message,"text");
+      pushMsg("assistant",(e.fallback?"":"物料生成失败：")+e.message,"text");
       S.stage="done";
       saveCurrentToHistory();
       paintMessages();
@@ -1183,7 +1183,7 @@ function sendUserInput(text){
     }
   }).catch(e=>{
     S.typing=false;
-    pushMsg("assistant","生成失败："+e.message,"text");
+    pushMsg("assistant",(e.fallback?"":"生成失败：")+e.message,"text");
     S.stage="done";
     saveCurrentToHistory();
     paintMessages();

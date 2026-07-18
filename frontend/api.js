@@ -1,7 +1,11 @@
 // 八马茶语 API 封装层
 // 所有后端调用集中在此，前端通过 BAMA_API.xxx() 调用
 const BAMA_API=(function(){
-  const BASE="http://localhost:8000";
+  // BASE 自适应：
+  //   - 页面由 nginx / 任意 http(s) 服务时，走同源（""），由网关反代 /api 到后端，
+  //     不写死 localhost:8000 否则浏览器会去访客本机找后端 → 跨域 + 连不上。
+  //   - 本地直接双击打开 HTML（file://）联调后端时，无同源可用，回退到 localhost:8000。
+  const BASE=(typeof window!=="undefined"&&window.location&&window.location.protocol&&window.location.protocol.startsWith("http"))?"":"http://localhost:8000";
 
   // 茶名→tea_id 映射（仅来源于后端 /api/teas，无任何兜底）
   let TEA_ID_MAP={};
@@ -27,7 +31,7 @@ const BAMA_API=(function(){
     try{
       res=await fetch(url, opts);
     }catch(e){
-      throw new Error("网络请求失败："+e.message+"（请确认后端已启动在 "+BASE+"）");
+      throw new Error("网络请求失败："+e.message+(BASE?"（请确认后端已启动在 "+BASE+"）":"（请确认网关已反代 /api 到后端）"));
     }
     let json;
     try{
@@ -38,6 +42,19 @@ const BAMA_API=(function(){
     if(!res.ok||!json.success){
       const msg=json.error&&json.error.message?("后端错误["+json.error.code+"]："+json.error.message):("HTTP "+res.status);
       throw new Error(msg);
+    }
+    // 后端未开放能力返回 success:true + meta.fallback:true + data.message。
+    // 这里统一拦截：fallback 时抛带 message 的 Error，让调用方走 .catch 展示友好提示，
+    // 而不是去取 data.image_url / data.outputs.* 这些不存在的字段渲染空内容。
+    const meta=json.meta||{};
+    if(meta.fallback){
+      const data=json.data||{};
+      const reason=meta.fallback_reason?(" ["+meta.fallback_reason+"]"):"";
+      const msg=(data.title?data.title+"：" :"")+(data.message||"该能力 Demo 阶段暂未开放")+reason;
+      const err=new Error(msg);
+      err.fallback=true;
+      err.fallbackData=data;
+      throw err;
     }
     return json;
   }

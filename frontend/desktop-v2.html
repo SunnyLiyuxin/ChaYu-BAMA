@@ -1159,7 +1159,7 @@ function handleOption(action,label){
       }
     }).catch(e=>{
       S.typing=false;
-      pushMessage({role:"assistant",content:"生成失败："+e.message,type:"text"});
+      pushMessage({role:"assistant",content:(e.fallback?"":"生成失败：")+e.message,type:"text"});
       S.stage="done";
       saveCurrentToHistory();
       updateChatArea();
@@ -1213,7 +1213,7 @@ function handleOption(action,label){
       });
     }).catch(e=>{
       S.typing=false;
-      pushMessage({role:"assistant",content:"物料生成失败："+e.message,type:"text"});
+      pushMessage({role:"assistant",content:(e.fallback?"":"物料生成失败：")+e.message,type:"text"});
       S.stage="done";
       saveCurrentToHistory();
       updateChatArea();
@@ -1263,7 +1263,7 @@ function handleCandidate(c){
     }
   }).catch(e=>{
     S.typing=false;
-    pushMessage({role:"assistant",content:"生成失败："+e.message,type:"text"});
+    pushMessage({role:"assistant",content:(e.fallback?"":"生成失败：")+e.message,type:"text"});
     saveCurrentToHistory();
     updateChatArea();
   });
@@ -1303,7 +1303,7 @@ function handleUserInput(text){
     }
   }).catch(e=>{
     S.typing=false;
-    pushMessage({role:"assistant",content:"生成失败："+e.message,type:"text"});
+    pushMessage({role:"assistant",content:(e.fallback?"":"生成失败：")+e.message,type:"text"});
     saveCurrentToHistory();
     updateChatArea();
   });
