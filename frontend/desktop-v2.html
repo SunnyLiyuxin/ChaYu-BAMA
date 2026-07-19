@@ -74,6 +74,34 @@ input,textarea{font-family:inherit}
 .topnav .nav-primary svg,.topnav .nav-secondary svg{width:16px;height:16px}
 .topnav .tag{padding:5px 12px;border-radius:999px;border:1px solid rgba(184,147,90,.3);font-size:11px;color:var(--goldD)}
 
+/* v2.0 业务员账号体系样式 */
+.staff-capsule{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;border:1px solid rgba(184,147,90,.5);background:rgba(245,239,227,.9);cursor:pointer;transition:all .2s;backdrop-filter:blur(4px)}
+.staff-capsule:hover{border-color:var(--gold);box-shadow:0 0 0 1px rgba(184,147,90,.3),0 8px 24px -8px rgba(184,147,90,.4)}
+.staff-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Noto Serif SC",serif;font-weight:700;font-size:13px;color:var(--paper);background:linear-gradient(135deg,var(--brothD),var(--ink));box-shadow:0 2px 8px -2px rgba(194,97,59,.4)}
+.staff-avatar.wanshan{background:linear-gradient(135deg,#4A6B5C,#2D4A3E)}
+.staff-info{display:flex;flex-direction:column;gap:1px;line-height:1}
+.staff-info .name{font-size:13px;font-weight:600;color:var(--brothD)}
+.staff-info .meta{font-size:10px;color:var(--goldD);letter-spacing:.05em}
+.staff-capsule svg.chev{width:12px;height:12px;color:var(--goldD);transition:transform .2s}
+.staff-capsule.open svg.chev{transform:rotate(180deg)}
+.staff-drawer{position:fixed;top:72px;right:32px;width:320px;max-height:70vh;overflow-y:auto;background:var(--paper);border:1px solid rgba(184,147,90,.3);border-radius:16px;box-shadow:0 24px 64px -16px rgba(194,97,59,.3);z-index:100;padding:16px;animation:pop .2s ease-out both}
+.staff-drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(184,147,90,.15)}
+.staff-drawer-head .t{font-family:"Noto Serif SC",serif;font-weight:700;font-size:14px;color:var(--brothD)}
+.staff-drawer-head .close{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--goldD);cursor:pointer}
+.staff-drawer-head .close:hover{background:rgba(184,147,90,.15)}
+.staff-drawer-head .close svg{width:14px;height:14px}
+.staff-card{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.staff-card:hover{background:rgba(184,147,90,.06);border-color:rgba(184,147,90,.2)}
+.staff-card.active{background:rgba(184,147,90,.12);border-color:var(--gold)}
+.staff-card .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Noto Serif SC",serif;font-weight:700;font-size:15px;color:var(--paper);flex-shrink:0}
+.staff-card .info{flex:1;min-width:0}
+.staff-card .info .n{font-size:13px;font-weight:600;color:var(--brothD);display:flex;align-items:center;gap:6px}
+.staff-card .info .n .id{font-size:10px;color:var(--goldD);font-weight:400}
+.staff-card .info .r{font-size:11px;color:rgba(212,115,79,.7);margin-top:2px}
+.staff-card .info .s{font-size:10px;color:rgba(184,147,90,.7);margin-top:2px}
+.staff-card .check{width:18px;height:18px;border-radius:50%;background:var(--gold);color:var(--paper);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.staff-card .check svg{width:11px;height:11px}
+
 .hero{position:relative;z-index:10;max-width:1280px;margin:0 auto;display:flex;flex-direction:column;align-items:center;padding:32px 32px 48px;text-align:center}
 .hero-sub{display:flex;align-items:center;gap:12px;margin-bottom:24px}
 .hero-sub .line{width:48px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,147,90,.6))}
@@ -176,6 +204,43 @@ input,textarea{font-family:inherit}
 .sb-item svg{width:22px;height:22px}
 .sb-item .lb{font-family:"Noto Serif SC",serif;font-weight:600;font-size:13px;letter-spacing:.1em}
 .sb-item .dot{position:absolute;right:8px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 2px var(--brothD)}
+/* v2.0 共享云端 / IP 模板库 / 一键发布 侧边栏按钮 */
+.sb-divider{width:60%;height:1px;background:rgba(184,147,90,.2);margin:6px auto}
+.sb-item.feature{width:88px;padding:10px 8px;border:1px dashed rgba(184,147,90,.35);background:rgba(184,147,90,.05)}
+.sb-item.feature:hover{border-color:var(--gold);background:rgba(184,147,90,.12)}
+.sb-item.feature.ip{border-color:rgba(74,107,92,.35);background:rgba(74,107,92,.05);color:rgba(245,239,227,.7)}
+.sb-item.feature.ip:hover{border-color:#4A6B5C;background:rgba(74,107,92,.15)}
+.sb-item.feature .lb{font-size:12px}
+.sb-item.feature .badge{position:absolute;right:6px;top:6px;padding:1px 5px;border-radius:6px;background:var(--cinnabar);color:var(--paper);font-size:8px;font-weight:700;letter-spacing:.05em}
+
+/* v2.0 共享云端素材库面板 */
+.cloud-panel{position:fixed;top:0;right:0;width:420px;height:100vh;background:var(--paper);border-left:1px solid rgba(184,147,90,.3);box-shadow:-24px 0 64px -16px rgba(194,97,59,.2);z-index:200;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
+.cloud-panel.open{transform:translateX(0)}
+.cloud-panel-head{padding:18px 20px;border-bottom:1px solid rgba(184,147,90,.15);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(184,147,90,.08),rgba(45,74,62,.04))}
+.cloud-panel-head .t{font-family:"Noto Serif SC",serif;font-weight:700;font-size:16px;color:var(--brothD);display:flex;align-items:center;gap:8px}
+.cloud-panel-head .close{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--goldD);cursor:pointer}
+.cloud-panel-head .close:hover{background:rgba(184,147,90,.15)}
+.cloud-panel-head .close svg{width:16px;height:16px}
+.cloud-filter{padding:12px 20px;border-bottom:1px solid rgba(184,147,90,.1);display:flex;flex-wrap:wrap;gap:6px}
+.cloud-filter .chip{padding:4px 10px;border-radius:999px;border:1px solid rgba(184,147,90,.3);background:rgba(245,239,227,.6);font-size:11px;color:var(--brothD);cursor:pointer}
+.cloud-filter .chip.active{background:var(--gold);color:var(--paper);border-color:var(--gold)}
+.cloud-list{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.cloud-item{padding:14px;border-radius:12px;border:1px solid rgba(184,147,90,.2);background:rgba(245,239,227,.5);transition:all .15s;cursor:pointer}
+.cloud-item:hover{border-color:var(--gold);box-shadow:0 8px 24px -8px rgba(184,147,90,.25);transform:translateY(-2px)}
+.cloud-item .ci-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cloud-item .ci-type{padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600}
+.cloud-item .ci-type.copy{background:rgba(184,147,90,.2);color:var(--brothD)}
+.cloud-item .ci-type.material{background:rgba(45,74,62,.15);color:var(--moss)}
+.cloud-item .ci-time{font-size:10px;color:rgba(184,147,90,.6)}
+.cloud-item .ci-tea{font-size:13px;font-weight:600;color:var(--brothD);margin-bottom:4px}
+.cloud-item .ci-preview{font-size:11px;color:rgba(212,115,79,.7);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cloud-item .ci-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid rgba(184,147,90,.1)}
+.cloud-item .ci-author{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--goldD)}
+.cloud-item .ci-author .av{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--brothD),var(--ink));color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
+.cloud-item .ci-actions{display:flex;gap:4px}
+.cloud-item .ci-actions button{padding:3px 8px;border-radius:6px;font-size:10px;background:rgba(184,147,90,.1);color:var(--brothD)}
+.cloud-item .ci-actions button:hover{background:var(--gold);color:var(--paper)}
+.cloud-empty{padding:40px 20px;text-align:center;color:rgba(212,115,79,.5);font-size:13px}
 
 .edition-switch{position:relative;cursor:pointer}
 .edition-switch::before{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:100%;width:140px;height:10px}
@@ -252,6 +317,44 @@ input,textarea{font-family:inherit}
 .fb-link{margin-top:12px;display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(212,115,79,.6);text-decoration:underline;text-underline-offset:2px}
 .fb-link svg{width:12px;height:12px}
 
+/* v2.0 一键发布 + 审核流 */
+.publish-bar{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(184,147,90,.25);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.publish-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:999px;border:1px solid var(--gold);background:linear-gradient(135deg,var(--brothD),var(--ink));color:var(--goldL);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px -2px rgba(194,97,59,.3)}
+.publish-btn:hover{transform:scale(1.04);box-shadow:0 6px 20px -2px rgba(194,97,59,.5)}
+.publish-btn svg{width:13px;height:13px}
+.publish-hint{font-size:11px;color:rgba(184,147,90,.6)}
+.publish-drawer{position:fixed;top:0;right:0;width:440px;height:100vh;background:var(--paper);border-left:1px solid rgba(184,147,90,.3);box-shadow:-24px 0 64px -16px rgba(194,97,59,.2);z-index:200;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
+.publish-drawer.open{transform:translateX(0)}
+.publish-drawer-head{padding:18px 20px;border-bottom:1px solid rgba(184,147,90,.15);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(184,147,90,.08),rgba(194,97,59,.04))}
+.publish-drawer-head .t{font-family:"Noto Serif SC",serif;font-weight:700;font-size:16px;color:var(--brothD);display:flex;align-items:center;gap:8px}
+.publish-drawer-head .close{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--goldD);cursor:pointer}
+.publish-drawer-head .close:hover{background:rgba(184,147,90,.15)}
+.publish-drawer-head .close svg{width:16px;height:16px}
+.publish-body{flex:1;overflow-y:auto;padding:20px}
+.publish-step{display:flex;gap:12px;margin-bottom:18px;position:relative}
+.publish-step .num{width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.publish-step .num.done{background:var(--moss)}
+.publish-step .num.cur{background:var(--cinnabar);animation:pulseGold 2s infinite}
+.publish-step:not(:last-child)::after{content:"";position:absolute;left:11px;top:24px;bottom:-12px;width:2px;background:rgba(184,147,90,.2)}
+.publish-step .body{flex:1}
+.publish-step .body .lb{font-size:13px;font-weight:600;color:var(--brothD);margin-bottom:4px}
+.publish-step .body .desc{font-size:11px;color:rgba(212,115,79,.65);line-height:1.5}
+.publish-platforms{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.publish-platforms button{padding:10px;border-radius:10px;border:1px solid rgba(184,147,90,.25);background:rgba(245,239,227,.5);font-size:12px;color:var(--brothD);cursor:pointer;transition:all .15s;text-align:left}
+.publish-platforms button:hover{border-color:var(--gold);background:rgba(184,147,90,.08)}
+.publish-platforms button.selected{border-color:var(--gold);background:rgba(184,147,90,.15);box-shadow:0 0 0 1px rgba(184,147,90,.3)}
+.publish-platforms button .pf{display:flex;align-items:center;gap:6px}
+.publish-field{margin-top:12px}
+.publish-field label{display:block;font-size:12px;font-weight:600;color:var(--brothD);margin-bottom:6px}
+.publish-field input,.publish-field textarea{width:100%;border:1px solid rgba(224,133,96,.2);background:var(--paper);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--brothD);outline:none;font-family:inherit}
+.publish-field input:focus,.publish-field textarea:focus{border-color:var(--gold)}
+.publish-foot{padding:16px 20px;border-top:1px solid rgba(184,147,90,.15);display:flex;gap:10px}
+.publish-foot button{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.publish-foot .cancel{border:1px solid rgba(184,147,90,.3);background:var(--paper);color:var(--brothD)}
+.publish-foot .cancel:hover{background:rgba(184,147,90,.08)}
+.publish-foot .submit{border:none;background:linear-gradient(135deg,var(--brothD),var(--ink));color:var(--goldL);box-shadow:0 4px 12px -2px rgba(194,97,59,.3)}
+.publish-foot .submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px -2px rgba(194,97,59,.5)}
+
 .trace-chain{margin-top:14px;padding:12px 14px;border-radius:14px;border:1.5px solid rgba(212,165,116,.55);background:rgba(251,245,240,.7);position:relative}
 .trace-chain::before{content:"";position:absolute;left:0;right:0;top:-8px;height:1px;background:linear-gradient(90deg,transparent,rgba(232,213,163,.7) 20%,rgba(232,213,163,.7) 80%,transparent)}
 .trace-head{display:flex;align-items:center;gap:6px;font-family:"Noto Serif SC",serif;font-weight:700;font-size:12px;color:var(--goldD);letter-spacing:.05em;margin-bottom:10px}
@@ -310,6 +413,11 @@ input,textarea{font-family:inherit}
 .field-hd .hint{font-size:11px;color:rgba(212,115,79,.5)}
 .field-hd .hint::before{content:"· "}
 .field-opts{display:flex;flex-wrap:wrap;gap:6px}
+/* v2.0 产品库分组展示样式 */
+.field-opts.tea-grouped{flex-direction:column;gap:10px;max-height:380px;overflow-y:auto;padding-right:4px}
+.tea-group{width:100%}
+.tea-group-label{font-size:11px;font-weight:700;color:var(--goldD);letter-spacing:.08em;margin-bottom:4px;padding-left:2px;border-left:2px solid var(--goldL);padding-left:6px}
+.tea-group-items{display:flex;flex-wrap:wrap;gap:6px}
 .opt{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;border-radius:10px;border:1px solid rgba(224,133,96,.15);background:rgba(245,239,227,.6);padding:8px 10px;text-align:left;transition:all .15s;min-width:120px;cursor:pointer}
 .opt.compact{min-width:90px}
 .opt:hover{border-color:rgba(184,147,90,.6);background:var(--paper)}
@@ -456,7 +564,14 @@ const S={
   awaitingInput:false,
   preOpen:false,preMode:null,preField:null,
   customTimeInput:"",
-  curTimeCat:""
+  curTimeCat:"",
+  // v2.0 业务员账号体系
+  currentStaffId:"BM001",
+  staffDrawerOpen:false,
+  // v2.0 共享云端素材库
+  cloudPanelOpen:false,
+  // v2.0 一键发布抽屉
+  publishDrawerOpen:false
 };
 
 const STORAGE_PREFIX="bamaChayu_state_";
@@ -511,7 +626,52 @@ function clearStoredState(edition){
   try{localStorage.removeItem(storageKey(edition||S.edition));}catch(e){}
 }
 
-const TEA_CATEGORIES=["赛珍珠浓香型安溪铁观音","牛一武夷岩茶·大红袍","鼎红武夷红茶·金骏眉"];
+// v2.0 产品库扩充：从 3 款经典茶扩充到八马主品牌核心 20 款（第 1 批）
+// 覆盖六大茶类 + 再加工茶，全价格带，按品类分组便于业务员检索
+const TEA_CATEGORIES=[
+  // 绿茶
+  "八马·明前龙井","八马·洞庭碧螺春","八马·黄山毛峰",
+  // 白茶
+  "八马·白毫银针","八马·寿眉",
+  // 黄茶
+  "八马·霍山黄芽",
+  // 青茶（乌龙茶）
+  "赛珍珠浓香型安溪铁观音","八马·清香型铁观音","八马·凤凰单丛","牛一武夷岩茶·大红袍","八马·武夷肉桂","八马·漳平水仙",
+  // 红茶
+  "鼎红武夷红茶·金骏眉","八马·正山小种","八马·祁门红茶","八马·滇红",
+  // 黑茶（普洱）
+  "八马·普洱生茶","八马·普洱熟茶","八马·小青柑",
+  // 再加工茶
+  "八马·茉莉龙珠"
+];
+// v2.0 业务员账号体系（虚拟业务员，Demo 用）
+const STAFF_MEMBERS=[
+  {id:"BM001",name:"李茶韵",role:"资深茶艺师",store:"北京旗舰店",skills:["文案","国风"],color:"#9B3A2F"},
+  {id:"BM002",name:"王茗轩",role:"海外业务专员",store:"上海体验店",skills:["物料","英文"],color:"#2D4A3E"},
+  {id:"BM003",name:"陈香远",role:"新媒体运营",store:"广州天河店",skills:["小红书","抖音"],color:"#B8935A"},
+  {id:"BM004",name:"张清茗",role:"万山红品牌经理",store:"深圳总部",skills:["年轻化","IP"],color:"#8B3D22"},
+  {id:"BM005",name:"林宇轩",role:"国际业务",store:"海外事业部",skills:["英文","国际化"],color:"#4A6B5C"}
+];
+// v2.0 共享云端素材库（Demo 示例数据，瀑布流展示）
+const CLOUD_ASSETS=[
+  {id:"ca1",type:"copy",tea:"赛珍珠浓香型安溪铁观音",preview:"一盏兰花香，半生岩骨情。赛珍珠铁观音，以三百年非遗技艺，把安溪的云雾与山场，凝成每一颗紧结的茶珠。",author:"BM001",time:Date.now()-2*3600*1000,version:"国内版",tags:["国风","送礼"]},
+  {id:"ca2",type:"material",tea:"鼎红武夷红茶·金骏眉",preview:"蜜香、薯香、花香三层叠加，金毫显露。鼎红金骏眉，一斤茶需采六万颗芽头，是武夷山给世界的温柔。",author:"BM003",time:Date.now()-5*3600*1000,version:"国内版",tags:["小红书","年轻"]},
+  {id:"ca3",type:"copy",tea:"牛一武夷岩茶·大红袍",preview:"岩骨花香，牛一为峰。九曲溪畔，三十六峰，牛一大红袍用 36 小时炭焙，把武夷山的岩韵焙进每一片叶脉。",author:"BM001",time:Date.now()-26*3600*1000,version:"国内版",tags:["商务","专业"]},
+  {id:"ca4",type:"copy",tea:"赛珍珠浓香型安溪铁观音",preview:"Orchid aroma lingers like a mountain mist. Saizhenzhu Tieguanyin — three centuries of craft, captured in each tightly rolled pearl.",author:"BM005",time:Date.now()-30*3600*1000,version:"海外版",tags:["英文","国际化"]},
+  {id:"ca5",type:"material",tea:"八马·普洱熟茶",preview:"陈香沉稳，汤色红浓明亮。八马普洱熟茶，勐海古树春料，渥堆发酵 45 天，时间的厚度都在这一杯里。",author:"BM002",time:Date.now()-50*3600*1000,version:"国内版",tags:["国风","收藏"]},
+  {id:"ca6",type:"copy",tea:"八马·茉莉龙珠",preview:"六窨一提，茉莉入骨。八马茉莉龙珠，以福鼎大白茶为底，横县茉莉花六次窨制，让春天的味道留在杯中。",author:"BM003",time:Date.now()-72*3600*1000,version:"国内版",tags:["年轻","日常"]}
+];
+const CLOUD_FILTERS=["全部","文案","物料","国内版","海外版","国风","年轻","商务","英文"];
+// 茶品类分组（用于前置选择器分组展示）
+const TEA_GROUPS=[
+  {label:"绿茶",teas:["八马·明前龙井","八马·洞庭碧螺春","八马·黄山毛峰"]},
+  {label:"白茶",teas:["八马·白毫银针","八马·寿眉"]},
+  {label:"黄茶",teas:["八马·霍山黄芽"]},
+  {label:"青茶（乌龙茶）",teas:["赛珍珠浓香型安溪铁观音","八马·清香型铁观音","八马·凤凰单丛","牛一武夷岩茶·大红袍","八马·武夷肉桂","八马·漳平水仙"]},
+  {label:"红茶",teas:["鼎红武夷红茶·金骏眉","八马·正山小种","八马·祁门红茶","八马·滇红"]},
+  {label:"黑茶（普洱）",teas:["八马·普洱生茶","八马·普洱熟茶","八马·小青柑"]},
+  {label:"再加工茶",teas:["八马·茉莉龙珠"]}
+];
 const GIFT_SCENES=[
   {value:"self",label:"自饮",desc:"日常品鉴，自得其乐"},
   {value:"elder",label:"送长辈",desc:"表达敬意与孝心"},
@@ -662,6 +822,213 @@ function renderWorkbenchOnly(){
   bindSelBar();
 }
 
+// v2.0 业务员账号体系：渲染业务员胶囊
+function renderStaffCapsule(){
+  const staff=STAFF_MEMBERS.find(s=>s.id===S.currentStaffId)||STAFF_MEMBERS[0];
+  const initial=staff.name.charAt(0);
+  const isWanshan=staff.id==="BM004";
+  return `<div class="staff-capsule ${S.staffDrawerOpen?'open':''}" onclick="toggleStaffDrawer()">
+    <div class="staff-avatar ${isWanshan?'wanshan':''}">${initial}</div>
+    <div class="staff-info"><span class="name">${staff.name}</span><span class="meta">${staff.id} · ${staff.role}</span></div>
+    ${svg("chevd")}
+  </div>`;
+}
+function renderStaffDrawer(){
+  if(!S.staffDrawerOpen)return "";
+  const cur=STAFF_MEMBERS.find(s=>s.id===S.currentStaffId)||STAFF_MEMBERS[0];
+  return `<div class="staff-drawer" id="staffDrawer">
+    <div class="staff-drawer-head">
+      <span class="t">切换业务员</span>
+      <span class="close" onclick="toggleStaffDrawer()">${svg("x")}</span>
+    </div>
+    ${STAFF_MEMBERS.map(s=>{
+      const initial=s.name.charAt(0);
+      const active=s.id===cur.id;
+      const isWanshan=s.id==="BM004";
+      return `<div class="staff-card ${active?'active':''}" onclick="switchStaff('${s.id}')">
+        <div class="avatar" style="background:linear-gradient(135deg,${s.color},${s.color}99)">${initial}</div>
+        <div class="info">
+          <div class="n">${s.name}<span class="id">${s.id}</span></div>
+          <div class="r">${s.role} · ${s.store}</div>
+          <div class="s">擅长：${s.skills.join(" / ")}</div>
+        </div>
+        ${active?`<span class="check">${svg("check")}</span>`:''}
+      </div>`;
+    }).join("")}
+  </div>`;
+}
+function toggleStaffDrawer(){S.staffDrawerOpen=!S.staffDrawerOpen;renderTopbarOnly();}
+function switchStaff(id){
+  if(id===S.currentStaffId){S.staffDrawerOpen=false;renderTopbarOnly();return;}
+  S.currentStaffId=id;S.staffDrawerOpen=false;
+  // 切换业务员后，历史记录、共享云端权限、生成内容归属切换
+  renderTopbarOnly();
+  renderWorkbenchOnly();
+}
+
+// v2.0 共享云端素材库
+S.cloudFilter="全部";
+function toggleCloudPanel(){
+  S.cloudPanelOpen=!S.cloudPanelOpen;
+  renderCloudPanel();
+}
+function renderCloudPanel(){
+  const old=document.getElementById("cloudPanel");
+  if(old)old.remove();
+  if(!S.cloudPanelOpen)return;
+  const panel=document.createElement("div");
+  panel.id="cloudPanel";
+  panel.className="cloud-panel open";
+  const filter=S.cloudFilter||"全部";
+  let items=CLOUD_ASSETS.slice().sort((a,b)=>b.time-a.time);
+  if(filter==="文案")items=items.filter(i=>i.type==="copy");
+  else if(filter==="物料")items=items.filter(i=>i.type==="material");
+  else if(filter==="国内版")items=items.filter(i=>i.version==="国内版");
+  else if(filter==="海外版")items=items.filter(i=>i.version==="海外版");
+  else if(filter!=="全部")items=items.filter(i=>(i.tags||[]).includes(filter));
+  panel.innerHTML=`<div class="cloud-panel-head">
+    <span class="t">${svg("spark")}☁ 共享云端素材库</span>
+    <span class="close" onclick="toggleCloudPanel()">${svg("x")}</span>
+  </div>
+  <div class="cloud-filter">
+    ${CLOUD_FILTERS.map(f=>`<span class="chip ${filter===f?'active':''}" onclick="setCloudFilter('${f}')">${f}</span>`).join("")}
+  </div>
+  <div class="cloud-list">
+    ${items.length===0?`<div class="cloud-empty">该筛选下暂无共享素材</div>`:
+    items.map(it=>{
+      const author=STAFF_MEMBERS.find(s=>s.id===it.author)||{name:"?",color:"#888"};
+      const initial=author.name.charAt(0);
+      const typeLb=it.type==="copy"?"文案":"物料";
+      return `<div class="cloud-item">
+        <div class="ci-head">
+          <span class="ci-type ${it.type}">${typeLb} · ${it.version}</span>
+          <span class="ci-time">${formatTime(it.time)}</span>
+        </div>
+        <div class="ci-tea">${it.tea}</div>
+        <div class="ci-preview">${escapeHtml(it.preview)}</div>
+        <div class="ci-foot">
+          <div class="ci-author"><span class="av" style="background:linear-gradient(135deg,${author.color},${author.color}99)">${initial}</span>${author.name} · ${it.author}</div>
+          <div class="ci-actions">
+            <button onclick="reuseCloudAsset('${it.id}')">一键复用</button>
+            <button onclick="deriveCloudAsset('${it.id}')">派生</button>
+          </div>
+        </div>
+      </div>`;
+    }).join("")}
+  </div>`;
+  document.body.appendChild(panel);
+}
+function setCloudFilter(f){S.cloudFilter=f;renderCloudPanel();}
+function reuseCloudAsset(id){
+  const it=CLOUD_ASSETS.find(a=>a.id===id);
+  if(!it)return;
+  // 自动填充前置选择参数
+  if(it.type==="copy"){
+    S.mode="copy";S.copySel.teaCategory=it.tea;
+  }else{
+    S.mode="material";S.matSel.teaCategory=it.tea;
+  }
+  S.cloudPanelOpen=false;renderCloudPanel();
+  renderWorkbenchOnly();
+}
+function deriveCloudAsset(id){
+  alert("已基于该素材派生新版本，溯源链已保留（Demo 提示）");
+}
+function openIPLibrary(){
+  alert("🎨 万山红 × 侠客 IP 模板库（试点）\n\n四大侠客角色 × 四款万山红产品：\n· 剑客·陆青山 × 茉莉花茶\n· 书生·沈墨白 × 桂花乌龙\n· 侠女·苏映雪 × 蜜桃红茶\n· 隐士·云无迹 × 白茶\n\nv2.0 提供模板库参考套用，v3.0 将支持 IP 自动融入生成。（Demo 提示）");
+}
+
+// v2.0 一键发布 + 审核流（仿 GitHub PR 机制）
+S.publishPlatform=null;
+S.publishTitle="";
+S.publishTags="";
+function openPublishDrawer(msgId){
+  S.publishDrawerOpen=true;
+  S.publishMsgId=msgId;
+  S.publishPlatform=null;
+  S.publishTitle="";
+  S.publishTags="";
+  renderPublishDrawer();
+}
+function closePublishDrawer(){
+  S.publishDrawerOpen=false;
+  renderPublishDrawer();
+}
+function renderPublishDrawer(){
+  const old=document.getElementById("publishDrawer");
+  if(old)old.remove();
+  if(!S.publishDrawerOpen)return;
+  const isOvs=S.edition==="overseas";
+  const platforms=isOvs?["Instagram","TikTok","YouTube","WhatsApp Business"]:["小红书","抖音","微信视频号","微信公众号"];
+  const staff=STAFF_MEMBERS.find(s=>s.id===S.currentStaffId)||STAFF_MEMBERS[0];
+  const drawer=document.createElement("div");
+  drawer.id="publishDrawer";
+  drawer.className="publish-drawer open";
+  drawer.innerHTML=`<div class="publish-drawer-head">
+    <span class="t">${svg("arrow")}一键发布 · 审核流</span>
+    <span class="close" onclick="closePublishDrawer()">${svg("x")}</span>
+  </div>
+  <div class="publish-body">
+    <div class="publish-step"><div class="num done">1</div><div class="body"><div class="lb">业务员生成物料</div><div class="desc">已完成 · 当前业务员：${staff.name}（${staff.id}）</div></div></div>
+    <div class="publish-step"><div class="num cur">2</div><div class="body"><div class="lb">选择发布平台</div><div class="desc">${isOvs?'海外主流平台':'国内主流平台'}，支持定时发布</div>
+      <div class="publish-platforms">
+        ${platforms.map(p=>`<button class="${S.publishPlatform===p?'selected':''}" onclick="selectPublishPlatform('${p}')"><div class="pf"><span>${p}</span>${S.publishPlatform===p?'<span style="margin-left:auto;color:var(--gold)">✓</span>':''}</div></button>`).join("")}
+      </div>
+    </div></div>
+    <div class="publish-step"><div class="num">3</div><div class="body"><div class="lb">填写发布信息</div>
+      <div class="publish-field"><label>标题</label><input type="text" value="${escapeAttr(S.publishTitle)}" placeholder="请输入发布标题" oninput="S.publishTitle=this.value"/></div>
+      <div class="publish-field"><label>标签</label><input type="text" value="${escapeAttr(S.publishTags)}" placeholder="如：#八马茶业 #中秋礼盒" oninput="S.publishTags=this.value"/></div>
+    </div></div>
+    <div class="publish-step"><div class="num">4</div><div class="body"><div class="lb">提交审核</div><div class="desc">自动发送飞书卡片给审核人（店长 / 品牌部）</div></div></div>
+    <div class="publish-step"><div class="num">5</div><div class="body"><div class="lb">审核结果</div><div class="desc">通过 → 自动调用平台 API 发布；打回 → 业务员收到飞书通知 + 批注</div></div></div>
+  </div>
+  <div class="publish-foot">
+    <button class="cancel" onclick="closePublishDrawer()">取消</button>
+    <button class="submit" onclick="submitPublish()">${svg("send")}提交审核</button>
+  </div>`;
+  document.body.appendChild(drawer);
+}
+function selectPublishPlatform(p){S.publishPlatform=p;renderPublishDrawer();}
+function submitPublish(){
+  if(!S.publishPlatform){alert("请先选择发布平台");return;}
+  if(!S.publishTitle.trim()){alert("请填写发布标题");return;}
+  const staff=STAFF_MEMBERS.find(s=>s.id===S.currentStaffId)||STAFF_MEMBERS[0];
+  alert(`✅ 发布申请已提交\n\n业务员：${staff.name}（${staff.id}）\n平台：${S.publishPlatform}\n标题：${S.publishTitle}\n标签：${S.publishTags||'（无）'}\n\n→ 已自动发送飞书卡片给审核人\n→ 审核通过后将自动发布到 ${S.publishPlatform}\n（Demo 提示）`);
+  S.publishDrawerOpen=false;
+  renderPublishDrawer();
+}
+// 仅重渲 topbar（业务员胶囊 + 抽屉），避免整页重渲影响其他状态
+function renderTopbarOnly(){
+  const oldTopbar=document.querySelector(".topbar");
+  if(oldTopbar){
+    const newTopbar=document.createElement("header");
+    newTopbar.className="topbar";
+    newTopbar.innerHTML=`<div class="logo">
+      <img class="logo-mark" src="bama-logo.png" width="48" height="48" alt="八马茶业" style="object-fit:contain;object-position:center"/>
+      <div class="logo-text"><span class="t">八马茶业</span><span class="s">BAMA TEA</span></div>
+    </div>
+    <div class="topnav">
+      ${S.page==='home'?`
+        <a href="#overview" class="nav-secondary">${svg("spark")}<span>功能概览</span></a>
+        <a href="#entry" class="nav-primary"><span>进入工作台</span>${svg("arrow")}</a>
+      `:`
+        <button class="nav-secondary" onclick="S.page='home';render()">${svg("back")}<span>返回主页</span></button>
+      `}
+      ${renderStaffCapsule()}
+      <span class="tag">v2.0 · 协作化 + 生态化</span>
+    </div>`;
+    oldTopbar.replaceWith(newTopbar);
+  }
+  // 更新抽屉
+  const oldDrawer=document.getElementById("staffDrawer");
+  if(oldDrawer)oldDrawer.remove();
+  if(S.staffDrawerOpen){
+    const drawer=document.createElement("div");
+    drawer.innerHTML=renderStaffDrawer();
+    document.body.appendChild(drawer.firstChild);
+  }
+}
+
 function renderHome(){
   const page=h("div","page home paper");
   page.innerHTML=`
@@ -679,7 +1046,8 @@ function renderHome(){
         <div class="topnav">
           <a href="#overview" class="nav-secondary">${svg("spark")}<span>功能概览</span></a>
           <a href="#entry" class="nav-primary"><span>进入工作台</span>${svg("arrow")}</a>
-          <span class="tag">v1.0 · 内部 Demo</span>
+          ${renderStaffCapsule()}
+          <span class="tag">v2.0 · 协作化 + 生态化</span>
         </div>
       </header>
       <section class="hero">
@@ -821,6 +1189,15 @@ function renderSidebar(){
           ${svg(ic)}<span class="lb">${lb}</span>
         </button>`;
       }).join("")}
+      <span class="sb-divider"></span>
+      <button class="sb-item feature" onclick="toggleCloudPanel()" title="所有业务员生成的素材按时间倒序">
+        ${svg("spark")}<span class="lb">☁ 共享云端</span>
+        <span class="badge">NEW</span>
+      </button>
+      ${S.currentStaffId==="BM004"?`<button class="sb-item feature ip" onclick="openIPLibrary()" title="万山红 × 侠客 IP 模板库（试点）">
+        ${svg("spark")}<span class="lb">🎨 IP 模板库</span>
+        <span class="badge">试点</span>
+      </button>`:''}
     </nav>
     <div class="edition-switch">
       <div class="edition-btn">
@@ -1002,6 +1379,8 @@ function renderChatArea(){
     }
     if(m.role==="assistant"&&(m.type==="result"||m.type==="image")){
       body+=renderTraceChain(m.trace);
+      // v2.0 一键发布 + 审核流
+      body+=`<div class="publish-bar"><button class="publish-btn" onclick="openPublishDrawer('${m.id||''}')">${svg("arrow")}<span>一键发布</span></button><span class="publish-hint">提交审核 → 飞书卡片通知 → 自动发布</span></div>`;
     }
     html+=`<div class="msg ${m.role} ${m.type}"><div class="msg-av">${av}</div><div class="msg-bubble">${body}</div></div>`;
   });
@@ -1585,6 +1964,11 @@ function fieldTitle(f){
   return map[f]||"修改";
 }
 
+// v2.0 产品库扩充：按品类分组渲染茶叶选择器，便于业务员从全 SKU 中检索
+function renderTeaCategoryField(selectedValue){
+  return `<div class="field"><div class="field-hd"><span class="lb">茶叶品类</span><span class="req">必选</span><span class="hint" style="margin-left:auto;font-size:11px;color:rgba(184,147,90,.6)">v2.0 · 全 SKU · 共 ${TEA_CATEGORIES.length} 款</span></div><div class="field-opts tea-grouped">${TEA_GROUPS.map(g=>`<div class="tea-group"><div class="tea-group-label">${g.label}</div><div class="tea-group-items">${g.teas.map(c=>`<button class="opt compact ${selectedValue===c?'selected':''}" data-field="teaCategory" data-value="${c}"><div class="row"><span class="lb">${c}</span>${selectedValue===c?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div>`).join("")}</div></div>`;
+}
+
 function renderSingleField(){
   const isCopy=S.preMode==="copy";
   const sel=isCopy?S.copySel:S.matSel;
@@ -1596,7 +1980,7 @@ function renderSingleField(){
     const opts=[["component-to-flavor","成分 → 风味","把茶叶成分翻译为消费者听得懂的风味"],["vague-to-vivid","模糊 → 形象描述","将抽象表述转化为具象画面"]];
     html=`<div class="field"><div class="field-hd"><span class="lb">任务类型</span><span class="req">必选</span></div><div class="field-opts">${opts.map(o=>`<button class="opt ${sel.taskType===o[0]?'selected':''}" data-field="taskType" data-value="${o[0]}"><div class="row"><span class="lb">${o[1]}</span>${sel.taskType===o[0]?'<span class="check">'+svg("check")+'</span>':''}</div><span class="desc">${o[2]}</span></button>`).join("")}</div></div>`;
   }else if(f==="teaCategory"){
-    html=`<div class="field"><div class="field-hd"><span class="lb">茶叶品类</span><span class="req">必选</span></div><div class="field-opts">${TEA_CATEGORIES.map(c=>`<button class="opt compact ${sel.teaCategory===c?'selected':''}" data-field="teaCategory" data-value="${c}"><div class="row"><span class="lb">${c}</span>${sel.teaCategory===c?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div>`;
+    html=renderTeaCategoryField(sel.teaCategory);
   }else if(f==="targetConsumer"){
     html=`<div class="field"><div class="field-hd"><span class="lb">目标消费者</span><span class="req">必选</span></div><div class="field-opts">${TARGET_CONSUMERS.map(c=>`<button class="opt ${sel.targetConsumer===c.value?'selected':''}" data-field="targetConsumer" data-value="${c.value}"><div class="row"><span class="lb">${c.label}</span>${sel.targetConsumer===c.value?'<span class="check">'+svg("check")+'</span>':''}</div><span class="desc">${c.desc}</span></button>`).join("")}</div></div>`;
   }else if(f==="tone"){
@@ -1673,7 +2057,7 @@ function renderFullFields(){
   if(isCopy){
     const taskOpts=[["component-to-flavor","成分 → 风味","把茶叶成分翻译为消费者听得懂的风味"],["vague-to-vivid","模糊 → 形象描述","将抽象表述转化为具象画面"]];
     html+=`<div class="field"><div class="field-hd"><span class="lb">任务类型</span><span class="req">必选</span></div><div class="field-opts">${taskOpts.map(o=>`<button class="opt ${S.copySel.taskType===o[0]?'selected':''}" data-field="taskType" data-value="${o[0]}"><div class="row"><span class="lb">${o[1]}</span>${S.copySel.taskType===o[0]?'<span class="check">'+svg("check")+'</span>':''}</div><span class="desc">${o[2]}</span></button>`).join("")}</div></div>`;
-    html+=`<div class="field"><div class="field-hd"><span class="lb">茶叶品类</span><span class="req">必选</span></div><div class="field-opts">${TEA_CATEGORIES.map(c=>`<button class="opt compact ${S.copySel.teaCategory===c?'selected':''}" data-field="teaCategory" data-value="${c}"><div class="row"><span class="lb">${c}</span>${S.copySel.teaCategory===c?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div>`;
+    html+=renderTeaCategoryField(S.copySel.teaCategory);
     html+=`<div class="field"><div class="field-hd"><span class="lb">目标消费者</span><span class="req">必选</span></div><div class="field-opts">${TARGET_CONSUMERS.map(c=>`<button class="opt ${S.copySel.targetConsumer===c.value?'selected':''}" data-field="targetConsumer" data-value="${c.value}"><div class="row"><span class="lb">${c.label}</span>${S.copySel.targetConsumer===c.value?'<span class="check">'+svg("check")+'</span>':''}</div><span class="desc">${c.desc}</span></button>`).join("")}</div></div>`;
     html+=`<div class="field-2col"><div class="field"><div class="field-hd"><span class="lb">语气</span><span class="hint">可调</span></div><div class="field-opts">${(isOvs?TONES.filter(t=>t!=="诗意古风"):TONES).map(t=>`<button class="opt compact ${S.copySel.tone===t?'selected':''}" data-field="tone" data-value="${t}"><div class="row"><span class="lb">${t}</span>${S.copySel.tone===t?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div><div class="field"><div class="field-hd"><span class="lb">长度</span><span class="hint">可调</span></div><div class="field-opts">${LENGTHS.map(l=>`<button class="opt compact ${S.copySel.length===l?'selected':''}" data-field="length" data-value="${l}"><div class="row"><span class="lb">${l}</span>${S.copySel.length===l?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div></div>`;
     html+=renderTimeNodeField(isOvs,S.copySel,true);
@@ -1689,7 +2073,7 @@ function renderFullFields(){
     html+=`<div class="field"><div class="field-hd"><span class="lb">平台</span><span class="req">必选</span></div><div class="field-opts">${ps.map(p=>`<button class="opt compact ${S.matSel.platform===p?'selected':''}" data-field="platform" data-value="${p}"><div class="row"><span class="lb">${p}</span>${S.matSel.platform===p?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div>`;
     html+=`<div class="field"><div class="field-hd"><span class="lb">送礼场景</span><span class="hint">可选</span></div><div class="field-opts">${GIFT_SCENES.map(g=>`<button class="opt ${S.matSel.giftScene===g.value?'selected':''}" data-field="giftScene" data-value="${g.value}"><div class="row"><span class="lb">${g.label}</span>${S.matSel.giftScene===g.value?'<span class="check">'+svg("check")+'</span>':''}</div><span class="desc">${g.desc}</span></button>`).join("")}</div></div>`;
     if(isOvs){
-      html+=`<div class="field"><div class="field-hd"><span class="lb">茶叶品类</span><span class="req">必选</span></div><div class="field-opts">${TEA_CATEGORIES.map(c=>`<button class="opt compact ${S.matSel.teaCategory===c?'selected':''}" data-field="teaCategory" data-value="${c}"><div class="row"><span class="lb">${c}</span>${S.matSel.teaCategory===c?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div>`;
+      html+=renderTeaCategoryField(S.matSel.teaCategory);
       html+=`<div class="field-2col"><div class="field"><div class="field-hd"><span class="lb">语言</span><span class="req">必选</span></div><div class="field-opts">${OVERSEAS_LANGUAGES.map(l=>`<button class="opt compact ${S.matSel.language===l.value?'selected':''}" data-field="language" data-value="${l.value}"><div class="row"><span class="lb">${l.label}</span>${S.matSel.language===l.value?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div><div class="field"><div class="field-hd"><span class="lb">目标消费者</span><span class="req">必选</span></div><div class="field-opts">${TARGET_CONSUMERS.map(c=>`<button class="opt ${S.matSel.targetConsumer===c.value?'selected':''}" data-field="targetConsumer" data-value="${c.value}"><div class="row"><span class="lb">${c.label}</span>${S.matSel.targetConsumer===c.value?'<span class="check">'+svg("check")+'</span>':''}</div><span class="desc">${c.desc}</span></button>`).join("")}</div></div></div>`;
       html+=`<div class="field"><div class="field-hd"><span class="lb">是否参考咖啡/红酒风味体系</span><span class="req">必选</span></div><div class="field-opts">${FLAVOR_REFERENCES.map(f=>`<button class="opt ${S.matSel.flavorReference===f.value?'selected':''}" data-field="flavorReference" data-value="${f.value}"><div class="row"><span class="lb">${f.label}</span>${S.matSel.flavorReference===f.value?'<span class="check">'+svg("check")+'</span>':''}</div>${f.desc?'<span class="desc">'+f.desc+'</span>':''}</button>`).join("")}</div></div>`;
       html+=`<div class="field-2col"><div class="field"><div class="field-hd"><span class="lb">语气</span><span class="hint">可调</span></div><div class="field-opts">${(isOvs?TONES.filter(t=>t!=="诗意古风"):TONES).map(t=>`<button class="opt compact ${S.matSel.tone===t?'selected':''}" data-field="tone" data-value="${t}"><div class="row"><span class="lb">${t}</span>${S.matSel.tone===t?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div><div class="field"><div class="field-hd"><span class="lb">长度</span><span class="hint">可调</span></div><div class="field-opts">${LENGTHS.map(l=>`<button class="opt compact ${S.matSel.length===l?'selected':''}" data-field="length" data-value="${l}"><div class="row"><span class="lb">${l}</span>${S.matSel.length===l?'<span class="check">'+svg("check")+'</span>':''}</div></button>`).join("")}</div></div></div>`;
