@@ -1335,10 +1335,17 @@ function handleUserInput(text){
   pushMessage({role:"user",content:text,type:"text"});
   S.awaitingInput=false;
   updateChatArea();
-  S.typingText="正在生成茶语文案…";S.typing=true;updateChatArea();
   const isOvs=S.edition==="overseas";
-  // 自由提问走 /api/chat：先经意义评判 LLM，无意义输入被拒（fallback）；
-  // 有意义把 text 作为 directive 透传，真正影响生成（不再输什么都给一大段）。
+  // 物料工作台自由提问 → mode=material：响应是物料 shape（copy + image_prompt），
+  // 需两步联调（chat 拿 image_prompt → imageGenerate 出图），与「确认生成」图片分支同构、
+  // 但经 chat 把 text 作为 directive 透传，让自由提问真正影响物料生成（修 P1 潜伏 bug）。
+  if(S.mode==="material"){
+    handleMaterialChat(text, isOvs);
+    return;
+  }
+  S.typingText="正在生成茶语文案…";S.typing=true;updateChatArea();
+  // 文案工作台自由提问 → mode 按 edition 走 domestic/overseas，响应读 outputs。
+  // 先经意义评判 LLM，无意义输入被拒（fallback）；有意义把 text 作为 directive 透传。
   const apiCall=BAMA_API.chat(S.copySel.teaCategory, S.copySel, {mode:isOvs?"overseas":"domestic", text, edition:S.edition});
   apiCall.then(r=>{
     S.typing=false;
@@ -1370,6 +1377,58 @@ function handleUserInput(text){
     S.typing=false;
     S.typingText="茶语正在努力输入中";
     pushMessage({role:"assistant",content:(e.fallback?"":"生成失败：")+e.message,type:e.fallback?"fallback":"error"});
+    saveCurrentToHistory();
+    updateChatArea();
+  });
+}
+
+// 物料工作台自由提问：走 /api/chat(mode=material) 把 text 作 directive 透传，
+// 响应是物料 shape（copy + image_prompt + trace_id），再调 imageGenerate 出图。
+// 与「确认生成」图片分支同构，区别仅在于文案依据来源是 chat(透传 directive) 而非
+// 直接 marketingAsset。fallback 由 request 层统一拦截抛 Error（含 image_prompt 缺失）。
+function handleMaterialChat(text, isOvs){
+  S.typingText="正在准备物料文案…";S.typing=true;updateChatArea();
+  const tea=S.matSel.teaCategory||"茶叶";
+  const routeId="demo_"+(S.matSel.teaCategory||"tea");
+  const assetEdition=S.edition;
+  BAMA_API.chat(S.matSel.teaCategory||"赛珍珠浓香型安溪铁观音", S.matSel, {mode:"material", text, routeId, edition:assetEdition}).then(assetRes=>{
+    const ad=(assetRes.data)||{};
+    const copy=ad.copy||{};
+    const imagePrompt=ad.image_prompt;
+    const traceId=ad.trace_id;
+    if(!imagePrompt){
+      throw new Error("后端未返回 image_prompt");
+    }
+    S.typingText="正在生成图片，通常需要 1-2 分钟，请稍候…";updateChatArea();
+    return BAMA_API.imageGenerate(imagePrompt, S.matSel.teaCategory||"赛珍珠浓香型安溪铁观音", S.matSel, routeId, assetEdition).then(imgRes=>{
+      const imgData=imgRes.data||{};
+      const imageUrl=imgData.image_url;
+      const contentLabel=S.matSel.content==="tea-marketing"?"茶叶营销":"茶文化";
+      const modalityLabel=S.matSel.modality==="image"?"图片":"视频";
+      let contentText=`已为您生成「${tea}」的${contentLabel}${modalityLabel}物料。`;
+      if(copy.headline)contentText+="\n\n标题："+copy.headline;
+      if(copy.subheadline)contentText+="\n副标题："+copy.subheadline;
+      if(copy.body)contentText+="\n正文："+copy.body;
+      pushMessage({role:"assistant",content:contentText,type:"image",imagePrompt:imageUrl});
+      S.stage="done";
+      saveCurrentToHistory();
+      updateChatArea();
+      if(traceId){
+        BAMA_API.getTrace(traceId).then(tr=>{
+          const last=S.messages[S.messages.length-1];
+          if(last&&last.role==="assistant"){
+            last.trace=mapTraceData(tr.data);
+            saveCurrentToHistory();
+            updateChatArea();
+          }
+        }).catch(e=>console.warn("trace 获取失败:",e.message));
+      }
+    });
+  }).catch(e=>{
+    S.typing=false;
+    S.typingText="茶语正在努力输入中";
+    pushMessage({role:"assistant",content:(e.fallback?"":"物料生成失败：")+e.message,type:e.fallback?"fallback":"error"});
+    S.stage="done";
     saveCurrentToHistory();
     updateChatArea();
   });
